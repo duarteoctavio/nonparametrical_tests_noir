@@ -47,20 +47,26 @@ fn group_equals<let N: u32>(sample_value: u8, array: [u8;N]) -> SamplePosition {
     }
 }
 
-fn average<let N: u32>(array: [u32; N]) -> u32 {
-    array.reduce(|a,b| a + b) / array.len()
+fn average<let N: u32>(array: [u8; N]) -> u8 {
+    array.reduce(|a,b| a + b) / ( array.len() as u8 )
 }
 
-// fn range_average(min: u8, max: u8, size: u32) -> u32 {
-//     let size = ( max - min ) + 1;
-//     let output = [0; size];
-//     let index = 0;
-//     for elem in min..=max {
-//         output[index] = elem;
-//         index += 1;
-//     };
-//     average(output)
-// }
+fn integer_range(min: u8, max: u8) -> [u8] {
+    let mut output: [u8] = &[];
+    for elem in min..=max {
+        output = output.push_back(elem);
+    };
+    output
+}
+
+fn range_average<let N: u32>(min: u8, max: u8) -> [u8; N] {
+    let mut output: [u8] = &[];
+    let average: u8 = average(integer_range(min, max));
+    for _ in min..=max {
+        output = output.push_back(average);
+    };
+    output.as_array()
+}
 
 // fn assign_wilcox_scores<let N: u32>(sorted_array: [u8; N]) -> [SamplePosition; N] {
 //     // following functions assume sorted data.
@@ -104,6 +110,10 @@ fn test_average() {
     assert(average([4]) == 4);
 }
 
-// fn test_range_average() {
-//     assert(range_average(4,6) == 5);
-// }
+#[test]
+fn test_range_average() {
+    let expected: [u8; 3] = [5,5,5];
+    let range = range_average(4,6);
+    print(range);
+    assert( range == expected );
+}
