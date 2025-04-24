@@ -1,4 +1,4 @@
-# Noir Verifiers for Non Parametrical Tests
+# Making scientifical research better: Noir Verifiers for Non Parametrical Tests
 
 ## Why is this useful
 
