@@ -7,7 +7,7 @@
 
 ## Why is this useful
 
-  I attach [this interesting article](https://www.chjh.nl/concerns-about-blockchain-for-science/). Even though the author is *against* the hypothesis that blockchain relatad tools can help fix the issue, I believe we are able to address several of the issues he mentions if ZK and some other current blockchain related concepts are considered.
+  I attach [this interesting article](https://www.chjh.nl/concerns-about-blockchain-for-science/). The interesting part about it is it highlights important current issues and challenges. Even though the author is *against* the hypothesis that blockchain relatad tools can help fix the issue, I believe we are able to address several of the issues he mentions if ZK and some other current blockchain related concepts are considered.
 
 """"
 What i care about is this list of problems he considers most relevant.
@@ -103,3 +103,12 @@ What i care about is this list of problems he considers most relevant.
 ## Stage 3: Tie contracts and a nice frontend to show an MVP application.
 
 
+# Some related projects: State of the art.
+
+- [https://www.protocols.io/](Protocols) is a service roughly offering the same benefits, but without any strong warrants or zero knowledge, which in some of the mentioend application cases are transformative. Their continued existence, though, highlights the fact that there's a need for this kind of services.
+
+
+# Some interesting articles.
+
+- [Cited above, about main issues and challenges:](https://www.chjh.nl/concerns-about-blockchain-for-science/) Challenges faced by current research and why basic blockchain technology wouldn't be good enough.
+- [About replication and new USA policies](https://www.axios.com/2025/03/24/medical-studies-rfk-nih-replication) Shows there are opportunities for services aimed towards ensuring and validating transparency in research.
