@@ -1,0 +1,6 @@
+[package]
+name = "nonparametrical_tests"
+type = "bin"
+authors = [""]
+
+[dependencies]
