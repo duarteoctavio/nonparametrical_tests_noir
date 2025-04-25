@@ -78,9 +78,10 @@ fn assign_wilcox_scores<let N: u32>(sorted_array: [u8; N]) -> [u8; N] {
     // TODO find something better than this horrible hack to initialize this variable, is there a NaN?
     let mut output = [0 ; N];
     for positions in sample_positions {
-        let mut values = range_average(positions.first_index, positions.last_index);
+        let mut values = range_average(positions.first_index + 1, positions.last_index + 1);
         for index in positions.first_index..=positions.last_index {
             let (elem, remainder) = values.pop_front();
+            // print(f"current remainder {remainder}");
             values = remainder;
             output[index] = elem;
         }
@@ -129,5 +130,6 @@ fn test_range_average() {
 #[test]
 fn test_assign_wilcox_scores() {
     let scores = assign_wilcox_scores([1,2,3,5,5,5]);
+    print(scores);
     assert(scores == [1,2,3,5,5,5]);
 }
