@@ -69,28 +69,29 @@ fn range_average(min: u8, max: u8) -> [u8] {
     output
 }
 
-// fn assign_wilcox_scores<let N: u32>(sorted_array: [u8; N]) -> [SamplePosition; N] {
-//     // following functions assume sorted data.
-//     is_sorted(sorted_array);
+fn assign_wilcox_scores<let N: u32>(sorted_array: [u8; N]) -> [u8; N] {
+    // following functions assume sorted data.
+    // is_sorted(sorted_array);
 
-//     let sample_positions = sorted_array.map(|e| group_equals(e, sorted_array));
-//     // we need to skip the repeated sample positions.
-//     // TODO find something better than this horrible hack to initialize this variable, is there a NaN?
-//     let mut output = [u8 ; sorted_array.len()];
-//     let mut last_observed = sorted_array[0] + 1;
-//     for positions in sample_positions {
-//         if positions.sample_value != last_observed {
-//             last_observed = positions.sample_value;
-//             let 
-//             for index in positions.first_index..=positions.last_index {
-//             }
-//         };
-//     };
-// }
+    let sample_positions = sorted_array.map(|e| group_equals(e, sorted_array));
+    // we need to skip the repeated sample positions.
+    // TODO find something better than this horrible hack to initialize this variable, is there a NaN?
+    let mut output = [0 ; N];
+    for positions in sample_positions {
+        let mut values = range_average(positions.first_index, positions.last_index);
+        for index in positions.first_index..=positions.last_index {
+            let (elem, remainder) = values.pop_front();
+            values = remainder;
+            output[index] = elem;
+        }
+    };
+    output
+}
 
 #[test]
 fn test_is_sorted() {
     is_sorted([0,1,2,3,4]);
+    is_sorted([1,2,3,5,5,5])
 }
 
 #[test]
@@ -122,6 +123,11 @@ fn test_integer_range() {
 fn test_range_average() {
     let expected: [u8] = [5,5,5];
     let range = range_average(4,6);
-    print(range);
     assert( range == expected );
+}
+
+#[test]
+fn test_assign_wilcox_scores() {
+    let scores = assign_wilcox_scores([1,2,3,5,5,5]);
+    assert(scores == [1,2,3,5,5,5]);
 }
