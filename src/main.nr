@@ -89,7 +89,6 @@ fn assign_wilcox_scores<let N: u32>(sorted_array: [i8; N]) -> [i8; N] {
         let mut values = range_average(positions.first_index + 1, positions.last_index + 1);
         for index in positions.first_index..=positions.last_index {
             let (elem, remainder) = values.pop_front();
-            // print(f"current remainder {remainder}");
             values = remainder;
             output[index] = elem;
         }
@@ -110,7 +109,7 @@ fn get_wilcoxon_t_statistic<let N: u32>(dataset: [i8; N]) -> i8 {
 
 fn main(statistic_threshold: pub i8, dataset: [i8; 9]) {
     let statistic = get_wilcoxon_t_statistic(dataset);
-    assert( statistic >= statistic_threshold );
+    assert( statistic <= statistic_threshold );
 }
 
 #[test]
@@ -171,11 +170,14 @@ fn test_assign_wilcox_scores() {
 #[test]
 fn statistic_calculation() {
     let statistic = get_wilcoxon_t_statistic([ 5, 5, -7, -9, -10, -12, 15, 17, 20]);
-    print(f"statistic is {statistic}");
-    assert(statistic == 15)
+    assert(statistic == 26)
 }
 
-#[test]
+#[test(should_fail)]
 fn test_rejection() {
     main(15, [ 5, 5, -7, -9, -10, -12, 15, 17, 20])
+}
+#[test]
+fn test_verification() {
+    main(15, [ 1, -2, 3, -4, 5, -6, -7 , -8, -9])
 }
