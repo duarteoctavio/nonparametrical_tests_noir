@@ -112,3 +112,4 @@ What i care about is this list of problems he considers most relevant.
 
 - [Cited above, about main issues and challenges:](https://www.chjh.nl/concerns-about-blockchain-for-science/) Challenges faced by current research and why basic blockchain technology wouldn't be good enough.
 - [About replication and new USA policies](https://www.axios.com/2025/03/24/medical-studies-rfk-nih-replication) Shows there are opportunities for services aimed towards ensuring and validating transparency in research.
+- [Example of controversial data doctoring](https://arstechnica.com/science/2024/07/alzheimers-scientist-indicted-for-allegedly-falsifying-data-in-16m-scheme/) This was a resounding situation in which data was doctored to manipulate results.
