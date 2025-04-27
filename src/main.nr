@@ -68,11 +68,11 @@ unconstrained fn average(slice: [i8]) -> i8 {
 // }
 
 fn range_average(min: i8, max: i8) -> i8 {
-    let zero_to_min_sum: i8 = ( min * (min + 1) ) / 2;
+    let zero_to_min_sum: i8 = ( ( min - 1 ) * (min) ) / 2;
     let zero_to_max_sum: i8 = ( max * (max + 1) ) / 2;
-    let range_sum = zero_to_max_sum - zero_to_min_sum;
-    let size = max - min;
-    let average = range_sum / size;
+    let range_sum: i8 = zero_to_max_sum - zero_to_min_sum;
+    let size: i8 = max - min + 1;
+    let average: i8 = range_sum / size;
     average
 }
 
