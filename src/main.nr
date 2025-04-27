@@ -55,18 +55,7 @@ fn group_equals<let N: u32>(sample_value: i8, array: [i8;N]) -> SamplePosition {
     }
 }
 
-unconstrained fn average(slice: [i8]) -> i8 {
-    slice.reduce(|a,b| a + b) / ( slice.len() as i8 )
-}
-
-// fn integer_range(min: i8, max: i8) -> [i8] {
-//     let mut output: [i8] = &[];
-//     for elem in min..=max {
-//         output = output.push_back(elem);
-//     };
-//     output
-// }
-
+/// This function will find the average between a range of numbers (min and max, inclusive on both ends). Thanks to integers being integers we can rely on a close summation formula and avoid using an `unconstrained` function.
 fn range_average(min: i8, max: i8) -> i8 {
     let zero_to_min_sum: i8 = ( ( min - 1 ) * (min) ) / 2;
     let zero_to_max_sum: i8 = ( max * (max + 1) ) / 2;
@@ -135,21 +124,6 @@ fn test_set_contains_elem() {
     let example = [1,2,3,4,5];
     assert( set_contains_elem(example,1) );
 }
-
-#[test]
-fn test_average() {
-    // Safety: this is a test!
-    unsafe { assert(average([4,5,6]) == 5) };
-    // Safety: this is a test!
-    unsafe { assert(average([4]) == 4) };
-}
-
-// #[test]
-// fn test_integer_range() {
-//     let expected: [i8; 3] = [4,5,6];
-//     let observed = integer_range(4,6);
-//     assert( observed.as_array() == expected )
-// }
 
 #[test]
 fn test_range_average() {
