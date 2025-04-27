@@ -55,26 +55,25 @@ fn group_equals<let N: u32>(sample_value: i8, array: [i8;N]) -> SamplePosition {
     }
 }
 
-fn average(slice: [i8]) -> i8 {
+unconstrained fn average(slice: [i8]) -> i8 {
     slice.reduce(|a,b| a + b) / ( slice.len() as i8 )
 }
 
-fn integer_range(min: i8, max: i8) -> [i8] {
-    let mut output: [i8] = &[];
-    for elem in min..=max {
-        output = output.push_back(elem);
-    };
-    output
-}
+// fn integer_range(min: i8, max: i8) -> [i8] {
+//     let mut output: [i8] = &[];
+//     for elem in min..=max {
+//         output = output.push_back(elem);
+//     };
+//     output
+// }
 
-fn range_average(min: i8, max: i8) -> [i8] {
-    let mut output: [i8] = &[];
-    let integers_array: [i8] = integer_range(min, max);
-    let average: i8 = average(integers_array);
-    for _ in min..=max {
-        output = output.push_back(average);
-    };
-    output
+fn range_average(min: i8, max: i8) -> i8 {
+    let zero_to_min_sum: i8 = ( min * (min + 1) ) / 2;
+    let zero_to_max_sum: i8 = ( max * (max + 1) ) / 2;
+    let range_sum = zero_to_max_sum - zero_to_min_sum;
+    let size = max - min;
+    let average = range_sum / size;
+    average
 }
 
 fn assign_wilcox_scores<let N: u32>(sorted_array: [i8; N]) -> [i8; N] {
@@ -83,17 +82,13 @@ fn assign_wilcox_scores<let N: u32>(sorted_array: [i8; N]) -> [i8; N] {
 
     let sample_positions = sorted_array.map(|e| group_equals(e, sorted_array));
     // we need to skip the repeated sample positions.
-    // TODO find something better than this horrible hack to initialize this variable, is there a NaN?
-    let mut output = [0 ; N];
+    let mut scores_slice: [i8] = [];
     for positions in sample_positions {
-        let mut values = range_average(positions.first_index + 1, positions.last_index + 1);
-        for index in positions.first_index..=positions.last_index {
-            let (elem, remainder) = values.pop_front();
-            values = remainder;
-            output[index] = elem;
-        }
-    };
-    output
+        let average = range_average(positions.first_index + 1, positions.last_index + 1);
+        scores_slice = scores_slice.push_back(average);
+    }
+    let scores: [i8; N] = scores_slice.as_array();
+    scores
 }
 
 fn get_wilcoxon_t_statistic<let N: u32>(dataset: [i8; N]) -> i8 {
@@ -143,33 +138,40 @@ fn test_set_contains_elem() {
 
 #[test]
 fn test_average() {
-    assert(average([4,5,6]) == 5);
-    assert(average([4]) == 4);
+    // Safety: this is a test!
+    unsafe { assert(average([4,5,6]) == 5) };
+    // Safety: this is a test!
+    unsafe { assert(average([4]) == 4) };
 }
 
-#[test]
-fn test_integer_range() {
-    let expected: [i8; 3] = [4,5,6];
-    let observed = integer_range(4,6);
-    assert( observed.as_array() == expected )
-}
+// #[test]
+// fn test_integer_range() {
+//     let expected: [i8; 3] = [4,5,6];
+//     let observed = integer_range(4,6);
+//     assert( observed.as_array() == expected )
+// }
 
 #[test]
 fn test_range_average() {
-    let expected: [i8] = [5,5,5];
+    let expected: i8 = 5;
     let range = range_average(4,6);
+    println("range");
+    println(range);
     assert( range == expected );
 }
 
 #[test]
 fn test_assign_wilcox_scores() {
     let scores = assign_wilcox_scores([1,2,3,5,5,5]);
+    println("scores");
+    println(scores);
     assert(scores == [1,2,3,5,5,5]);
 }
 
 #[test]
 fn statistic_calculation() {
     let statistic = get_wilcoxon_t_statistic([ 5, 5, -7, -9, -10, -12, 15, 17, 20]);
+    println(f"statistic is {statistic}");
     assert(statistic == 26)
 }
 
