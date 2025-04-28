@@ -91,9 +91,11 @@ fn get_wilcoxon_t_statistic<let N: u32>(dataset: [i8; N]) -> i8 {
     statistic
 }
 
-fn main(statistic_threshold: pub i8, dataset: [i8; 9]) {
+fn main(statistic_threshold: i8, dataset: [i8; 9]) {
     let statistic = get_wilcoxon_t_statistic(dataset);
-    assert( statistic <= statistic_threshold );
+    println("statistic is");
+    println(statistic);
+    assert( statistic < statistic_threshold );
 }
 
 #[test]
@@ -129,16 +131,12 @@ fn test_set_contains_elem() {
 fn test_range_average() {
     let expected: i8 = 5;
     let range = range_average(4,6);
-    println("range");
-    println(range);
     assert( range == expected );
 }
 
 #[test]
 fn test_assign_wilcox_scores() {
     let scores = assign_wilcox_scores([1,2,3,5,5,5]);
-    println("scores");
-    println(scores);
     assert(scores == [1,2,3,5,5,5]);
 }
 
