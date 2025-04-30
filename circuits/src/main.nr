@@ -16,7 +16,7 @@ fn set_contains_elem<let N: u32>(set: [i8;N] , elem: i8 ) -> bool {
     let mut output = false;
     for e in set {
         if e == elem {
-            output = true
+            output = true;
         }
     }
     output

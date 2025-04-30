@@ -5,20 +5,13 @@ import {Test, console} from "forge-std/Test.sol";
 import {Counter} from "../src/Counter.sol";
 
 contract CounterTest is Test {
-    Counter public counter;
+    function setUp() public {}
 
-    function setUp() public {
-        counter = new Counter();
-        counter.setNumber(0);
-    }
-
-    function test_Increment() public {
-        counter.increment();
-        assertEq(counter.number(), 1);
-    }
-
-    function testFuzz_SetNumber(uint256 x) public {
-        counter.setNumber(x);
-        assertEq(counter.number(), x);
+    function test_readFile() public {
+        bytes memory content = vm.readFileBinary("./some-file.txt");
+        assertEq(content[0], 'h');
+        assertEq(content[1], 'o');
+        assertEq(content[2], 'l');
+        assertEq(content[3], 'a');
     }
 }
