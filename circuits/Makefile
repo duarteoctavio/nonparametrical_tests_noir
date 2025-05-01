@@ -13,3 +13,6 @@ proof:
 
 verify: proof
 	bb verify -k ./target/vk -p ./target/proof
+
+measure_gates:
+	bb gates
