@@ -10824,7 +10824,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/routes/_index.tsx"
   );
-  import.meta.hot.lastModified = "1746102114616.4023";
+  import.meta.hot.lastModified = "1746102703500.7756";
 }
 function Index() {
   return /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("div", { className: "min-h-screen bg-white text-slate-900", children: [
@@ -10892,7 +10892,7 @@ function Index() {
       lineNumber: 31,
       columnNumber: 7
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("section", { className: "relative overflow-hidden bg-slate-50 py-21", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("section", { className: "relative overflow-hidden bg-slate-50 py-28", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime5.jsxDEV)("div", { className: "absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25" }, void 0, false, {
         fileName: "app/routes/_index.tsx",
         lineNumber: 62,
@@ -12334,4 +12334,4 @@ lucide-react/dist/esm/lucide-react.js:
    * See the LICENSE file in the root directory of this source tree.
    *)
 */
-//# sourceMappingURL=/build/routes/_index-DHB22IUH.js.map
+//# sourceMappingURL=/build/routes/_index-LEKSIGHO.js.map

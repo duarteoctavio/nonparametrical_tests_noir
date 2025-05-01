@@ -66,7 +66,7 @@ export default function Index() {
       </header>
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-slate-50 py-21">
+      <section className="relative overflow-hidden bg-slate-50 py-28">
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25"></div>
         <div className="container relative mx-auto py-15 px-4">
           <div className="max-w-3xl mx-auto text-center">

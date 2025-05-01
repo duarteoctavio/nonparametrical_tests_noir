@@ -674,7 +674,7 @@ function Index() {
       lineNumber: 27,
       columnNumber: 7
     }, this),
-    /* @__PURE__ */ jsxDEV7("section", { className: "relative overflow-hidden bg-slate-50 py-21", children: [
+    /* @__PURE__ */ jsxDEV7("section", { className: "relative overflow-hidden bg-slate-50 py-28", children: [
       /* @__PURE__ */ jsxDEV7("div", { className: "absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25" }, void 0, !1, {
         fileName: "app/routes/_index.tsx",
         lineNumber: 70,
@@ -2403,7 +2403,7 @@ function Index() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-TUTM7ZLM.js", imports: ["/build/_shared/chunk-X3PXDGUE.js", "/build/_shared/chunk-G2WSVXPZ.js", "/build/_shared/chunk-F4KNNEUR.js", "/build/_shared/chunk-PLT55Z5M.js", "/build/_shared/chunk-2Z2JGDFU.js", "/build/_shared/chunk-RJ5JRAEL.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-T4GGNSA4.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-DHB22IUH.js", imports: ["/build/_shared/chunk-Y6RJRNBS.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "4e2acd88", hmr: { runtime: "/build/_shared/chunk-RJ5JRAEL.js", timestamp: 1746102115403 }, url: "/build/manifest-4E2ACD88.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-TUTM7ZLM.js", imports: ["/build/_shared/chunk-X3PXDGUE.js", "/build/_shared/chunk-G2WSVXPZ.js", "/build/_shared/chunk-F4KNNEUR.js", "/build/_shared/chunk-PLT55Z5M.js", "/build/_shared/chunk-2Z2JGDFU.js", "/build/_shared/chunk-RJ5JRAEL.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-PZDJHGND.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-T4GGNSA4.js", imports: void 0, hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-LEKSIGHO.js", imports: ["/build/_shared/chunk-Y6RJRNBS.js"], hasAction: !1, hasLoader: !1, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "5d3d3200", hmr: { runtime: "/build/_shared/chunk-RJ5JRAEL.js", timestamp: 1746102715683 }, url: "/build/manifest-5D3D3200.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
