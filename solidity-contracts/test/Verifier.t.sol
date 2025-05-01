@@ -8,7 +8,7 @@ contract VerifierTest is Test {
     HonkVerifier public verifier;
     function setUp() public {
         verifier = new HonkVerifier();
-        bytes memory proof = vm.readFileBinary("./src/proof")
+        bytes memory proof = vm.readFileBinary("./src/proof");
     }
 
     function test_readFile() public {
