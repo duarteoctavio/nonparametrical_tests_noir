@@ -5,7 +5,11 @@ import {Test, console} from "forge-std/Test.sol";
 import {HonkVerifier} from "../src/Verifier.sol";
 
 contract VerifierTest is Test {
-    function setUp() public {}
+    HonkVerifier public verifier;
+    function setUp() public {
+        verifier = new HonkVerifier();
+        bytes memory proof = vm.readFileBinary("./src/proof")
+    }
 
     function test_readFile() public {
         bytes memory content = vm.readFileBinary("./some-file.txt");
