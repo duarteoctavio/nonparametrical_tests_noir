@@ -14,3 +14,6 @@ proof:
 
 verify: proof
 	bb verify -k ./target/vk -p ./target/proof  --oracle_hash keccak
+
+verifier:
+	bb write_solidity_verifier -k ./target/vk -o ../solidity-contracts/src/Verifier.sol
