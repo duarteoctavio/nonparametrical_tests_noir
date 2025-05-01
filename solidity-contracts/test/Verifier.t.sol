@@ -2,9 +2,9 @@
 pragma solidity ^0.8.13;
 
 import {Test, console} from "forge-std/Test.sol";
-import {Counter} from "../src/Counter.sol";
+import {HonkVerifier} from "../src/Verifier.sol";
 
-contract CounterTest is Test {
+contract VerifierTest is Test {
     function setUp() public {}
 
     function test_readFile() public {
