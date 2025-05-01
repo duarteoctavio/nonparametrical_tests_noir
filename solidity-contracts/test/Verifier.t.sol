@@ -6,9 +6,11 @@ import {HonkVerifier} from "../src/Verifier.sol";
 
 contract VerifierTest is Test {
     HonkVerifier public verifier;
+    bytes public proof;
+
     function setUp() public {
         verifier = new HonkVerifier();
-        bytes memory proof = vm.readFileBinary("./src/proof");
+        proof = vm.readFileBinary("./src/proof");
     }
 
     function test_readFile() public {
@@ -17,5 +19,11 @@ contract VerifierTest is Test {
         assertEq(content[1], 'o');
         assertEq(content[2], 'l');
         assertEq(content[3], 'a');
+    }
+
+    function test_verifier() public {
+        bytes32[] memory pInputs;
+        // pInputs.push(1);
+        verifier.verify(proof, pInputs);
     }
 }
