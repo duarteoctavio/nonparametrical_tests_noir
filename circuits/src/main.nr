@@ -1,3 +1,5 @@
+mod merkle;
+
 fn abs(x: i8) -> u8 {
     let mut output = x;
     if (x <=0) {
@@ -91,10 +93,15 @@ fn get_wilcoxon_t_statistic<let N: u32>(dataset: [i8; N]) -> i8 {
     statistic
 }
 
-fn main(statistic_threshold: i8, dataset: [i8; 9]) {
+fn main(statistic_threshold: i8, dataset: [i8; 8], expected_root: pub Field) {
     let statistic = get_wilcoxon_t_statistic(dataset);
-    println("statistic is");
-    println(statistic);
+    let mut merkle = merkle::MerkleThree::<8, 3>::new();
+
+    for elem in dataset {
+        merkle.add_leaf(elem as Field);
+    }
+    let root = merkle.root();
+    assert(root == expected_root);
     assert( statistic < statistic_threshold );
 }
 
@@ -143,15 +150,21 @@ fn test_assign_wilcox_scores() {
 #[test]
 fn statistic_calculation() {
     let statistic = get_wilcoxon_t_statistic([ 5, 5, -7, -9, -10, -12, 15, 17, 20]);
-    println(f"statistic is {statistic}");
+    // println(f"statistic is {statistic}");
     assert(statistic == 26)
 }
 
 #[test(should_fail)]
-fn test_rejection() {
-    main(15, [ 5, 5, -7, -9, -10, -12, 15, 17, 20])
+fn test_rejection_for_big_threshold() {
+    main(15, [ 5, 5, -7, -9, -10, -12, 15, 17], 0x217e1ba626143e05dce6486d9f7d9ec1857c8d98a2f3e35efe157753c9138d1e)
 }
+
+#[test(should_fail)]
+fn test_rejection_wrong_root() {
+    main(15, [ 1, -2, 3, -4, 5, -6, -7 , -8], 0xff)
+}
+
 #[test]
 fn test_verification() {
-    main(15, [ 1, -2, 3, -4, 5, -6, -7 , -8, -9])
+    main(15, [ 1, -2, 3, -4, 5, -6, -7 , -8], 0x012cbc2a96babd4a5f1d50b4401b5e6a7056f939a0ff06782e30a8bd7dd6ef70)
 }
