@@ -17,5 +17,5 @@ verify: proof
 
 verifier: contract
 	cp target/Verifier.sol ../solidity-contracts/src/Verifier.sol
-	cp target/proof ../solidity-contracts/src/Verifier.sol
+	cp target/proof ../solidity-contracts/src/proof
 
