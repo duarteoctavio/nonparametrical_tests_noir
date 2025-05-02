@@ -3,7 +3,6 @@ compile:
 
 keys:
 	bb write_vk -b target/nonparametrical_tests.json -o target --oracle_hash keccak
-	# bb write_vk -b ./target/nonparametrical_tests.json -o ./target
 
 contract: compile keys
 	bb write_solidity_verifier -k ./target/vk -o ./target/Verifier.sol
@@ -26,3 +25,7 @@ clean_proof:
 
 	echo 0x$PROOF_WITHOUT_PUBLIC_INPUTS
 	echo "[${SPLIT_HEX_PUBLIC_INPUTS}]"
+
+verifier: contract
+	cp target/Verifier.sol ../solidity-contracts/src/Verifier.sol
+	cp target/proof ../solidity-contracts/src/Verifier.sol
