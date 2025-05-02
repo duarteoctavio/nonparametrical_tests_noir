@@ -27,6 +27,6 @@ clean_proof: proof
 	echo "[${SPLIT_HEX_PUBLIC_INPUTS}]" >> ./target/clean_proof
 
 
-verifier: contract proof
+verifier: contract clean_proof
 	cp target/Verifier.sol ../solidity-contracts/src/Verifier.sol
 	cp target/clean* ../solidity-contracts/src/

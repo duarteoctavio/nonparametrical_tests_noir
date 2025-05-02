@@ -7,10 +7,12 @@ import {HonkVerifier} from "../src/Verifier.sol";
 contract VerifierTest is Test {
     HonkVerifier public verifier;
     bytes public proof;
+    bytes32[] public pInputs;
 
     function setUp() public {
         verifier = new HonkVerifier();
-        proof = vm.readFileBinary("./src/proof");
+        proof = vm.readFileBinary("./src/clean_proof");
+        pInputs = vm.readFile("./src/clean_public_inputs");
     }
 
     function test_readFile() public {
@@ -22,8 +24,6 @@ contract VerifierTest is Test {
     }
 
     function test_verifier() public {
-        bytes32[] memory pInputs;
-        // pInputs.push(1);
         verifier.verify(proof, pInputs);
     }
 }
