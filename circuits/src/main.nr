@@ -10,6 +10,8 @@ fn main(statistic_threshold: i16, dataset: [i16; 128], expected_root: pub Field)
         merkle.add_leaf(elem as Field);
     }
     let root = merkle.root();
+    println("statistic");
+    println(statistic);
     assert(root == expected_root);
     assert( statistic < statistic_threshold );
 }
