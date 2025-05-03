@@ -33,10 +33,13 @@ contract VerifierTest is Test {
         bytes32 processHash = keccak256("easy to repeat process");
         bytes32 experimentId = app.proposeExperiment{value: 1 ether}(processHash, verifier, 1 ether);
 
-        assertEq(app.findExperiment(experimentId).author, address(this));
-        assertEq(app.findExperiment(experimentId).processHash, processHash);
-        assertEq(app.findExperiment(experimentId).bounty, 1 ether);
-        assertEq(address(app.findExperiment(experimentId).verifier), address(verifier));
+        App.Experiment memory experiment = app.findExperiment(experimentId);
+        assertEq(experiment.author, address(this));
+        assertEq(experiment.processHash, processHash);
+        assertEq(experiment.bounty, 1 ether);
+        assertEq(experiment.revalidated, false);
+        assertEq(experiment.claimed, false);
+        assertEq(address(experiment.verifier), address(verifier));
         assertEq(address(app).balance, 1 ether);
     }
 
@@ -85,7 +88,7 @@ contract VerifierTest is Test {
         app.publishRevalidation(experimentId, bytes("proof"), merkleRoot);
     }
 
-    function test_approveRevalidation() public {
+    function test_claimBounty() public {
         address author = address(0x123);
         address revalidator = address(0x456);
         payable(author).transfer(2 ether);
@@ -103,11 +106,22 @@ contract VerifierTest is Test {
         vm.prank(author);
         uint256 balanceBefore = revalidator.balance;
         app.approveRevalidation(experimentId);
+        
+        vm.prank(revalidator);
+        app.claimBounty(experimentId);
+        
         assertEq(revalidator.balance, balanceBefore + 1 ether);
 
         assertEq(address(app).balance, 0 ether);
         
         App.Revalidation memory revalidation = app.findRevalidation(experimentId);
+        App.Experiment memory experiment = app.findExperiment(experimentId);
+
         assertEq(revalidation.approved, true);
+        assertEq(experiment.revalidated, true);
+        assertEq(revalidation.approved, true);
+        assertEq(revalidation.revalidator, revalidator);
+        assertEq(experiment.claimed, true);
+
     }
 }
