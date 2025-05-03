@@ -14,6 +14,28 @@ proof:
 verify: proof
 	bb verify -k ./target/vk -p ./target/proof --oracle_hash keccak
 
+<<<<<<< HEAD
 verifier: contract proof
 	cp target/Verifier.sol ../solidity-contracts/src/Verifier.sol
 	cp target/proof ../solidity-contracts/test/proof
+=======
+clean_proof: proof
+	PROOF_HEX=$(cat ./target/proof | od -An -v -t x1 | tr -d $' \n' | sed 's/^.\{8\}//')
+
+	NUM_PUBLIC_INPUTS=1  # Replace this with the number of public inputs in your circuit
+	HEX_PUBLIC_INPUTS=${PROOF_HEX:0:$((32 * $NUM_PUBLIC_INPUTS * 2))}
+	SPLIT_HEX_PUBLIC_INPUTS=$(sed -e 's/.\{64\}/"0x&",/g' <<<$HEX_PUBLIC_INPUTS)
+
+	PROOF_WITHOUT_PUBLIC_INPUTS="${PROOF_HEX:$((NUM_PUBLIC_INPUTS * 32 * 2))}"
+
+	echo "proof"
+	echo 0x$PROOF_WITHOUT_PUBLIC_INPUTS
+	echo $PROOF_WITHOUT_PUBLIC_INPUTS > ./target/clean_proof
+	echo "inputs"
+	echo "[${SPLIT_HEX_PUBLIC_INPUTS}]" > ./target/clean_public_inputs
+
+
+verifier: contract clean_proof
+	cp target/Verifier.sol ../solidity-contracts/src/Verifier.sol
+	cp target/clean* ../solidity-contracts/src/
+>>>>>>> origin/main
