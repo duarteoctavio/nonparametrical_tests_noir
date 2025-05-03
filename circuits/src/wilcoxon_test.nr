@@ -1,13 +1,17 @@
-fn abs(x: i16) -> u8 {
+fn abs(x: i16) -> u16 {
     let mut output = x;
     if (x <=0) {
         output = - output;
     }
-    output as u8
+    output as u16
 }
 
 fn is_abs_sorted<let N: u32>(array: [ i16; N ]) {
     for i in 1..array.len() {
+        // println("element");
+        // println(i);
+        // println(abs( array[i] ));
+        // println(abs( array[i-1] ));
         assert( abs( array[i] ) >= abs( array[i-1] ), "This array is not sorted by absolute value as the test requires.");
     };
 }
