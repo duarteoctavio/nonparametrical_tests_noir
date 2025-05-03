@@ -23,8 +23,11 @@ clean_proof: proof
 
 	PROOF_WITHOUT_PUBLIC_INPUTS="${PROOF_HEX:$((NUM_PUBLIC_INPUTS * 32 * 2))}"
 
-	echo 0x$PROOF_WITHOUT_PUBLIC_INPUTS >> ./target/clean_public_inputs
-	echo "[${SPLIT_HEX_PUBLIC_INPUTS}]" >> ./target/clean_proof
+	echo "proof"
+	echo 0x$PROOF_WITHOUT_PUBLIC_INPUTS
+	echo $PROOF_WITHOUT_PUBLIC_INPUTS > ./target/clean_proof
+	echo "inputs"
+	echo "[${SPLIT_HEX_PUBLIC_INPUTS}]" > ./target/clean_public_inputs
 
 
 verifier: contract clean_proof
