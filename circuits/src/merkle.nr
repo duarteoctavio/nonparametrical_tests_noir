@@ -29,7 +29,7 @@ impl<let N: u32, let DEPTH: u32> MerkleThree<N, DEPTH> {
             buf[i] = self.leafs[i];
         }
 
-        
+
         for current in 0..DEPTH {
             let limit = N / 2.pow_32((current + 1) as Field) as u32;
             for i in 0..N {
