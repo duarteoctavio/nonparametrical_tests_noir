@@ -20,4 +20,4 @@ jobs:
       - name: Run Tests
         run: |
           cd solidity-contracts
-          forge test -vv 
+          forge test -vv --color=always
