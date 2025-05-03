@@ -11,7 +11,7 @@ contract TestVerifier is IVerifier {
         nextResult = true;
     }
 
-    function verify(bytes calldata _proof, bytes32[] calldata _publicInputs) external view returns (bool) {
+    function verify(bytes calldata, bytes32[] calldata) external view returns (bool) {        
         return nextResult;
     }
 
