@@ -12,8 +12,13 @@ proof:
 	bb prove -b ./target/nonparametrical_tests.json -w ./target/nonparametrical_tests.gz -o ./target  --oracle_hash keccak --output_format bytes_and_fields
 
 verify: proof
-	bb verify -k ./target/vk -p ./target/proof  --oracle_hash keccak
+	bb verify -k ./target/vk -p ./target/proof --oracle_hash keccak
 
+<<<<<<< HEAD
+verifier: contract proof
+	cp target/Verifier.sol ../solidity-contracts/src/Verifier.sol
+	cp target/proof ../solidity-contracts/test/proof
+=======
 clean_proof: proof
 	PROOF_HEX=$(cat ./target/proof | od -An -v -t x1 | tr -d $' \n' | sed 's/^.\{8\}//')
 
@@ -33,3 +38,4 @@ clean_proof: proof
 verifier: contract clean_proof
 	cp target/Verifier.sol ../solidity-contracts/src/Verifier.sol
 	cp target/clean* ../solidity-contracts/src/
+>>>>>>> origin/main
