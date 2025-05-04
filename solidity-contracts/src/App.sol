@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 import {IVerifier} from './Verifier.sol';
+import {PoseidonT3} from './Poseidon2.sol';
 
 contract App {
     struct Experiment {
@@ -10,14 +11,21 @@ contract App {
         uint256 bounty;
         bool revalidated;
         bool claimed;
+        uint256 sampleLength;
+    }
+
+    struct Sample {
+        uint256 value;
+        bytes32 sourceHash;
     }
 
     struct Revalidation {
         bytes32 experimentId;
         bytes proof;
-        bytes32 dataSetMerkleRoot;
+        uint256 dataSetMerkleRoot;
         address revalidator;
         bool approved;
+        Sample[] samples;
     }
 
     mapping(bytes32 => Experiment) internal proposals;
@@ -53,7 +61,8 @@ contract App {
             dataSetMerkleRoot: dataSetMerkleRoot,
             experimentId: experimentId,
             revalidator: msg.sender,
-            approved: false
+            approved: false,
+            samples: new Sample[](0)
         });
     }
 
@@ -66,12 +75,16 @@ contract App {
         experiment.revalidated = true;
     }
 
-    function claimBounty(bytes32 experimentId) external {
+    function claimBounty(bytes32 experimentId, Sample[] calldata samples) external {
         Experiment storage experiment = proposals[experimentId];
         Revalidation memory revalidation = revalidations[experimentId];
         require(experiment.revalidated, "Experiment not revalidated");
         require(revalidation.revalidator == msg.sender, "Not authorized");
         require(!experiment.claimed, "Bounty already claimed");
+        require(samples.length == experiment.sampleLength, "Invalid number of samples");
+        uint256 recalculated = recalculateMerkleRoot(samples);
+
+
         payable(revalidation.revalidator).transfer(experiment.bounty);
 
         experiment.claimed = true;
@@ -98,5 +111,31 @@ contract App {
         bytes32[] memory array = new bytes32[](1);
         array[0] = element;
         return array;
+    }
+
+    function arrayOfTwoElements(uint256 element1, uint256 element2) public pure returns (uint256[2] memory) {
+        uint256[2] memory array;
+        array[0] = element1;
+        array[1] = element2;
+        return array;
+    }
+
+    function recalculateMerkleRoot(Sample[] calldata samples) public pure returns (uint256) {
+        uint256[] memory hashes = new uint256[](samples.length);
+
+        for (uint256 i = 0; i < samples.length; i++) {
+            uint256[2] memory array = arrayOfTwoElements(samples[i].value, uint256(samples[i].sourceHash));
+            hashes[i] = PoseidonT3.hash(arrayOfTwoElements(1, 1));
+        }
+
+        uint256 length = samples.length / 2;
+
+        while (length > 1) {
+            for (uint256 i = 0; i < length; i += 2) {
+                hashes[i] = PoseidonT3.hash(arrayOfTwoElements(hashes[2*i], hashes[2*i + 1]));
+            }
+            length = length / 2;
+        }
+        return hashes[0];
     }
 }
