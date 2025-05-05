@@ -12,7 +12,8 @@
     "format": "prettier --write --cache --cache-location ./node_modules/.cache/prettier --log-level warn .",
     "typecheck": "tsc",
     "db:generate": "drizzle-kit generate:sqlite",
-    "db:migrate": "tsx app/db/migrate.ts"
+    "db:migrate": "node ./scripts/migrate.mjs",
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@fontsource/geist-sans": "^5.2.5",
