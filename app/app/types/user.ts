@@ -1,22 +1,14 @@
 export interface User {
   id: number;
-  email: string;
-  name: string | null;
+  walletAddress: string;
   createdAt: Date;
 }
 
 export interface UserSession {
   id: number;
-  email: string;
-  name: string | null;
+  walletAddress: string;
 }
 
-export type LoginForm = {
-  email: string;
-  password: string;
-  remember: boolean;
-};
-
-export type RegisterForm = LoginForm & {
-  name: string;
+export type WalletAuth = {
+  walletAddress: string;
 };

@@ -8,7 +8,6 @@ import { $path } from "remix-routes";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
-
   const allExperiments = getAllExperiments();
   return data({ user, experiments: allExperiments });
 }
@@ -36,7 +35,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Dashboard() {
-  const { user, experiments } = useLoaderData<typeof loader>();
+  const { experiments } = useLoaderData<typeof loader>();
 
   return (
     <div className="min-h-screen bg-background">

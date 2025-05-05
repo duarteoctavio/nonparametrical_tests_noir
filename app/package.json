@@ -11,7 +11,7 @@
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint --fix .",
     "format": "prettier --write --cache --cache-location ./node_modules/.cache/prettier --log-level warn .",
     "typecheck": "tsc",
-    "db:generate": "drizzle-kit generate:sqlite",
+    "db:generate": "drizzle-kit generate",
     "db:migrate": "node ./scripts/migrate.mjs",
     "db:push": "drizzle-kit push"
   },
@@ -23,11 +23,13 @@
     "@radix-ui/react-slot": "^1.2.0",
     "@radix-ui/react-toast": "^1.2.11",
     "@radix-ui/react-tooltip": "^1.2.4",
+    "@rainbow-me/rainbowkit": "^2.2.4",
     "@remix-run/node": "^2.16.5",
     "@remix-run/react": "^2.16.5",
     "@remix-run/serve": "^2.16.5",
     "@remix-run/server-runtime": "^2.16.5",
     "@t3-oss/env-core": "^0.13.4",
+    "@tanstack/react-query": "^5.75.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/better-sqlite3": "^7.6.13",
     "bcryptjs": "^3.0.2",
@@ -41,6 +43,9 @@
     "react-dom": "^18.2.0",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
+    "valibot": "^1.0.0",
+    "viem": "^2.28.4",
+    "wagmi": "^2.15.2",
     "zod": "^3.24.3"
   },
   "devDependencies": {

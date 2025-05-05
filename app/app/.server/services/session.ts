@@ -80,9 +80,19 @@ export async function requireUserId(
   return user;
 }
 
+// Get user session information or null if not logged in
+// Updated to map database result to User interface
 export async function getUser(request: Request): Promise<User | null> {
   const userId = await getUserId(request);
   if (!userId) return null;
 
-  return getUserById(userId) ?? null;
+  const dbUser = getUserById(userId);
+  if (!dbUser) return null;
+
+  // Map the dbUser object to the User interface
+  return {
+    id: dbUser.id,
+    walletAddress: dbUser.address, // Map address to walletAddress
+    createdAt: dbUser.createdAt,
+  };
 }

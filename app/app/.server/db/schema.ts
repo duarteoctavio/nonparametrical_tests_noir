@@ -1,10 +1,11 @@
+// Defines database schema using Drizzle ORM
+// Removed email and password columns from usersTable for wallet-only auth.
 import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
 import { createdAt, id } from "./common-schema";
 
 export const usersTable = sqliteTable("users", {
   id: id(),
-  email: text("email").notNull().unique(),
-  password: text("password").notNull(),
+  address: text("address").notNull().unique(),
   name: text("name"),
   createdAt: createdAt(),
 });

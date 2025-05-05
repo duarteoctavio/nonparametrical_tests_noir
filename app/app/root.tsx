@@ -4,6 +4,7 @@ import "@fontsource/geist-sans/400.css";
 import "@fontsource/geist-sans/500.css";
 import "@fontsource/geist-sans/600.css";
 import "@fontsource/geist-sans/700.css";
+import { Providers } from "./providers";
 
 export default function App() {
   return (
@@ -15,7 +16,9 @@ export default function App() {
         <Links />
       </head>
       <body className="font-geist h-full bg-background antialiased">
-        <Outlet />
+        <Providers>
+          <Outlet />
+        </Providers>
         <ScrollRestoration />
         <Scripts />
       </body>

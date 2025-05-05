@@ -1,38 +1,28 @@
-import { Form, useActionData, useNavigation } from "@remix-run/react";
+import { useEffect, useRef } from "react";
+import { useAccount } from "wagmi";
+import { Form, useSubmit } from "@remix-run/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { data } from "@remix-run/node";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ClientOnly } from "../components/client-only";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/card";
 import { createUserSession } from "~/.server/services/session";
-import { getUserByEmail } from "~/.server/dto/users";
-import { verifyPassword } from "~/.server/services/auth";
+import { findOrCreateUserByAddress } from "~/.server/dto/users";
+import { redirect } from "@remix-run/node";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  const address = formData.get("address") as string;
 
-  if (!email || !password) {
-    return data({ error: "Email and password are required" }, { status: 400 });
+  if (!address) {
+    console.error("Login action called without address.");
+    return redirect("/login");
   }
 
-  const user = getUserByEmail(email);
+  const user = await findOrCreateUserByAddress(address);
+
   if (!user) {
-    return data({ error: "Invalid email or password" }, { status: 401 });
-  }
-
-  const isPasswordValid = await verifyPassword(password, user.password);
-  if (!isPasswordValid) {
-    return data({ error: "Invalid email or password" }, { status: 401 });
+    console.error(`Could not find or create user for address: ${address}`);
+    return redirect("/login");
   }
 
   return createUserSession({
@@ -44,49 +34,33 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Login() {
-  const actionData = useActionData<typeof action>();
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const { isConnected, address } = useAccount();
+  const submit = useSubmit();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (isConnected && address && formRef.current) {
+      console.log(`Wallet connected with address: ${address}. Submitting login form.`);
+      const formData = new FormData(formRef.current);
+      submit(formData, { method: "post" });
+    }
+  }, [isConnected, address, submit]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="glass w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-center">Welcome to ReValidate</CardTitle>
-          <CardDescription className="text-center">
-            Science that stands the test of time
-          </CardDescription>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold tracking-tight">Welcome Back</CardTitle>
+          <CardDescription>Connect your wallet to sign in.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Form method="post" className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="Enter your email" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-            {actionData?.error && <p className="text-sm text-destructive">{actionData.error}</p>}
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Signing in..." : "Sign in"}
-            </Button>
+        <CardContent className="flex justify-center py-8">
+          <Form method="post" ref={formRef}>
+            <input type="hidden" name="address" value={address ?? ""} />
+            <ClientOnly>
+              <ConnectButton label="Connect Wallet" showBalance={false} accountStatus="address" />
+            </ClientOnly>
           </Form>
         </CardContent>
-        <CardFooter className="flex justify-center">
-          <p className="text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <a href="/register" className="text-primary hover:underline">
-              Register
-            </a>
-          </p>
-        </CardFooter>
       </Card>
     </div>
   );
