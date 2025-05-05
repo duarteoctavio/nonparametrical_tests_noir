@@ -35,15 +35,32 @@ export async function createUserSession({
 }) {
   const session = await getSession(request);
   session.set(USER_SESSION_KEY, userId);
-  return redirect(redirectTo, {
-    headers: {
-      "Set-Cookie": await sessionStorage.commitSession(session, {
-        maxAge: remember
-          ? 60 * 60 * 24 * 7 // 7 days
-          : undefined,
-      }),
-    },
-  });
+
+  try {
+    // Log before committing
+    console.log(`Committing session for user ID: ${userId}, redirectTo: ${redirectTo}`);
+
+    const cookie = await sessionStorage.commitSession(session, {
+      maxAge: remember
+        ? 60 * 60 * 24 * 7 // 7 days
+        : undefined,
+    });
+
+    // Log after successful commit
+    console.log(`Session committed successfully for user ID: ${userId}`);
+
+    return redirect(redirectTo, {
+      headers: {
+        "Set-Cookie": cookie,
+      },
+    });
+  } catch (error) {
+    // Log any error during session commit
+    console.error("!!! Error during createUserSession commit/redirect !!!", error);
+    // Re-throw the error so Remix still handles it (likely showing an error page),
+    // but now we have specific server logs.
+    throw error;
+  }
 }
 
 export async function logout(request: Request) {
@@ -81,18 +98,38 @@ export async function requireUserId(
 }
 
 // Get user session information or null if not logged in
-// Updated to map database result to User interface
+// Updated: Also includes worldIdNullifierHash in the returned User object.
 export async function getUser(request: Request): Promise<User | null> {
   const userId = await getUserId(request);
   if (!userId) return null;
 
-  const dbUser = getUserById(userId);
-  if (!dbUser) return null;
+  const session = await getSession(request);
+  const userSessionKey = session.get(USER_SESSION_KEY);
 
-  // Map the dbUser object to the User interface
-  return {
+  // Ensure the user ID from the session key matches the one fetched
+  if (userSessionKey !== userId) {
+    console.error(`Session validation failed: User ID mismatch in getUser`);
+    await sessionStorage.destroySession(session);
+    // Don't redirect here, just return null as user is not authenticated
+    return null;
+  }
+
+  // Fetch full user details from the database
+  const dbUser = await getUserById(userId);
+
+  if (!dbUser) {
+    console.error(`getUser failed: User not found for ID ${userId}`);
+    await sessionStorage.destroySession(session);
+    return null; // User associated with session doesn't exist
+  }
+
+  // Map dbUser to the User interface
+  const user: User = {
     id: dbUser.id,
-    walletAddress: dbUser.address, // Map address to walletAddress
+    walletAddress: dbUser.address ?? "", // Default to empty string if null
+    worldIdNullifierHash: dbUser.worldIdNullifierHash, // Include the nullifier hash
     createdAt: dbUser.createdAt,
   };
+
+  return user;
 }

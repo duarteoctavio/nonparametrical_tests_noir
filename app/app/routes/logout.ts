@@ -1,14 +1,15 @@
-import { logout } from "~/.server/services/session";
+// Route to handle user logout
 import type { ActionFunctionArgs } from "@remix-run/node";
+import { logout } from "~/.server/services/session";
 import { redirect } from "@remix-run/node";
 
-// Action function: Handles POST requests to log the user out
+// Action function: Destroys the session on POST
 export async function action({ request }: ActionFunctionArgs) {
   return logout(request);
 }
 
-// Loader function: Redirects GET requests to the login page
+// Loader function: Redirects to login if accessed via GET (optional)
 export async function loader() {
-  // If someone navigates here directly via GET, just send them to login
+  // Prevent GET access if desired, or handle differently
   return redirect("/login");
 }

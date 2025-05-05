@@ -1,6 +1,7 @@
 export interface User {
   id: number;
   walletAddress: string;
+  worldIdNullifierHash?: string | null;
   createdAt: Date;
 }
 

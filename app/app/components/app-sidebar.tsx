@@ -1,10 +1,16 @@
 import { NavLink } from "@remix-run/react";
-import { HistoryIcon, HomeIcon, RocketIcon, SearchCheckIcon } from "lucide-react";
+import {
+  HistoryIcon,
+  HomeIcon,
+  LogOutIcon,
+  RocketIcon,
+  SearchCheckIcon,
+  UserCircle,
+} from "lucide-react";
 import { $path } from "remix-routes";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarTrigger,
@@ -22,7 +28,12 @@ const ITEMS = [
   { label: "History", path: $path("/dashboard"), icon: HistoryIcon, inactive: true },
 ];
 
-export function AppSidebar() {
+interface AppSidebarProps {
+  userIdentifier: string;
+  onLogout: () => void;
+}
+
+export function AppSidebar({ userIdentifier, onLogout }: AppSidebarProps) {
   const { setOpenMobile } = useSidebar();
 
   return (
@@ -35,7 +46,7 @@ export function AppSidebar() {
           <SidebarTrigger variant="outline" />
         </SidebarMenuButton>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="flex flex-col justify-between">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -54,8 +65,32 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <SidebarGroup className="mt-auto pb-4 group-data-[collapsed=true]:pt-4">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip={userIdentifier}
+                  className="cursor-default hover:bg-transparent focus:bg-transparent data-[active=true]:bg-transparent"
+                >
+                  <UserCircle strokeWidth={2} />
+                  <span>{userIdentifier}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip="Logout"
+                  onClick={onLogout}
+                  className="text-red-600 hover:bg-red-100 dark:hover:bg-red-900/50"
+                >
+                  <LogOutIcon strokeWidth={2} />
+                  <span>Logout</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
     </Sidebar>
   );
 }

@@ -36,3 +36,35 @@ export async function findOrCreateUserByAddress(address: string): Promise<Select
     return null; // Return null if creation fails
   }
 }
+
+export function findUserByNullifierHash(nullifierHash: string) {
+  return db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.worldIdNullifierHash, nullifierHash))
+    .get(); // Use .get() for SQLite to return one or undefined
+}
+
+export async function createUserWithNullifier(nullifierHash: string): Promise<SelectUser | null> {
+  // Ensure the nullifier hash is unique before attempting to insert,
+  // although the database constraint should also handle this.
+  const existingUser = findUserByNullifierHash(nullifierHash);
+  if (existingUser) {
+    console.warn(`User with nullifier hash ${nullifierHash} already exists.`);
+    return existingUser; // Or handle as an error depending on desired logic
+  }
+
+  try {
+    const newUser = await db
+      .insert(usersTable)
+      .values({ worldIdNullifierHash: nullifierHash })
+      // Address is omitted, will be null (or its default if defined)
+      // createdAt should be handled by the schema default
+      .returning()
+      .get(); // Use .get() for SQLite
+    return newUser;
+  } catch (error) {
+    console.error(`Error creating user for nullifier hash ${nullifierHash}:`, error);
+    return null; // Return null if creation fails
+  }
+}
