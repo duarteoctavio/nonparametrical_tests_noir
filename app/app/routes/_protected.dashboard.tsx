@@ -3,6 +3,7 @@ import { Form, useLoaderData, Link } from "@remix-run/react";
 import { requireUserId } from "~/.server/services/session";
 import { createExperiment, getAllExperiments } from "~/.server/dto/experiments";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
@@ -85,20 +86,22 @@ export default function Dashboard() {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {experiments.map((experiment) => (
-              <div key={experiment.id} className="glass rounded-xl p-6 shadow-sm">
-                <h3 className="font-geist mb-2 text-lg font-semibold text-foreground">
-                  {experiment.title}
-                </h3>
-                <p className="font-geist mb-4 text-sm text-muted-foreground">
-                  {experiment.description}
-                </p>
-                <div className="flex items-center justify-between">
+              <Card key={experiment.id}>
+                <CardHeader>
+                  <CardTitle>{experiment.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="font-geist mb-4 text-sm text-muted-foreground">
+                    {experiment.description}
+                  </p>
+                </CardContent>
+                <CardFooter className="flex items-center justify-between">
                   <span className="font-geist font-medium text-primary">${experiment.bounty}</span>
                   <span className="font-geist text-sm text-muted-foreground">
                     {new Date(experiment.createdAt).toLocaleDateString()}
                   </span>
-                </div>
-              </div>
+                </CardFooter>
+              </Card>
             ))}
           </div>
         </div>

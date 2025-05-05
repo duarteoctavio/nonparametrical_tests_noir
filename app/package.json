@@ -7,6 +7,7 @@
     "dev": "remix vite:dev",
     "build": "remix vite:build",
     "start": "remix-serve ./build/server/index.js",
+    "check": "run-s format lint typecheck",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint --fix .",
     "format": "prettier --write --cache --cache-location ./node_modules/.cache/prettier --log-level warn .",
     "typecheck": "tsc",
@@ -32,7 +33,7 @@
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.43.1",
     "isbot": "^4.1.0",
-    "lucide-react": "^0.503.0",
+    "lucide-react": "^0.507.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^3.2.0",
@@ -53,9 +54,10 @@
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-n": "^17.17.0",
-    "eslint-plugin-unused-imports": "^4.1.4",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "npm-run-all2": "^8.0.1",
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
@@ -68,6 +70,5 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  },
-  "packageManager": "pnpm@9.15.0+sha256.09a8fe31a34fda706354680619f4002f4ccef6dadff93240d24ef6c831f0fd28"
+  }
 }
