@@ -9,12 +9,20 @@ pub struct MerkleThree<let SIZE: u32, let DEPTH: u32> {
     current: u32,
 }
 
-pub comptime fn merkle_three(power_of_two: Field) -> Quoted {
+comptime fn merkle_three_test(power_of_two: Field) -> Quoted {
     let depth: u32 = power_of_two as u32;
     let base: Field = 2;
     let n: u32 = base.pow_32(power_of_two) as u32;
     quote {
         MerkleThree::<$n, $depth>::new()
+    }
+}
+pub comptime fn merkle_three(power_of_two: Field) -> Quoted {
+    let depth: u32 = power_of_two as u32;
+    let base: Field = 2;
+    let n: u32 = base.pow_32(power_of_two) as u32;
+    quote {
+        merkle::MerkleThree::<$n, $depth>::new()
     }
 }
 
@@ -145,7 +153,7 @@ fn test_one_simple_example_size_8() {
 
 #[test]
 fn test_macro_one_simple_example_size_8() {
-    let mut merkle = merkle_three!(3);
+    let mut merkle = merkle_three_test!(3);
     merkle.add_leaf(1);
     merkle.add_leaf(2);
     merkle.add_leaf(3);
