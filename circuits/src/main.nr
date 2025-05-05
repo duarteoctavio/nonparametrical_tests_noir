@@ -4,7 +4,8 @@ mod wilcoxon_test;
 
 fn main(statistic_threshold: i16, dataset: [i16; 128], expected_root: pub Field) {
     let statistic = wilcoxon_test::get_wilcoxon_t_statistic(dataset);
-    let mut merkle = merkle::MerkleThree::<128, 7>::new();
+    // let mut merkle = merkle::MerkleThree::<128, 7>::new();
+    let mut merkle = merkle::merkle_three!(7);
 
     for elem in dataset {
         merkle.add_leaf(elem as Field);
