@@ -1,16 +1,13 @@
-import { json } from '@remix-run/node';
-import { Form, Link, useLoaderData } from '@remix-run/react';
-import { requireUserId } from '~/utils/session.server';
-import { db } from '~/db';
-import { experiments, users } from '~/db/schema';
-import { eq } from 'drizzle-orm';
-import type { LoaderFunctionArgs } from '@remix-run/node';
+import { data } from "@remix-run/node";
+import { Form, Link, useLoaderData } from "@remix-run/react";
+import { requireUserId } from "~/.server/services/session";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { getExperimentsByCreator } from "~/.server/dto/experiments";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const userId = await requireUserId(request);
-  const userExperiments = await db.select().from(experiments).where(eq(experiments.creatorId, userId)).all();
-  const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  return json({ experiments: userExperiments, user: user[0] });
+  const user = await requireUserId(request);
+  const userExperiments = getExperimentsByCreator(user.id);
+  return data({ experiments: userExperiments, user });
 }
 
 export default function MyExperiments() {
@@ -20,62 +17,59 @@ export default function MyExperiments() {
     <div className="min-h-screen bg-background">
       {/* Navbar */}
       <nav className="glass shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-primary font-geist">ReValidate</h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-foreground font-geist">Welcome, {user?.name || 'Researcher'}</span>
-            <Form action="/logout" method="post">
-              <button
-                type="submit"
-                className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 font-geist"
-              >
-                Sign out
-              </button>
-            </Form>
-          </div>
-        </div>
-      </div>
-    </nav>
-    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground font-geist">My Experiments</h1>
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center px-4 py-2 border border-border rounded-lg shadow-sm text-sm font-medium text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200 font-geist"
-          >
-            Back to Dashboard
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {experiments.map((experiment) => (
-            <div
-              key={experiment.id}
-              className="glass rounded-xl shadow-sm p-6"
-            >
-              <h3 className="text-lg font-semibold text-foreground mb-2 font-geist">
-                {experiment.title}
-              </h3>
-              <p className="text-muted-foreground text-sm mb-4 font-geist">
-                {experiment.description}
-              </p>
-              <div className="flex justify-between items-center">
-                <span className="text-primary font-medium font-geist">
-                  ${experiment.bounty}
-                </span>
-                <span className="text-sm text-muted-foreground font-geist">
-                  {new Date(experiment.createdAt).toLocaleDateString()}
-                </span>
-              </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 justify-between">
+            <div className="flex items-center">
+              <h1 className="font-geist text-2xl font-bold text-primary">ReValidate</h1>
             </div>
-          ))}
+            <div className="flex items-center space-x-4">
+              <span className="font-geist text-foreground">
+                Welcome, {user?.name || "Researcher"}
+              </span>
+              <Form action="/logout" method="post">
+                <button
+                  type="submit"
+                  className="font-geist rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                >
+                  Sign out
+                </button>
+              </Form>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div className="min-h-screen bg-background px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 flex items-center justify-between">
+            <h1 className="font-geist text-3xl font-bold text-foreground">My Experiments</h1>
+            <Link
+              to="/dashboard"
+              className="font-geist inline-flex items-center rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-colors duration-200 hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {experiments.map((experiment) => (
+              <div key={experiment.id} className="glass rounded-xl p-6 shadow-sm">
+                <h3 className="font-geist mb-2 text-lg font-semibold text-foreground">
+                  {experiment.title}
+                </h3>
+                <p className="font-geist mb-4 text-sm text-muted-foreground">
+                  {experiment.description}
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="font-geist font-medium text-primary">${experiment.bounty}</span>
+                  <span className="font-geist text-sm text-muted-foreground">
+                    {new Date(experiment.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

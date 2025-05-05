@@ -1,11 +1,5 @@
 import type { LinksFunction } from "@remix-run/node";
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 import styles from "./tailwind.css";
 import globals from "./styles/globals.css";
 import "@fontsource/geist-sans/400.css";
@@ -27,7 +21,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full font-geist antialiased bg-background">
+      <body className="font-geist h-full bg-background antialiased">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

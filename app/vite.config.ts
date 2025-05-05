@@ -11,10 +11,10 @@ declare module "@remix-run/node" {
 export default defineConfig({
   server: {
     port: 5173,
-    host: 'localhost',
+    host: "localhost",
     hmr: {
-      protocol: 'ws',
-      host: 'localhost',
+      protocol: "ws",
+      host: "localhost",
       port: 5173,
     },
   },

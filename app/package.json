@@ -4,10 +4,11 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "build": "remix vite:build",
     "start": "remix-serve ./build/server/index.js",
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint --fix .",
+    "format": "prettier --write --cache --cache-location ./node_modules/.cache/prettier --log-level warn .",
     "typecheck": "tsc",
     "db:generate": "drizzle-kit generate:sqlite",
     "db:migrate": "tsx app/db/migrate.ts"
@@ -22,6 +23,7 @@
     "@remix-run/react": "^2.16.5",
     "@remix-run/serve": "^2.16.5",
     "@remix-run/server-runtime": "^2.16.5",
+    "@t3-oss/env-core": "^0.13.4",
     "@types/bcryptjs": "^2.4.6",
     "@types/better-sqlite3": "^7.6.13",
     "bcryptjs": "^3.0.2",
@@ -34,7 +36,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^3.2.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.16.5",
@@ -49,9 +52,14 @@
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-n": "^17.17.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "remix-routes": "^1.7.7",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.4",
     "typescript": "^5.1.6",
@@ -60,5 +68,6 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  }
+  },
+  "packageManager": "pnpm@9.15.0+sha256.09a8fe31a34fda706354680619f4002f4ccef6dadff93240d24ef6c831f0fd28"
 }

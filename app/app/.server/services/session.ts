@@ -1,8 +1,7 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import type { User } from "~/types/user";
-import { eq } from "drizzle-orm";
-import { db } from "~/db";
-import { users } from "~/db/schema";
+import { env } from "~/.server/env";
+import { getUserById } from "../dto/users";
 
 // Export this to use in your root.tsx
 export const sessionStorage = createCookieSessionStorage({
@@ -11,8 +10,8 @@ export const sessionStorage = createCookieSessionStorage({
     httpOnly: true,
     path: "/",
     sameSite: "lax",
-    secrets: ["s3cr3t"], // TODO: Replace with env variable
-    secure: process.env.NODE_ENV === "production",
+    secrets: [env.SESSION_SECRET],
+    secure: env.NODE_ENV === "production",
   },
 });
 
@@ -64,24 +63,26 @@ export async function getUserId(request: Request): Promise<number | undefined> {
 
 export async function requireUserId(
   request: Request,
-  redirectTo: string = new URL(request.url).pathname
+  redirectTo: string = new URL(request.url).pathname,
 ) {
   const userId = await getUserId(request);
   if (!userId) {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
     throw redirect(`/login?${searchParams}`);
   }
-  return userId;
+
+  const user = getUserById(userId);
+  if (!user) {
+    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+    throw redirect(`/login?${searchParams}`);
+  }
+
+  return user;
 }
 
 export async function getUser(request: Request): Promise<User | null> {
   const userId = await getUserId(request);
   if (!userId) return null;
 
-  try {
-    const user = await db.select().from(users).where(eq(users.id, userId)).get();
-    return user;
-  } catch {
-    return null;
-  }
-} 
+  return getUserById(userId) ?? null;
+}

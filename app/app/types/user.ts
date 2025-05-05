@@ -19,4 +19,4 @@ export type LoginForm = {
 
 export type RegisterForm = LoginForm & {
   name: string;
-}; 
+};
