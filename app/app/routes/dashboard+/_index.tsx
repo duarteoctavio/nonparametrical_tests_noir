@@ -1,9 +1,10 @@
 import { data, redirect } from "@remix-run/node";
-import { Form, useLoaderData, Link } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
 import { requireUserId } from "~/.server/services/session";
 import { createExperiment, getAllExperiments } from "~/.server/dto/experiments";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import { $path } from "remix-routes";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
@@ -31,7 +32,7 @@ export async function action({ request }: ActionFunctionArgs) {
     creatorId: user.id,
   });
 
-  return redirect("/dashboard");
+  return redirect($path("/dashboard"));
 }
 
 export default function Dashboard() {
@@ -39,7 +40,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navbar */}
+      {/* Navbar
       <nav className="glass shadow-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between">
@@ -61,7 +62,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-      </nav>
+      </nav> */}
 
       {/* Main Content */}
       <div className="px-4 py-8 sm:px-6 lg:px-8">
@@ -70,13 +71,13 @@ export default function Dashboard() {
             <h1 className="font-geist text-3xl font-bold text-foreground">Dashboard</h1>
             <div className="flex space-x-4">
               <Link
-                to="/experiments/new"
+                to={$path("/dashboard/experiments/new")}
                 className="font-geist inline-flex items-center rounded-lg border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors duration-200 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
                 Create New Experiment
               </Link>
               <Link
-                to="/experiments/my"
+                to={$path("/dashboard/experiments/me")}
                 className="font-geist inline-flex items-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-colors duration-200 hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
                 My Experiments
