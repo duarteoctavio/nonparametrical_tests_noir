@@ -1,3 +1,5 @@
+use fraction;
+
 fn abs(x: i8) -> u8 {
     let mut output = x;
     if (x <=0) {

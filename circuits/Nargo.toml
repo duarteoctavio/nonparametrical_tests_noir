@@ -4,3 +4,6 @@ type = "bin"
 authors = [""]
 
 [dependencies]
+# currently doesn't work
+fixed = { tag = "v1.0.0", git = "https://github.com/manu-bhadoria/noir-fixed-point/" } 
+fraction = { tag = "v1.2.2", git = "https://github.com/resurgencelabs/fraction" }
