@@ -1,3 +1,4 @@
+// @jsxImportSource react
 import React from "react";
 import { Link } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
@@ -16,8 +17,6 @@ import {
   Star,
   ExternalLink,
 } from "lucide-react";
-import { motion } from "framer-motion";
-import { useRef } from "react";
 import { EvervaultCard } from "../components/ui/EvervaultCard";
 
 export default function Index() {
