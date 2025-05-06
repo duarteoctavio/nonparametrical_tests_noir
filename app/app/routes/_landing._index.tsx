@@ -69,10 +69,13 @@ export default function LandingIndex() {
               pricing
             </Link>
           </nav>
-          <Button className="bg-indigo-600 hover:bg-indigo-700 shadow-sm">
+          <Link
+            to="/login"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 h-10 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 shadow-sm text-slate-50 hover:text-slate-50"
+          >
             Get started
             <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          </Link>
         </div>
       </header>
 
@@ -96,13 +99,13 @@ export default function LandingIndex() {
               Validate findings. Build confidence. Advance science.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Button
-                size="lg"
-                className="bg-indigo-600 hover:bg-indigo-700 shadow-md rounded-full px-8"
+              <Link
+                to="/login"
+                className="inline-flex items-center justify-center text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 h-11 rounded-full px-8 bg-indigo-600 hover:bg-indigo-700 shadow-md text-slate-50 hover:text-slate-50"
               >
                 Start revalidating
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              </Link>
               <Button
                 size="lg"
                 variant="outline"
