@@ -1,9 +1,10 @@
 // @jsxImportSource react
 import React from "react";
 import { Link } from "@remix-run/react";
-import { Button } from "~/components/ui/button";
-import { Card } from "~/components/ui/card";
-import { Separator } from "~/components/ui/separator";
+import type { MetaFunction } from "@remix-run/node";
+import { Button } from "~/components/landing/button";
+import { Card } from "~/components/landing/card";
+import { Separator } from "~/components/landing/separator";
 import {
   ArrowRight,
   CheckCircle,
@@ -17,9 +18,20 @@ import {
   Star,
   ExternalLink,
 } from "lucide-react";
-import { EvervaultCard } from "../components/ui/EvervaultCard";
+import { EvervaultCard } from "~/components/landing/EvervaultCard";
 
-export default function Index() {
+export const meta: MetaFunction = () => {
+  return [
+    { title: "ReValidate - Strengthen Scientific Integrity" },
+    {
+      name: "description",
+      content:
+        "Our platform enables researchers to verify, replicate, and strengthen scientific studies with transparent methodologies.",
+    },
+  ];
+};
+
+export default function LandingIndex() {
   return (
     <div className="min-h-screen bg-white text-slate-900">
       {/* HEADER */}

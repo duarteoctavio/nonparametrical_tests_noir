@@ -2,11 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
+
+@layer utilities {
+  .bg-grid-slate-100 {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(226 232 240 / 0.8)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  }
+
+  .bg-grid-slate-700 {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(51 65 85 / 0.4)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Roboto Flex", ui-sans-serif, system-ui, sans-serif;
+  }
+  /* The html, body rule from the original app/app/tailwind.css was likely superseded by the body rule above.
+     If specific html styling or the dark:bg-gray-950 is still needed and not covered by theme variables, it can be added back selectively. 
+     For now, relying on body bg-background and text-foreground from CSS variables.
+  */
 
   @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
+    html {
+      color-scheme: dark;
+    }
   }
 }
