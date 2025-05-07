@@ -1,157 +1,45 @@
-fn abs(x: i8) -> u8 {
-    let mut output = x;
-    if (x <=0) {
-        output = - output;
+mod merkle;
+mod wilcoxon_test;
+
+
+fn main(statistic_threshold: i16, dataset: [i16; 128], expected_root: pub Field) {
+    let statistic = wilcoxon_test::get_wilcoxon_t_statistic(dataset);
+    let mut merkle = merkle::MerkleThree::<128, 7>::new();
+
+    for elem in dataset {
+        merkle.add_leaf(elem as Field);
     }
-    output as u8
-}
-
-fn is_abs_sorted<let N: u32>(array: [ i8; N ]) {
-    for i in 1..array.len() {
-        assert( abs( array[i] ) >= abs( array[i-1] ), "This array is not sorted by absolute value as the test requires.");
-    };
-}
-
-fn set_contains_elem<let N: u32>(set: [i8;N] , elem: i8 ) -> bool {
-    let mut output = false;
-    for e in set {
-        if e == elem {
-            output = true;
-        }
-    }
-    output
-}
-
-struct SamplePosition {
-    sample_value: i8,
-    amount_of_samples: i8,
-    first_index: i8,
-    last_index: i8,
-}
-
-// NOTE while it's tempting to use a remainder array, it would have the same length padded with 0s, as we are forced to use a fixed size. Therefore, we opt for just reusing the same array.
-// NOTE only works on sorted arrays.
-fn group_equals<let N: u32>(sample_value: i8, array: [i8;N]) -> SamplePosition {
-    let mut amount: i8 = 0;
-    let mut first_index: i8 = 0;
-    let mut last_index: i8 = 0;
-    let mut bumped_on = false;
-    for index in 0..array.len() {
-        let current = array[index];
-        if current == sample_value {
-            amount+=1;
-            last_index = index as i8;
-            if !bumped_on {
-                bumped_on = true;
-                first_index = index as i8;
-            };
-        }
-    };
-    SamplePosition {
-        sample_value,
-        amount_of_samples: amount,
-        first_index,
-        last_index
-    }
-}
-
-/// This function will find the average between a range of numbers (min and max, inclusive on both ends). Thanks to integers being integers we can rely on a close summation formula and avoid using an `unconstrained` function.
-fn range_average(min: i8, max: i8) -> i8 {
-    let zero_to_min_sum: i8 = ( ( min - 1 ) * (min) ) / 2;
-    let zero_to_max_sum: i8 = ( max * (max + 1) ) / 2;
-    let range_sum: i8 = zero_to_max_sum - zero_to_min_sum;
-    let size: i8 = max - min + 1;
-    let average: i8 = range_sum / size;
-    average
-}
-
-fn assign_wilcox_scores<let N: u32>(sorted_array: [i8; N]) -> [i8; N] {
-    // following functions assume sorted data.
-    is_abs_sorted(sorted_array);
-
-    let sample_positions = sorted_array.map(|e| group_equals(e, sorted_array));
-    // we need to skip the repeated sample positions.
-    let mut scores_slice: [i8] = [];
-    for positions in sample_positions {
-        let average = range_average(positions.first_index + 1, positions.last_index + 1);
-        scores_slice = scores_slice.push_back(average);
-    }
-    let scores: [i8; N] = scores_slice.as_array();
-    scores
-}
-
-fn get_wilcoxon_t_statistic<let N: u32>(dataset: [i8; N]) -> i8 {
-    let scores = assign_wilcox_scores(dataset);
-    let mut statistic = 0;
-    for i in 0..dataset.len() {
-        if (dataset[i] > 0) {
-            statistic += scores[i];
-        }
-    };
-    statistic
-}
-
-fn main(statistic_threshold: i8, dataset: [i8; 9]) {
-    let statistic = get_wilcoxon_t_statistic(dataset);
-    println("statistic is");
+    let root = merkle.root();
+    println("statistic");
     println(statistic);
+    assert(root == expected_root);
     assert( statistic < statistic_threshold );
 }
 
-#[test]
-fn test_abs() {
-    assert(8 == abs(8));
-    assert(8 == abs(-8));
-}
-
-#[test]
-fn test_is_abs_sorted() {
-    is_abs_sorted([0,1,2,3,4]);
-    is_abs_sorted([-1,-2,3,-5,5,5])
-}
 #[test(should_fail)]
-fn test_is_abs_sorted_fails() {
-    is_abs_sorted([6,1,2,3,4]);
-    is_abs_sorted([1,-2,3,5,5,5])
-}
-
-#[test]
-fn test_group_equals() {
-    let position = group_equals(2, [1,2,2,3,4]);
-    assert(position.amount_of_samples == 2);
-}
-
-#[test]
-fn test_set_contains_elem() {
-    let example = [1,2,3,4,5];
-    assert( set_contains_elem(example,1) );
-}
-
-#[test]
-fn test_range_average() {
-    let expected: i8 = 5;
-    let range = range_average(4,6);
-    assert( range == expected );
-}
-
-#[test]
-fn test_assign_wilcox_scores() {
-    let scores = assign_wilcox_scores([1,2,3,5,5,5]);
-    assert(scores == [1,2,3,5,5,5]);
-}
-
-#[test]
-fn statistic_calculation() {
-    let statistic = get_wilcoxon_t_statistic([ 5, 5, -7, -9, -10, -12, 15, 17, 20]);
-    println(f"statistic is {statistic}");
-    assert(statistic == 26)
+fn test_rejection_for_big_threshold() {
+    main(
+        15,
+        [418,-430,-673,1008,-1180,1227,1331,-1598,1964,-2054,2870,-3040,3275,3292,-4092,-4129,-4212,-4319,4423,-4723,4748,-4789,5383,-5968,-6018,-6231,6419,-6463,6502,6653,6683,-6691,6723,6885,6900,-7345,-7455,-7475,-7627,7729,-7812,-7965,-8011,8236,-8377,8558,8769,8913,-8921,-9443,-10395,-10615,-10685,-10820,-10829,11013,12026,12071,-12225,-12557,12993,13115,-13563,-14472,14807,-15108,15772,17548,-17873,-18201,18665,-18759,-19263,19335,-19364,-19838,-19883,-20140,-20148,20299,-20536,20584,-20732,21088,21325,21377,21601,21773,21820,21871,-21898,-22089,22216,-22437,-22437,22793,-22806,-23064,23456,-24072,-24301,-24713,25169,25405,25710,26199,-26239,-26330,-27065,-27713,-28287,28344,-28570,-28679,29033,-29115,-29181,-29554,29808,29978,-30099,30309,-30615,-31260,-31603,-31753,31973,32239],
+        0x2815ae70918e2300380e522f1b58a0da640f2d0f748a42cd573d3747ce989e0b
+    )
 }
 
 #[test(should_fail)]
-fn test_rejection() {
-    main(15, [ 5, 5, -7, -9, -10, -12, 15, 17, 20])
+fn test_rejection_wrong_root() {
+    main(
+        15,
+        [418,-430,-673,1008,-1180,1227,1331,-1598,1964,-2054,2870,-3040,3275,3292,-4092,-4129,-4212,-4319,4423,-4723,4748,-4789,5383,-5968,-6018,-6231,6419,-6463,6502,6653,6683,-6691,6723,6885,6900,-7345,-7455,-7475,-7627,7729,-7812,-7965,-8011,8236,-8377,8558,8769,8913,-8921,-9443,-10395,-10615,-10685,-10820,-10829,11013,12026,12071,-12225,-12557,12993,13115,-13563,-14472,14807,-15108,15772,17548,-17873,-18201,18665,-18759,-19263,19335,-19364,-19838,-19883,-20140,-20148,20299,-20536,20584,-20732,21088,21325,21377,21601,21773,21820,21871,-21898,-22089,22216,-22437,-22437,22793,-22806,-23064,23456,-24072,-24301,-24713,25169,25405,25710,26199,-26239,-26330,-27065,-27713,-28287,28344,-28570,-28679,29033,-29115,-29181,-29554,29808,29978,-30099,30309,-30615,-31260,-31603,-31753,31973,32239],
+        0xff
+    )
 }
+
 #[test]
 fn test_verification() {
-    main(15, [ 1, -2, 3, -4, 5, -6, -7 , -8, -9])
+    main(
+        4227,
+        [418,-430,-673,1008,-1180,1227,1331,-1598,1964,-2054,2870,-3040,3275,3292,-4092,-4129,-4212,-4319,4423,-4723,4748,-4789,5383,-5968,-6018,-6231,6419,-6463,6502,6653,6683,-6691,6723,6885,6900,-7345,-7455,-7475,-7627,7729,-7812,-7965,-8011,8236,-8377,8558,8769,8913,-8921,-9443,-10395,-10615,-10685,-10820,-10829,11013,12026,12071,-12225,-12557,12993,13115,-13563,-14472,14807,-15108,15772,17548,-17873,-18201,18665,-18759,-19263,19335,-19364,-19838,-19883,-20140,-20148,20299,-20536,20584,-20732,21088,21325,21377,21601,21773,21820,21871,-21898,-22089,22216,-22437,-22437,22793,-22806,-23064,23456,-24072,-24301,-24713,25169,25405,25710,26199,-26239,-26330,-27065,-27713,-28287,28344,-28570,-28679,29033,-29115,-29181,-29554,29808,29978,-30099,30309,-30615,-31260,-31603,-31753,31973,32239],
+        0x2815ae70918e2300380e522f1b58a0da640f2d0f748a42cd573d3747ce989e0b
+    )
 }
+

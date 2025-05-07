@@ -1,22 +1,10 @@
-import type { LinksFunction } from "@remix-run/node";
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
-import styles from "./tailwind.css";
-import globals from "./styles/globals.css";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import "./globals.css";
 import "@fontsource/geist-sans/400.css";
 import "@fontsource/geist-sans/500.css";
 import "@fontsource/geist-sans/600.css";
 import "@fontsource/geist-sans/700.css";
-
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
-  { rel: "stylesheet", href: globals },
-];
+import { Providers } from "./providers";
 
 export default function App() {
   return (
@@ -27,8 +15,10 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full font-geist antialiased bg-background">
-        <Outlet />
+      <body className="font-geist h-full bg-background antialiased">
+        <Providers>
+          <Outlet />
+        </Providers>
         <ScrollRestoration />
         <Scripts />
       </body>

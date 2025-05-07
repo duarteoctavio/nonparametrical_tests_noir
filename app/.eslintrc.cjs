@@ -1,8 +1,4 @@
-/**
- * This is intended to be a basic starting point for linting in your app.
- * It relies on recommended configs out of the box for simplicity, but you can
- * and should modify this configuration to best suit your team's needs.
- */
+const path = require("path");
 
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
@@ -53,8 +49,11 @@ module.exports = {
     // Typescript
     {
       files: ["**/*.{ts,tsx}"],
-      plugins: ["@typescript-eslint", "import"],
+      plugins: ["@typescript-eslint", "import", "eslint-plugin-n", "unused-imports"],
       parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: [path.join(__dirname, "tsconfig.json")],
+      },
       settings: {
         "import/internal-regex": "^~/",
         "import/resolver": {
@@ -71,6 +70,24 @@ module.exports = {
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
+      rules: {
+        "@typescript-eslint/no-misused-promises": [
+          "error",
+          { checksVoidReturn: { attributes: false } },
+        ],
+        "n/no-process-env": "error",
+        "@typescript-eslint/no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "warn",
+        "unused-imports/no-unused-vars": [
+          "warn",
+          {
+            vars: "all",
+            varsIgnorePattern: "^_",
+            args: "after-used",
+            argsIgnorePattern: "^_",
+          },
+        ],
+      },
     },
 
     // Node
