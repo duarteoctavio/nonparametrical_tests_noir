@@ -65,7 +65,7 @@ contract VerifierTest is Test {
         bytes32 experimentId = app.proposeExperiment{value: 1 ether}(processHash, verifier, 1 ether);
 
         address revalidator = address(0x123);
-        bytes32 merkleRoot = keccak256("merkle root");
+        uint256 merkleRoot = 0xabc;
         vm.prank(revalidator);
         app.publishRevalidation(experimentId, bytes("proof"), merkleRoot);
 
@@ -82,7 +82,7 @@ contract VerifierTest is Test {
         bytes32 processHash = keccak256("easy to repeat process");
         bytes32 experimentId = app.proposeExperiment{value: 1 ether}(processHash, verifier, 1 ether);
 
-        bytes32 merkleRoot = keccak256("merkle root");
+        uint256 merkleRoot = 0xabc;
         verifier.setNextResult(false);
         vm.expectRevert("Invalid proof");
         app.publishRevalidation(experimentId, bytes("proof"), merkleRoot);
@@ -99,7 +99,12 @@ contract VerifierTest is Test {
         vm.prank(author);
         bytes32 experimentId = app.proposeExperiment{value: 1 ether}(processHash, verifier, 1 ether);
 
-        bytes32 merkleRoot = keccak256("merkle root");
+        uint256[128] memory samples;
+        for (uint256 i = 0; i < 128; ++i) {
+            samples[i] = 10;
+        }
+        
+        uint256 merkleRoot = app.recalculateMerkleRoot(samples);
         vm.prank(revalidator);
         app.publishRevalidation(experimentId, bytes("proof"), merkleRoot);
 
@@ -108,7 +113,7 @@ contract VerifierTest is Test {
         app.approveRevalidation(experimentId);
         
         vm.prank(revalidator);
-        app.claimBounty(experimentId);
+        app.claimBounty(experimentId, samples);
         
         assertEq(revalidator.balance, balanceBefore + 1 ether);
 

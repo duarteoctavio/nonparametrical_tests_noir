@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 import {IVerifier} from './Verifier.sol';
+import {PoseidonT3} from './Poseidon2.sol';
+import {console} from "forge-std/console.sol";
+
 
 contract App {
     struct Experiment {
@@ -15,13 +18,16 @@ contract App {
     struct Revalidation {
         bytes32 experimentId;
         bytes proof;
-        bytes32 dataSetMerkleRoot;
+        uint256 dataSetMerkleRoot;
         address revalidator;
         bool approved;
+        uint256[] samples;
     }
 
     mapping(bytes32 => Experiment) internal proposals;
     mapping(bytes32 => Revalidation) internal revalidations;
+
+    uint256 public constant SAMPLE_LENGTH = 128;
 
 
     constructor() {}
@@ -42,10 +48,10 @@ contract App {
         return experimentId;
     }
 
-    function publishRevalidation(bytes32 experimentId, bytes calldata proof, bytes32 dataSetMerkleRoot) external {
+    function publishRevalidation(bytes32 experimentId, bytes calldata proof, uint256 dataSetMerkleRoot) external {
         Experiment memory experiment = proposals[experimentId];
 
-        bool isValid = experiment.verifier.verify(proof, arrayOfOneElement(dataSetMerkleRoot));
+        bool isValid = experiment.verifier.verify(proof, arrayOfOneElement(bytes32(dataSetMerkleRoot)));
         require(isValid, "Invalid proof");
         require(!experiment.revalidated, "Experiment already revalidated");
         revalidations[experimentId] = Revalidation({
@@ -53,7 +59,8 @@ contract App {
             dataSetMerkleRoot: dataSetMerkleRoot,
             experimentId: experimentId,
             revalidator: msg.sender,
-            approved: false
+            approved: false,
+            samples: new uint256[](SAMPLE_LENGTH)
         });
     }
 
@@ -66,14 +73,17 @@ contract App {
         experiment.revalidated = true;
     }
 
-    function claimBounty(bytes32 experimentId) external {
+    function claimBounty(bytes32 experimentId, uint256[SAMPLE_LENGTH] calldata samples) external {
         Experiment storage experiment = proposals[experimentId];
         Revalidation memory revalidation = revalidations[experimentId];
         require(experiment.revalidated, "Experiment not revalidated");
         require(revalidation.revalidator == msg.sender, "Not authorized");
         require(!experiment.claimed, "Bounty already claimed");
+        require(samples.length == SAMPLE_LENGTH, "Invalid number of samples");
+        uint256 recalculated = recalculateMerkleRoot(samples);
+        require(recalculated == revalidation.dataSetMerkleRoot, "Merkle root does not match");
+        
         payable(revalidation.revalidator).transfer(experiment.bounty);
-
         experiment.claimed = true;
     }
 
@@ -98,5 +108,31 @@ contract App {
         bytes32[] memory array = new bytes32[](1);
         array[0] = element;
         return array;
+    }
+
+    function arrayOfTwoElements(uint256 element1, uint256 element2) public pure returns (uint256[2] memory) {
+        uint256[2] memory array;
+        array[0] = element1;
+        array[1] = element2;
+        return array;
+    }
+
+    function recalculateMerkleRoot(uint256[SAMPLE_LENGTH] calldata samples) public pure returns (uint256) {
+        uint256[] memory hashes = new uint256[](samples.length);
+
+        for (uint256 i = 0; i < samples.length; i++) {
+            hashes[i] = samples[i];
+        }
+
+        uint256 length = samples.length / 2;
+
+        while (length > 1) {
+            for (uint256 i = 0; i < length; i += 2) {
+                hashes[i] = PoseidonT3.hash(arrayOfTwoElements(hashes[2*i], hashes[2*i + 1]));
+            }
+            length = length / 2;
+        }
+
+        return hashes[0];
     }
 }

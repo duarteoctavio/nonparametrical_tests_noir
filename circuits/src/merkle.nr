@@ -1,9 +1,5 @@
 use std::hash::poseidon;
 
-// comptime fn coso(limit: u32) -> u32 {
-//     4
-// }
-
 pub struct MerkleThree<let SIZE: u32, let DEPTH: u32> {
     leafs: [Field; SIZE],
     current: u32,
@@ -45,7 +41,6 @@ impl<let N: u32, let DEPTH: u32> MerkleThree<N, DEPTH> {
         for i in 0..self.leafs.len() {
             buf[i] = self.leafs[i];
         }
-
 
         for current in 0..DEPTH {
             let limit = N / 2.pow_32((current + 1) as Field) as u32;
