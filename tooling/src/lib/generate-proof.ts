@@ -7,7 +7,7 @@ const numericString = z.string().regex(/^-?\d+/);
 
 const inputMapSchema = z.object({
     statistic_threshold: numericString,
-    dataset: numericString,
+    dataset: z.array(numericString),
     expected_root: numericString
 })
 
