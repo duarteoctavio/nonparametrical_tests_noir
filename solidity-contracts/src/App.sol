@@ -8,6 +8,8 @@ contract App {
         address author;
         IVerifier verifier;
         uint256 bounty;
+        bool revalidated;
+        bool claimed;
     }
 
     struct Revalidation {
@@ -32,7 +34,9 @@ contract App {
             processHash: processHash,
             author: author,
             verifier: verifier,
-            bounty: bounty
+            bounty: bounty,
+            revalidated: false,
+            claimed: false
         });
         proposals[experimentId] = proposal;
         return experimentId;
@@ -43,7 +47,7 @@ contract App {
 
         bool isValid = experiment.verifier.verify(proof, arrayOfOneElement(dataSetMerkleRoot));
         require(isValid, "Invalid proof");
-
+        require(!experiment.revalidated, "Experiment already revalidated");
         revalidations[experimentId] = Revalidation({
             proof: proof,
             dataSetMerkleRoot: dataSetMerkleRoot,
@@ -54,13 +58,23 @@ contract App {
     }
 
     function approveRevalidation(bytes32 experimentId) external {
-        Experiment memory experiment = proposals[experimentId];
+        Experiment storage experiment = proposals[experimentId];
         require(experiment.author == msg.sender, "Not authorized");
+        Revalidation storage revalidation = revalidations[experimentId];
+        
+        revalidation.approved = true;
+        experiment.revalidated = true;
+    }
+
+    function claimBounty(bytes32 experimentId) external {
+        Experiment storage experiment = proposals[experimentId];
         Revalidation memory revalidation = revalidations[experimentId];
-        revalidation.approved = true;
+        require(experiment.revalidated, "Experiment not revalidated");
+        require(revalidation.revalidator == msg.sender, "Not authorized");
+        require(!experiment.claimed, "Bounty already claimed");
         payable(revalidation.revalidator).transfer(experiment.bounty);
-        revalidation.approved = true;
-        revalidations[experimentId] = revalidation;
+
+        experiment.claimed = true;
     }
 
     /// Read methods
