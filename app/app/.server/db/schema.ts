@@ -1,6 +1,4 @@
-// Defines database schema using Drizzle ORM
-// Updated usersTable: Added worldIdNullifierHash for World ID integration.
-import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, index, blob } from "drizzle-orm/sqlite-core";
 import { createdAt, id } from "./common-schema";
 
 export const usersTable = sqliteTable(
@@ -29,6 +27,7 @@ export const experimentsTable = sqliteTable(
       .notNull()
       .references(() => usersTable.id),
     createdAt: createdAt(),
+    image: blob("image", { mode: "buffer" }).notNull(),
   },
   (t) => [index("experiments_creator_id_idx").on(t.creatorId)],
 );

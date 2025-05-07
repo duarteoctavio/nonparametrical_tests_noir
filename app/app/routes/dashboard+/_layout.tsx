@@ -1,11 +1,15 @@
-import { Outlet, Form, useSubmit, useLoaderData } from "@remix-run/react";
+// Combined version of dashboard layout with authentication and neobrutalist UI
+import { Outlet, Form, useSubmit, useLoaderData, useNavigate } from "@remix-run/react";
+import { ArrowLeftIcon } from "lucide-react";
 import { AppSidebar } from "~/components/app-sidebar";
-import { SidebarProvider } from "~/components/ui/sidebar";
+import { Button } from "~/components/ui/button";
+import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import { useAccount } from "wagmi";
 import { useEffect, useRef, useState } from "react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { requireUserId } from "~/.server/services/session";
+import useDashboardTopbar from "~/hooks/use-dashboard-topbar";
 
 // Add a loader function for the layout
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -38,6 +42,8 @@ export default function Layout() {
   const submit = useSubmit();
   const logoutFormRef = useRef<HTMLFormElement>(null);
   const [wasConnected, setWasConnected] = useState<boolean | undefined>(undefined);
+  const breadcrumb = useDashboardTopbar();
+  const navigate = useNavigate();
 
   // --- Get user data from THIS layout's loader ---
   const { user } = useLoaderData<typeof loader>(); // Use the loader defined above
@@ -69,9 +75,28 @@ export default function Layout() {
           if (logoutFormRef.current) submit(logoutFormRef.current);
         }}
       />
-      <main className="flex flex-1 flex-col bg-background">
-        <Outlet />
-      </main>
+      <SidebarInset>
+        {!breadcrumb.disableHeader && (
+          <header className="flex h-16 shrink-0 items-center border-b px-6 transition-[width,height] ease-linear">
+            {breadcrumb.backButton && (
+              <Button
+                variant="ghost"
+                className="mr-2 hidden md:flex"
+                size="icon"
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                <ArrowLeftIcon />
+              </Button>
+            )}
+            <span className="text-lg font-semibold md:text-xl">{breadcrumb.label}</span>
+          </header>
+        )}
+        <main className="p-6">
+          <Outlet />
+        </main>
+      </SidebarInset>
     </SidebarProvider>
   );
 }
