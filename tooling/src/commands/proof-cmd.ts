@@ -20,7 +20,7 @@ export class ProofCmd extends Command {
         const noir = new Noir(circuitJson);
         const { witness } = await noir.execute(inputMap);
         const backend = new UltraHonkBackend(circuitJson.bytecode);
-        const proof = await backend.generateProof(witness);
+        const proof = await backend.generateProof(witness, { keccak: true });
         console.log(proof);
         backend.destroy();
     }
