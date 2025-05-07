@@ -9,6 +9,23 @@ pub struct MerkleThree<let SIZE: u32, let DEPTH: u32> {
     current: u32,
 }
 
+comptime fn merkle_three_test(power_of_two: Field) -> Quoted {
+    let depth: u32 = power_of_two as u32;
+    let base: Field = 2;
+    let n: u32 = base.pow_32(power_of_two) as u32;
+    quote {
+        MerkleThree::<$n, $depth>::new()
+    }
+}
+pub comptime fn merkle_three(power_of_two: Field) -> Quoted {
+    let depth: u32 = power_of_two as u32;
+    let base: Field = 2;
+    let n: u32 = base.pow_32(power_of_two) as u32;
+    quote {
+        merkle::MerkleThree::<$n, $depth>::new()
+    }
+}
+
 
 impl<let N: u32, let DEPTH: u32> MerkleThree<N, DEPTH> {
     pub fn new() -> Self {
@@ -111,6 +128,32 @@ fn test_one_simple_example() {
 #[test]
 fn test_one_simple_example_size_8() {
     let mut merkle = MerkleThree::<8, 3>::new();
+    merkle.add_leaf(1);
+    merkle.add_leaf(2);
+    merkle.add_leaf(3);
+    merkle.add_leaf(4);
+    merkle.add_leaf(5);
+    merkle.add_leaf(6);
+    merkle.add_leaf(7);
+    merkle.add_leaf(8);
+
+    let root = poseidon::bn254::hash_2([
+        poseidon::bn254::hash_2([
+            poseidon::bn254::hash_2([1, 2]),
+            poseidon::bn254::hash_2([3, 4])
+        ]),
+        poseidon::bn254::hash_2([
+            poseidon::bn254::hash_2([5, 6]),
+            poseidon::bn254::hash_2([7, 8])
+        ])
+    ]);
+
+    assert_eq(merkle.root(), root);
+}
+
+#[test]
+fn test_macro_one_simple_example_size_8() {
+    let mut merkle = merkle_three_test!(3);
     merkle.add_leaf(1);
     merkle.add_leaf(2);
     merkle.add_leaf(3);
