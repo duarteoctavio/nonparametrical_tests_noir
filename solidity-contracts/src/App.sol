@@ -11,7 +11,6 @@ contract App {
         uint256 bounty;
         bool revalidated;
         bool claimed;
-        uint256 sampleLength;
     }
 
     struct Sample {
@@ -30,6 +29,8 @@ contract App {
 
     mapping(bytes32 => Experiment) internal proposals;
     mapping(bytes32 => Revalidation) internal revalidations;
+
+    uint256 public constant SAMPLE_LENGTH = 128;
 
 
     constructor() {}
@@ -50,10 +51,10 @@ contract App {
         return experimentId;
     }
 
-    function publishRevalidation(bytes32 experimentId, bytes calldata proof, bytes32 dataSetMerkleRoot) external {
+    function publishRevalidation(bytes32 experimentId, bytes calldata proof, uint256 dataSetMerkleRoot) external {
         Experiment memory experiment = proposals[experimentId];
 
-        bool isValid = experiment.verifier.verify(proof, arrayOfOneElement(dataSetMerkleRoot));
+        bool isValid = experiment.verifier.verify(proof, arrayOfOneElement(bytes32(dataSetMerkleRoot)));
         require(isValid, "Invalid proof");
         require(!experiment.revalidated, "Experiment already revalidated");
         revalidations[experimentId] = Revalidation({
@@ -81,8 +82,8 @@ contract App {
         require(experiment.revalidated, "Experiment not revalidated");
         require(revalidation.revalidator == msg.sender, "Not authorized");
         require(!experiment.claimed, "Bounty already claimed");
-        require(samples.length == experiment.sampleLength, "Invalid number of samples");
-        uint256 recalculated = recalculateMerkleRoot(samples);
+        require(samples.length == SAMPLE_LENGTH, "Invalid number of samples");
+        // uint256 recalculated = recalculateMerkleRoot(samples);
 
 
         payable(revalidation.revalidator).transfer(experiment.bounty);
