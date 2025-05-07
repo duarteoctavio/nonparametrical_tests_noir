@@ -2,6 +2,8 @@
 pragma solidity ^0.8.13;
 import {IVerifier} from './Verifier.sol';
 import {PoseidonT3} from './Poseidon2.sol';
+import {console} from "forge-std/console.sol";
+
 
 contract App {
     struct Experiment {
@@ -13,18 +15,13 @@ contract App {
         bool claimed;
     }
 
-    struct Sample {
-        uint256 value;
-        bytes32 sourceHash;
-    }
-
     struct Revalidation {
         bytes32 experimentId;
         bytes proof;
         uint256 dataSetMerkleRoot;
         address revalidator;
         bool approved;
-        Sample[] samples;
+        uint256[] samples;
     }
 
     mapping(bytes32 => Experiment) internal proposals;
@@ -63,7 +60,7 @@ contract App {
             experimentId: experimentId,
             revalidator: msg.sender,
             approved: false,
-            samples: new Sample[](0)
+            samples: new uint256[](SAMPLE_LENGTH)
         });
     }
 
@@ -76,18 +73,17 @@ contract App {
         experiment.revalidated = true;
     }
 
-    function claimBounty(bytes32 experimentId, Sample[] calldata samples) external {
+    function claimBounty(bytes32 experimentId, uint256[SAMPLE_LENGTH] calldata samples) external {
         Experiment storage experiment = proposals[experimentId];
         Revalidation memory revalidation = revalidations[experimentId];
         require(experiment.revalidated, "Experiment not revalidated");
         require(revalidation.revalidator == msg.sender, "Not authorized");
         require(!experiment.claimed, "Bounty already claimed");
         require(samples.length == SAMPLE_LENGTH, "Invalid number of samples");
-        // uint256 recalculated = recalculateMerkleRoot(samples);
-
-
+        uint256 recalculated = recalculateMerkleRoot(samples);
+        require(recalculated == revalidation.dataSetMerkleRoot, "Merkle root does not match");
+        
         payable(revalidation.revalidator).transfer(experiment.bounty);
-
         experiment.claimed = true;
     }
 
@@ -121,12 +117,11 @@ contract App {
         return array;
     }
 
-    function recalculateMerkleRoot(Sample[] calldata samples) public pure returns (uint256) {
+    function recalculateMerkleRoot(uint256[SAMPLE_LENGTH] calldata samples) public pure returns (uint256) {
         uint256[] memory hashes = new uint256[](samples.length);
 
         for (uint256 i = 0; i < samples.length; i++) {
-            uint256[2] memory array = arrayOfTwoElements(samples[i].value, uint256(samples[i].sourceHash));
-            hashes[i] = PoseidonT3.hash(arrayOfTwoElements(1, 1));
+            hashes[i] = samples[i];
         }
 
         uint256 length = samples.length / 2;
@@ -137,6 +132,7 @@ contract App {
             }
             length = length / 2;
         }
+
         return hashes[0];
     }
 }
