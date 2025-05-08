@@ -7,6 +7,7 @@ import { useWaitForTransactionReceipt, useWriteContract, usePublicClient } from 
 import { appApi } from "~/utils/app_api";
 import { getAddress, keccak256 } from "viem";
 import { useState, useEffect } from "react";
+import { env } from "~/.server/env";
 
 interface Experiment {
   id: number;
@@ -21,7 +22,7 @@ interface Experiment {
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
   const userExperiments = getExperimentsByCreator(user.id);
-  const appAddress = process.env.APP_ADDRESS;
+  const appAddress = env.APP_ADDRESS;
   return data({ experiments: userExperiments, user, appAddress });
 }
 

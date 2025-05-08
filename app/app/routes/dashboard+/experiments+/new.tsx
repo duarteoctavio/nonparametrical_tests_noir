@@ -12,6 +12,7 @@ import { Textarea } from "~/components/ui/textarea";
 import { useState } from "react";
 import { appApi } from "~/utils/app_api";
 import { useWriteContract } from "wagmi";
+import { env } from "~/.server/env";
 
 export async function action({ request }: ActionFunctionArgs) {
   const user = await requireUserId(request);
@@ -26,19 +27,13 @@ export async function action({ request }: ActionFunctionArgs) {
     return data({ error: "All fields are required" }, { status: 400 });
   }
 
-
-
-  if (!process.env.VERIFIER_ADDRESS) {
-    return data({ error: "VERIFIER_ADDRESS is not set" }, { status: 500 });
-  }
-
   createExperiment({
     title,
     description,
     bounty,
     creatorId: user.id,
     image: Buffer.from([]),
-    verifierAddress: process.env.VERIFIER_ADDRESS as string,
+    verifierAddress: env.VERIFIER_ADDRESS,
   });
 
   return redirect($path("/dashboard/experiments/me"));
