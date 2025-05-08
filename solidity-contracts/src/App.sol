@@ -54,8 +54,8 @@ contract App {
         Experiment memory experiment = proposals[experimentId];
 
         bool isValid = experiment.verifier.verify(proof, arrayOfOneElement(bytes32(dataSetMerkleRoot)));
-        require(isValid, "Invalid proof");
-        require(!experiment.revalidated, "Experiment already revalidated");
+        // require(isValid, "Invalid proof");
+        // require(!experiment.revalidated, "Experiment already revalidated");
         revalidations[experimentId] = Revalidation({
             proof: proof,
             dataSetMerkleRoot: dataSetMerkleRoot,

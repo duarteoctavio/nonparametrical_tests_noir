@@ -1,6 +1,6 @@
 // User Data Transfer Objects and Database Access Functions
 // Removed createUser and getUserByEmail functions as they are unused in wallet-only auth.
-import { InferInsertModel, InferSelectModel, eq } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, eq, inArray } from "drizzle-orm";
 import { db } from "../db";
 import { usersTable } from "../db/schema";
 
@@ -67,4 +67,10 @@ export async function createUserWithNullifier(nullifierHash: string): Promise<Se
     console.error(`Error creating user for nullifier hash ${nullifierHash}:`, error);
     return null; // Return null if creation fails
   }
+}
+
+export async function getUsersByIds(ids: number[]): Promise<Record<number, SelectUser>> {
+  if (!ids.length) return {};
+  const users = await db.select().from(usersTable).where(inArray(usersTable.id, ids)).all();
+  return Object.fromEntries(users.map(u => [u.id, u]));
 }

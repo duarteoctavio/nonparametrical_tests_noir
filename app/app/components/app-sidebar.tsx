@@ -23,9 +23,9 @@ import {
 
 const ITEMS = [
   { label: "Home", path: $path("/dashboard"), icon: HomeIcon, end: true },
-  { label: "Experiments", path: $path("/dashboard/experiments"), icon: RocketIcon },
-  { label: "My Validations", path: $path("/dashboard"), icon: SearchCheckIcon, inactive: true },
-  { label: "History", path: $path("/dashboard"), icon: HistoryIcon, inactive: true },
+  // { label: "Experiments", path: $path("/dashboard/experiments"), icon: RocketIcon },
+  // { label: "My Validations", path: $path("/dashboard"), icon: SearchCheckIcon, inactive: true },
+  // { label: "History", path: $path("/dashboard"), icon: HistoryIcon, inactive: true },
 ];
 
 interface AppSidebarProps {

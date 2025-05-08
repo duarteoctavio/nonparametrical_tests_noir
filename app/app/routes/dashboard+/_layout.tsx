@@ -76,24 +76,43 @@ export default function Layout() {
         }}
       />
       <SidebarInset>
+        {/* Top Navbar - now inside SidebarInset */}
+        <nav className="glass shadow-sm mb-2">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex h-16 justify-between">
+              <div className="flex items-center">
+                <h1 className="font-geist text-2xl font-bold text-primary">ReValidate</h1>
+              </div>
+              <div className="flex items-center space-x-4">
+                <span className="font-geist text-foreground">
+                  Welcome!
+                </span>
+                <Button
+                  variant="default"
+                  onClick={() => {
+                    if (logoutFormRef.current) submit(logoutFormRef.current);
+                  }}
+                >
+                  Sign out
+                </Button>
+              </div>
+            </div>
+          </div>
+        </nav>
         {!breadcrumb.disableHeader && (
-          <header className="flex h-16 shrink-0 items-center border-b px-6 transition-[width,height] ease-linear">
-            {breadcrumb.backButton && (
+          <header className="flex h-16 shrink-0 items-center border-b px-6 transition-[width,height] ease-linear justify-between">
+            <span className="text-lg font-semibold md:text-xl">{breadcrumb.label}</span>
+            {breadcrumb.label !== "Home" && breadcrumb.label !== "Dashboard" && (
               <Button
-                variant="ghost"
-                className="mr-2 hidden md:flex"
-                size="icon"
-                onClick={() => {
-                  navigate(-1);
-                }}
+                variant="outline"
+                onClick={() => navigate('/dashboard')}
               >
-                <ArrowLeftIcon />
+                Back to Dashboard
               </Button>
             )}
-            <span className="text-lg font-semibold md:text-xl">{breadcrumb.label}</span>
           </header>
         )}
-        <main className="p-6">
+        <main className="pt-0 px-6 pb-6">
           <Outlet />
         </main>
       </SidebarInset>
