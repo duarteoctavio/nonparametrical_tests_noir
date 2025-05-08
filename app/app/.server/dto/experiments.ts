@@ -11,15 +11,22 @@ export function createExperiment(data: InsertExperiment) {
 }
 
 export async function getExperimentByHash(hash: string): Promise<SelectExperiment> {
-  const [ experiment ] = await db.select().from(experimentsTable).where(eq(experimentsTable.txHash, hash)).limit(1);
+  const [experiment] = await db
+    .select()
+    .from(experimentsTable)
+    .where(eq(experimentsTable.txHash, hash))
+    .limit(1);
   if (!experiment) {
     throw new Error("Experiment not found for hash " + hash);
   }
   return experiment;
 }
 
-export async function updateExperiment(id: SelectExperiment["id"], data: Partial<InsertExperiment>) {
-  await db.update(experimentsTable).set(data).where(eq(experimentsTable.id, id))
+export async function updateExperiment(
+  id: SelectExperiment["id"],
+  data: Partial<InsertExperiment>,
+) {
+  await db.update(experimentsTable).set(data).where(eq(experimentsTable.id, id));
 }
 
 export function getExperimentsByCreator(creatorId: number) {

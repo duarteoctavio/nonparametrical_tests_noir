@@ -10,8 +10,6 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { useState } from "react";
-import { appApi } from "~/utils/app_api";
-import { useWriteContract } from "wagmi";
 import { env } from "~/.server/env";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -70,12 +68,7 @@ export default function NewExperiment() {
 
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
-          <Input
-            id="title"
-            name="title"
-            placeholder="Enter experiment title"
-            required
-          />
+          <Input id="title" name="title" placeholder="Enter experiment title" required />
         </div>
 
         <div className="space-y-2">
@@ -113,11 +106,7 @@ export default function NewExperiment() {
           />
           {imagePreview && (
             <div className="mt-2">
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="max-h-48 rounded-lg object-cover"
-              />
+              <img src={imagePreview} alt="Preview" className="max-h-48 rounded-lg object-cover" />
             </div>
           )}
         </div>
@@ -130,4 +119,4 @@ export default function NewExperiment() {
       </Form>
     </div>
   );
-} 
+}

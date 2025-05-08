@@ -1,8 +1,8 @@
 // Updated providers setup for Wagmi v2 / RainbowKit v1
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
-import { http, WagmiProvider } from "wagmi";
-import { mainnet, anvil } from "wagmi/chains";
+import { WagmiProvider } from "wagmi";
+import { anvil } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"; // Need QueryClient for RainbowKit v1+
 import { ClientOnly } from "./components/client-only";
 

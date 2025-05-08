@@ -1,5 +1,4 @@
 // @jsxImportSource react
-import React from "react";
 import { Link } from "@remix-run/react";
 import type { MetaFunction } from "@remix-run/node";
 import { Button } from "~/components/landing/button";
@@ -16,7 +15,6 @@ import {
   Clock,
   Trophy,
   Star,
-  ExternalLink,
 } from "lucide-react";
 import { EvervaultCard } from "~/components/landing/EvervaultCard";
 
@@ -36,42 +34,40 @@ export default function LandingIndex() {
     <div className="min-h-screen bg-white text-slate-900">
       {/* HEADER */}
       <header className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/80 backdrop-blur-md">
-        <div className="container mx-auto py-4 px-4 flex justify-between items-center">
+        <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">
             <FileCheck className="h-8 w-8 text-indigo-600" />
-            <span className="font-semibold text-xl tracking-tight">
-              ReValidate
-            </span>
+            <span className="text-xl font-semibold tracking-tight">ReValidate</span>
           </div>
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden items-center gap-8 md:flex">
             <Link
               to="#features"
-              className="text-slate-600 hover:text-indigo-600 transition text-sm font-medium"
+              className="text-sm font-medium text-slate-600 transition hover:text-indigo-600"
             >
               features
             </Link>
             <Link
               to="#how-it-works"
-              className="text-slate-600 hover:text-indigo-600 transition text-sm font-medium"
+              className="text-sm font-medium text-slate-600 transition hover:text-indigo-600"
             >
               how it works
             </Link>
             <Link
               to="#testimonials"
-              className="text-slate-600 hover:text-indigo-600 transition text-sm font-medium"
+              className="text-sm font-medium text-slate-600 transition hover:text-indigo-600"
             >
               testimonials
             </Link>
             <Link
               to="#pricing"
-              className="text-slate-600 hover:text-indigo-600 transition text-sm font-medium"
+              className="text-sm font-medium text-slate-600 transition hover:text-indigo-600"
             >
               pricing
             </Link>
           </nav>
           <Link
             to="/login"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 h-10 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 shadow-sm text-slate-50 hover:text-slate-50"
+            className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-slate-50 shadow-sm ring-offset-white transition-colors hover:bg-indigo-700 hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300"
           >
             Get started
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -81,27 +77,27 @@ export default function LandingIndex() {
 
       {/* HERO */}
       <section className="relative overflow-hidden bg-slate-50 py-28">
-        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25"></div>
-        <div className="container relative mx-auto py-15 px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-700 mb-6 ring-1 ring-inset ring-indigo-500/20">
+        <div className="bg-grid-slate-100 dark:bg-grid-slate-700/25 absolute inset-0 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]"></div>
+        <div className="py-15 container relative mx-auto px-4">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-6 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
               <span>Science that stands the test of time</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 to-indigo-500 leading-tight">
+            <h1 className="mb-6 bg-gradient-to-r from-indigo-700 to-indigo-500 bg-clip-text text-4xl font-bold leading-tight text-transparent md:text-6xl">
               Restore trust in science through rigorous revalidation
             </h1>
-            <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-              The replication crisis undermines scientific credibility. Our
-              platform enables researchers to verify, replicate, and strengthen
-              scientific studies with transparent methodologies.
+            <p className="mb-8 text-xl leading-relaxed text-slate-600">
+              The replication crisis undermines scientific credibility. Our platform enables
+              researchers to verify, replicate, and strengthen scientific studies with transparent
+              methodologies.
             </p>
-            <p className="text-lg font-medium mb-10 text-indigo-600">
+            <p className="mb-10 text-lg font-medium text-indigo-600">
               Validate findings. Build confidence. Advance science.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="mb-16 flex flex-col justify-center gap-4 sm:flex-row">
               <Link
                 to="/login"
-                className="inline-flex items-center justify-center text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 h-11 rounded-full px-8 bg-indigo-600 hover:bg-indigo-700 shadow-md text-slate-50 hover:text-slate-50"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-indigo-600 px-8 text-sm font-medium text-slate-50 shadow-md ring-offset-white transition-colors hover:bg-indigo-700 hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300"
               >
                 Start revalidating
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -109,54 +105,45 @@ export default function LandingIndex() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-full px-8"
+                className="rounded-full border-indigo-600 px-8 text-indigo-600 hover:bg-indigo-50"
               >
                 See how it works
                 <CheckCircle className="ml-2 h-5 w-5" />
               </Button>
             </div>
-            <div className="rounded-xl bg-white border border-slate-200 p-8 mb-12 shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="aspect-video bg-slate-50 rounded-lg flex items-center justify-center mb-6 overflow-hidden relative border border-slate-100">
-                <div className="absolute inset-0 bg-[radial-gradient(#e0e7ff_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
+            <div className="mb-12 rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-shadow duration-300 hover:shadow-md">
+              <div className="relative mb-6 flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-slate-100 bg-slate-50">
+                <div className="absolute inset-0 bg-[radial-gradient(#e0e7ff_1px,transparent_1px)] opacity-40 [background-size:16px_16px]"></div>
                 <div className="z-10 flex flex-col items-center">
-                  <FileCheck className="h-16 w-16 text-indigo-200 mb-3" />
+                  <FileCheck className="mb-3 h-16 w-16 text-indigo-200" />
                   <span className="text-slate-400">
-                    Dashboard preview: Grayscale interface with indigo
-                    highlights for actions and progress indicators
+                    Dashboard preview: Grayscale interface with indigo highlights for actions and
+                    progress indicators
                   </span>
                 </div>
               </div>
-              <div className="flex flex-wrap justify-center gap-8 items-center">
-                <span className="text-sm text-slate-500 font-medium">
-                  Trusted by
-                </span>
-                <div className="flex flex-wrap gap-8 justify-center">
-                  <div className="h-8 opacity-60 text-slate-400 font-medium">
+              <div className="flex flex-wrap items-center justify-center gap-8">
+                <span className="text-sm font-medium text-slate-500">Trusted by</span>
+                <div className="flex flex-wrap justify-center gap-8">
+                  <div className="h-8 font-medium text-slate-400 opacity-60">
                     Stanford University
                   </div>
-                  <div className="h-8 opacity-60 text-slate-400 font-medium">
-                    Nature
-                  </div>
-                  <div className="h-8 opacity-60 text-slate-400 font-medium">
+                  <div className="h-8 font-medium text-slate-400 opacity-60">Nature</div>
+                  <div className="h-8 font-medium text-slate-400 opacity-60">
                     Science Foundation
                   </div>
-                  <div className="h-8 opacity-60 text-slate-400 font-medium">
-                    MIT
-                  </div>
-                  <div className="h-8 opacity-60 text-slate-400 font-medium">
-                    OSF
-                  </div>
+                  <div className="h-8 font-medium text-slate-400 opacity-60">MIT</div>
+                  <div className="h-8 font-medium text-slate-400 opacity-60">OSF</div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="text-center max-w-xl mx-auto">
-            <p className="text-lg font-medium text-slate-700 mb-4">
-              Transform hypothesis to verified knowledge in a transparent,
-              collaborative ecosystem
+          <div className="mx-auto max-w-xl text-center">
+            <p className="mb-4 text-lg font-medium text-slate-700">
+              Transform hypothesis to verified knowledge in a transparent, collaborative ecosystem
             </p>
             <div className="flex justify-center">
-              <div className="p-3 bg-indigo-50 rounded-full">
+              <div className="rounded-full bg-indigo-50 p-3">
                 <BarChart3 className="h-8 w-8 text-indigo-600" />
               </div>
             </div>
@@ -165,76 +152,67 @@ export default function LandingIndex() {
       </section>
 
       {/* FEATURES */}
-      <section id="features" className="py-24 bg-white">
+      <section id="features" className="bg-white py-24">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-700 mb-4 ring-1 ring-inset ring-indigo-500/20">
+          <div className="mb-16 text-center">
+            <div className="mb-4 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
               <span>Why choose us</span>
             </div>
-            <h2 className="text-3xl font-bold mb-4">
-              Why researchers choose ReValidate
-            </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">
-              Our platform provides the tools and framework needed to ensure
-              scientific integrity
+            <h2 className="mb-4 text-3xl font-bold">Why researchers choose ReValidate</h2>
+            <p className="mx-auto max-w-2xl text-slate-600">
+              Our platform provides the tools and framework needed to ensure scientific integrity
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="p-8 border-slate-200 hover:shadow-lg transition-all duration-300 rounded-xl group">
+          <div className="grid gap-8 md:grid-cols-3">
+            <Card className="group rounded-xl border-slate-200 p-8 transition-all duration-300 hover:shadow-lg">
               <div className="flex flex-col items-start">
-                <div className="p-3 bg-indigo-50 rounded-xl mb-6 group-hover:bg-indigo-100 transition-colors">
+                <div className="mb-6 rounded-xl bg-indigo-50 p-3 transition-colors group-hover:bg-indigo-100">
                   <Search className="h-8 w-8 text-indigo-600" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Transparent Methodology
-                </h3>
-                <p className="text-slate-600 mb-6 leading-relaxed">
-                  Detailed protocols and complete methodologies ensure true
-                  replicability and build trust in the scientific community.
+                <h3 className="mb-3 text-xl font-semibold">Transparent Methodology</h3>
+                <p className="mb-6 leading-relaxed text-slate-600">
+                  Detailed protocols and complete methodologies ensure true replicability and build
+                  trust in the scientific community.
                 </p>
                 <Button
                   variant="ghost"
-                  className="text-indigo-600 p-0 hover:bg-transparent hover:text-indigo-700 group-hover:translate-x-1 transition-transform"
+                  className="p-0 text-indigo-600 transition-transform hover:bg-transparent hover:text-indigo-700 group-hover:translate-x-1"
                 >
                   Learn more <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </div>
             </Card>
-            <Card className="p-8 border-slate-200 hover:shadow-lg transition-all duration-300 rounded-xl group">
+            <Card className="group rounded-xl border-slate-200 p-8 transition-all duration-300 hover:shadow-lg">
               <div className="flex flex-col items-start">
-                <div className="p-3 bg-indigo-50 rounded-xl mb-6 group-hover:bg-indigo-100 transition-colors">
+                <div className="mb-6 rounded-xl bg-indigo-50 p-3 transition-colors group-hover:bg-indigo-100">
                   <Shield className="h-8 w-8 text-indigo-600" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Verification Framework
-                </h3>
-                <p className="text-slate-600 mb-6 leading-relaxed">
-                  Standardized protocols and statistical tools to verify or
-                  challenge existing research with confidence and accuracy.
+                <h3 className="mb-3 text-xl font-semibold">Verification Framework</h3>
+                <p className="mb-6 leading-relaxed text-slate-600">
+                  Standardized protocols and statistical tools to verify or challenge existing
+                  research with confidence and accuracy.
                 </p>
                 <Button
                   variant="ghost"
-                  className="text-indigo-600 p-0 hover:bg-transparent hover:text-indigo-700 group-hover:translate-x-1 transition-transform"
+                  className="p-0 text-indigo-600 transition-transform hover:bg-transparent hover:text-indigo-700 group-hover:translate-x-1"
                 >
                   Learn more <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </div>
             </Card>
-            <Card className="p-8 border-slate-200 hover:shadow-lg transition-all duration-300 rounded-xl group">
+            <Card className="group rounded-xl border-slate-200 p-8 transition-all duration-300 hover:shadow-lg">
               <div className="flex flex-col items-start">
-                <div className="p-3 bg-indigo-50 rounded-xl mb-6 group-hover:bg-indigo-100 transition-colors">
+                <div className="mb-6 rounded-xl bg-indigo-50 p-3 transition-colors group-hover:bg-indigo-100">
                   <Users className="h-8 w-8 text-indigo-600" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Collaborative Network
-                </h3>
-                <p className="text-slate-600 mb-6 leading-relaxed">
-                  Connect with peers for independent validation and strengthen
-                  the scientific community through collective expertise.
+                <h3 className="mb-3 text-xl font-semibold">Collaborative Network</h3>
+                <p className="mb-6 leading-relaxed text-slate-600">
+                  Connect with peers for independent validation and strengthen the scientific
+                  community through collective expertise.
                 </p>
                 <Button
                   variant="ghost"
-                  className="text-indigo-600 p-0 hover:bg-transparent hover:text-indigo-700 group-hover:translate-x-1 transition-transform"
+                  className="p-0 text-indigo-600 transition-transform hover:bg-transparent hover:text-indigo-700 group-hover:translate-x-1"
                 >
                   Learn more <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
@@ -245,74 +223,69 @@ export default function LandingIndex() {
       </section>
 
       {/* Evervault Card Demo Section */}
-      <section className="flex flex-col items-center py-0 px-0 bg-white w-full min-h-[350px]">
-        <div className="w-full h-[350px] md:h-[420px] flex items-center justify-center">
-          <EvervaultCard
-            text="Bringing trust with math"
-            className="w-full h-full"
-          />
+      <section className="flex min-h-[350px] w-full flex-col items-center bg-white px-0 py-0">
+        <div className="flex h-[350px] w-full items-center justify-center md:h-[420px]">
+          <EvervaultCard text="Bringing trust with math" className="h-full w-full" />
         </div>
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how-it-works" className="py-24 bg-slate-50">
+      <section id="how-it-works" className="bg-slate-50 py-24">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-700 mb-4 ring-1 ring-inset ring-indigo-500/20">
+          <div className="mb-16 text-center">
+            <div className="mb-4 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
               <span>The process</span>
             </div>
-            <h2 className="text-3xl font-bold mb-4">
-              Revalidation in three simple steps
-            </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Our structured approach ensures consistency and reliability across
-              all revalidation projects.
+            <h2 className="mb-4 text-3xl font-bold">Revalidation in three simple steps</h2>
+            <p className="mx-auto max-w-2xl text-lg text-slate-600">
+              Our structured approach ensures consistency and reliability across all revalidation
+              projects.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto relative">
-            <div className="hidden md:block absolute top-1/2 left-[20%] right-[20%] h-0.5 bg-indigo-100 -translate-y-1/2 z-0"></div>
-            <div className="flex flex-col items-center text-center relative z-10 bg-slate-50 p-6 rounded-xl">
-              <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-6 shadow-md">
-                <span className="text-indigo-600 font-bold text-lg">1</span>
+          <div className="relative mx-auto grid max-w-4xl gap-8 md:grid-cols-3">
+            <div className="absolute left-[20%] right-[20%] top-1/2 z-0 hidden h-0.5 -translate-y-1/2 bg-indigo-100 md:block"></div>
+            <div className="relative z-10 flex flex-col items-center rounded-xl bg-slate-50 p-6 text-center">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 shadow-md">
+                <span className="text-lg font-bold text-indigo-600">1</span>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Submit Study</h3>
-              <p className="text-slate-600 mb-4 leading-relaxed">
-                Upload original research data and methodology for revalidation
-                through our secure platform.
+              <h3 className="mb-3 text-xl font-semibold">Submit Study</h3>
+              <p className="mb-4 leading-relaxed text-slate-600">
+                Upload original research data and methodology for revalidation through our secure
+                platform.
               </p>
-              <div className="p-2 bg-white rounded-full shadow-sm">
+              <div className="rounded-full bg-white p-2 shadow-sm">
                 <Search className="h-6 w-6 text-indigo-600" />
               </div>
             </div>
-            <div className="flex flex-col items-center text-center relative z-10 bg-slate-50 p-6 rounded-xl">
-              <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-6 shadow-md">
-                <span className="text-indigo-600 font-bold text-lg">2</span>
+            <div className="relative z-10 flex flex-col items-center rounded-xl bg-slate-50 p-6 text-center">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 shadow-md">
+                <span className="text-lg font-bold text-indigo-600">2</span>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Verify Process</h3>
-              <p className="text-slate-600 mb-4 leading-relaxed">
-                Independent researchers replicate experiments following
-                standardized protocols with complete transparency.
+              <h3 className="mb-3 text-xl font-semibold">Verify Process</h3>
+              <p className="mb-4 leading-relaxed text-slate-600">
+                Independent researchers replicate experiments following standardized protocols with
+                complete transparency.
               </p>
-              <div className="p-2 bg-white rounded-full shadow-sm">
+              <div className="rounded-full bg-white p-2 shadow-sm">
                 <Clock className="h-6 w-6 text-indigo-600" />
               </div>
             </div>
-            <div className="flex flex-col items-center text-center relative z-10 bg-slate-50 p-6 rounded-xl">
-              <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-6 shadow-md">
-                <span className="text-indigo-600 font-bold text-lg">3</span>
+            <div className="relative z-10 flex flex-col items-center rounded-xl bg-slate-50 p-6 text-center">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 shadow-md">
+                <span className="text-lg font-bold text-indigo-600">3</span>
               </div>
-              <h3 className="text-xl font-semibold mb-3">Publish Results</h3>
-              <p className="text-slate-600 mb-4 leading-relaxed">
-                Receive detailed revalidation reports with confidence metrics
-                and recommendations for improvement.
+              <h3 className="mb-3 text-xl font-semibold">Publish Results</h3>
+              <p className="mb-4 leading-relaxed text-slate-600">
+                Receive detailed revalidation reports with confidence metrics and recommendations
+                for improvement.
               </p>
-              <div className="p-2 bg-white rounded-full shadow-sm">
+              <div className="rounded-full bg-white p-2 shadow-sm">
                 <Trophy className="h-6 w-6 text-indigo-600" />
               </div>
             </div>
           </div>
           <div className="mt-16 text-center">
-            <Button className="bg-indigo-600 hover:bg-indigo-700 shadow-md rounded-full px-8">
+            <Button className="rounded-full bg-indigo-600 px-8 shadow-md hover:bg-indigo-700">
               Start the revalidation process
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -321,14 +294,14 @@ export default function LandingIndex() {
       </section>
 
       {/* CTA MIDPOINT */}
-      <section className="py-20 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white">
+      <section className="bg-gradient-to-br from-indigo-500 to-indigo-700 py-20 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">
+          <h2 className="mb-6 text-2xl font-bold md:text-3xl">
             Strengthen the foundation of scientific knowledge
           </h2>
           <Button
             size="lg"
-            className="bg-white text-indigo-700 hover:bg-slate-100 shadow-lg rounded-full px-8"
+            className="rounded-full bg-white px-8 text-indigo-700 shadow-lg hover:bg-slate-100"
           >
             Join the revalidation movement
           </Button>
@@ -336,36 +309,31 @@ export default function LandingIndex() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section id="testimonials" className="py-24 bg-white">
+      <section id="testimonials" className="bg-white py-24">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-700 mb-4 ring-1 ring-inset ring-indigo-500/20">
+          <div className="mb-16 text-center">
+            <div className="mb-4 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
               <span>Testimonials</span>
             </div>
-            <h2 className="text-3xl font-bold mb-4">
-              What researchers are saying
-            </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">
-              Hear from scientists who have strengthened their research through
-              our platform
+            <h2 className="mb-4 text-3xl font-bold">What researchers are saying</h2>
+            <p className="mx-auto max-w-2xl text-slate-600">
+              Hear from scientists who have strengthened their research through our platform
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Card className="p-8 border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-xl">
+          <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
+            <Card className="rounded-xl border-slate-200 p-8 shadow-sm transition-all duration-300 hover:shadow-md">
               <div className="flex flex-col">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mr-4 border-2 border-white shadow-sm">
-                    <span className="text-indigo-600 font-medium">JD</span>
+                <div className="mb-6 flex items-center">
+                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-indigo-100 shadow-sm">
+                    <span className="font-medium text-indigo-600">JD</span>
                   </div>
                   <div>
                     <h4 className="font-semibold">Dr. Jane Doe</h4>
-                    <p className="text-sm text-slate-500">
-                      Neuroscience Professor
-                    </p>
+                    <p className="text-sm text-slate-500">Neuroscience Professor</p>
                   </div>
                 </div>
-                <div className="mb-4 text-indigo-50 relative">
-                  <div className="absolute text-indigo-100 top-0 left-0 transform -translate-x-2 -translate-y-3">
+                <div className="relative mb-4 text-indigo-50">
+                  <div className="absolute left-0 top-0 -translate-x-2 -translate-y-3 transform text-indigo-100">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -376,19 +344,18 @@ export default function LandingIndex() {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="w-8 h-8 opacity-20"
+                      className="h-8 w-8 opacity-20"
                     >
                       <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
                       <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
                     </svg>
                   </div>
                 </div>
-                <p className="text-slate-600 mb-6 leading-relaxed">
-                  "ReValidate helped confirm our key findings while identifying
-                  important methodological improvements. Our work is now
-                  stronger and more credible."
+                <p className="mb-6 leading-relaxed text-slate-600">
+                  &quot;ReValidate helped confirm our key findings while identifying important
+                  methodological improvements. Our work is now stronger and more credible.&quot;
                 </p>
-                <div className="flex text-indigo-500 mt-auto">
+                <div className="mt-auto flex text-indigo-500">
                   <Star className="h-5 w-5 fill-current" />
                   <Star className="h-5 w-5 fill-current" />
                   <Star className="h-5 w-5 fill-current" />
@@ -397,21 +364,19 @@ export default function LandingIndex() {
                 </div>
               </div>
             </Card>
-            <Card className="p-8 border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-xl">
+            <Card className="rounded-xl border-slate-200 p-8 shadow-sm transition-all duration-300 hover:shadow-md">
               <div className="flex flex-col">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mr-4 border-2 border-white shadow-sm">
-                    <span className="text-indigo-600 font-medium">MS</span>
+                <div className="mb-6 flex items-center">
+                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-indigo-100 shadow-sm">
+                    <span className="font-medium text-indigo-600">MS</span>
                   </div>
                   <div>
                     <h4 className="font-semibold">Dr. Mark Smith</h4>
-                    <p className="text-sm text-slate-500">
-                      Clinical Research Director
-                    </p>
+                    <p className="text-sm text-slate-500">Clinical Research Director</p>
                   </div>
                 </div>
-                <div className="mb-4 text-indigo-50 relative">
-                  <div className="absolute text-indigo-100 top-0 left-0 transform -translate-x-2 -translate-y-3">
+                <div className="relative mb-4 text-indigo-50">
+                  <div className="absolute left-0 top-0 -translate-x-2 -translate-y-3 transform text-indigo-100">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -422,19 +387,18 @@ export default function LandingIndex() {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="w-8 h-8 opacity-20"
+                      className="h-8 w-8 opacity-20"
                     >
                       <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
                       <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
                     </svg>
                   </div>
                 </div>
-                <p className="text-slate-600 mb-6 leading-relaxed">
-                  "The platform's rigorous approach revealed subtle statistical
-                  issues in our initial analysis that we were able to correct
-                  before publication."
+                <p className="mb-6 leading-relaxed text-slate-600">
+                  &quot;The platform&apos;s rigorous approach revealed subtle statistical issues in
+                  our initial analysis that we were able to correct before publication.&quot;
                 </p>
-                <div className="flex text-indigo-500 mt-auto">
+                <div className="mt-auto flex text-indigo-500">
                   <Star className="h-5 w-5 fill-current" />
                   <Star className="h-5 w-5 fill-current" />
                   <Star className="h-5 w-5 fill-current" />
@@ -443,21 +407,19 @@ export default function LandingIndex() {
                 </div>
               </div>
             </Card>
-            <Card className="p-8 border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-xl">
+            <Card className="rounded-xl border-slate-200 p-8 shadow-sm transition-all duration-300 hover:shadow-md">
               <div className="flex flex-col">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mr-4 border-2 border-white shadow-sm">
-                    <span className="text-indigo-600 font-medium">AL</span>
+                <div className="mb-6 flex items-center">
+                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-indigo-100 shadow-sm">
+                    <span className="font-medium text-indigo-600">AL</span>
                   </div>
                   <div>
                     <h4 className="font-semibold">Dr. Anna Lee</h4>
-                    <p className="text-sm text-slate-500">
-                      Psychology Researcher
-                    </p>
+                    <p className="text-sm text-slate-500">Psychology Researcher</p>
                   </div>
                 </div>
-                <div className="mb-4 text-indigo-50 relative">
-                  <div className="absolute text-indigo-100 top-0 left-0 transform -translate-x-2 -translate-y-3">
+                <div className="relative mb-4 text-indigo-50">
+                  <div className="absolute left-0 top-0 -translate-x-2 -translate-y-3 transform text-indigo-100">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -468,19 +430,18 @@ export default function LandingIndex() {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="w-8 h-8 opacity-20"
+                      className="h-8 w-8 opacity-20"
                     >
                       <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
                       <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
                     </svg>
                   </div>
                 </div>
-                <p className="text-slate-600 mb-6 leading-relaxed">
-                  "ReValidate is transforming how we approach scientific
-                  validation. The transparent ecosystem builds confidence in
-                  findings across disciplines."
+                <p className="mb-6 leading-relaxed text-slate-600">
+                  &quot;ReValidate is transforming how we approach scientific validation. The
+                  transparent ecosystem builds confidence in findings across disciplines.&quot;
                 </p>
-                <div className="flex text-indigo-500 mt-auto">
+                <div className="mt-auto flex text-indigo-500">
                   <Star className="h-5 w-5 fill-current" />
                   <Star className="h-5 w-5 fill-current" />
                   <Star className="h-5 w-5 fill-current" />
@@ -491,41 +452,33 @@ export default function LandingIndex() {
             </Card>
           </div>
           <div className="mt-16 text-center">
-            <p className="text-slate-500 mb-6 font-medium">Featured in</p>
-            <div className="flex flex-wrap justify-center gap-12 items-center">
-              <div className="h-8 opacity-60 text-slate-400 font-medium">
-                Science
-              </div>
-              <div className="h-8 opacity-60 text-slate-400 font-medium">
-                Nature
-              </div>
-              <div className="h-8 opacity-60 text-slate-400 font-medium">
-                PNAS
-              </div>
-              <div className="h-8 opacity-60 text-slate-400 font-medium">
-                Cell
-              </div>
+            <p className="mb-6 font-medium text-slate-500">Featured in</p>
+            <div className="flex flex-wrap items-center justify-center gap-12">
+              <div className="h-8 font-medium text-slate-400 opacity-60">Science</div>
+              <div className="h-8 font-medium text-slate-400 opacity-60">Nature</div>
+              <div className="h-8 font-medium text-slate-400 opacity-60">PNAS</div>
+              <div className="h-8 font-medium text-slate-400 opacity-60">Cell</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-24 bg-slate-50">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="bg-white rounded-2xl p-12 shadow-xl border border-slate-100">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-indigo-50 text-indigo-700 mb-4 ring-1 ring-inset ring-indigo-500/20">
+      <section className="bg-slate-50 py-24">
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="rounded-2xl border border-slate-100 bg-white p-12 shadow-xl">
+            <div className="mb-8 text-center">
+              <div className="mb-4 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
                 <span>Get started</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="mb-6 text-3xl font-bold md:text-4xl">
                 Ready to strengthen scientific integrity?
               </h2>
             </div>
-            <ul className="mb-8 space-y-4 max-w-md mx-auto">
+            <ul className="mx-auto mb-8 max-w-md space-y-4">
               <li className="flex items-start">
                 <div className="flex-shrink-0 p-1">
-                  <CheckCircle className="h-5 w-5 text-indigo-600 mt-0.5" />
+                  <CheckCircle className="mt-0.5 h-5 w-5 text-indigo-600" />
                 </div>
                 <span className="ml-3 text-slate-700">
                   Validate methods and reproduce results with confidence
@@ -533,7 +486,7 @@ export default function LandingIndex() {
               </li>
               <li className="flex items-start">
                 <div className="flex-shrink-0 p-1">
-                  <CheckCircle className="h-5 w-5 text-indigo-600 mt-0.5" />
+                  <CheckCircle className="mt-0.5 h-5 w-5 text-indigo-600" />
                 </div>
                 <span className="ml-3 text-slate-700">
                   Join a community committed to scientific excellence
@@ -541,7 +494,7 @@ export default function LandingIndex() {
               </li>
               <li className="flex items-start">
                 <div className="flex-shrink-0 p-1">
-                  <CheckCircle className="h-5 w-5 text-indigo-600 mt-0.5" />
+                  <CheckCircle className="mt-0.5 h-5 w-5 text-indigo-600" />
                 </div>
                 <span className="ml-3 text-slate-700">
                   Enhance the credibility and impact of your research
@@ -551,7 +504,7 @@ export default function LandingIndex() {
             <div className="text-center">
               <Button
                 size="lg"
-                className="bg-indigo-600 hover:bg-indigo-700 shadow-lg rounded-full px-8"
+                className="rounded-full bg-indigo-600 px-8 shadow-lg hover:bg-indigo-700"
               >
                 Get started today
                 <Clock className="ml-2 h-5 w-5" />
@@ -562,22 +515,21 @@ export default function LandingIndex() {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-white pt-16 pb-8">
+      <footer className="bg-white pb-8 pt-16">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
+          <div className="mb-12 grid gap-8 md:grid-cols-4">
             <div>
-              <div className="flex items-center gap-2 mb-4">
+              <div className="mb-4 flex items-center gap-2">
                 <FileCheck className="h-6 w-6 text-indigo-600" />
-                <span className="font-semibold text-lg">ReValidate</span>
+                <span className="text-lg font-semibold">ReValidate</span>
               </div>
-              <p className="text-slate-500 mb-4 leading-relaxed">
-                Strengthening scientific integrity through transparent
-                revalidation.
+              <p className="mb-4 leading-relaxed text-slate-500">
+                Strengthening scientific integrity through transparent revalidation.
               </p>
               <div className="flex gap-4">
                 <Link
                   to="#"
-                  className="text-slate-400 hover:text-indigo-600 transition"
+                  className="text-slate-400 transition hover:text-indigo-600"
                   aria-label="Facebook"
                 >
                   <svg
@@ -595,7 +547,7 @@ export default function LandingIndex() {
                 </Link>
                 <Link
                   to="#"
-                  className="text-slate-400 hover:text-indigo-600 transition"
+                  className="text-slate-400 transition hover:text-indigo-600"
                   aria-label="Twitter"
                 >
                   <svg
@@ -609,7 +561,7 @@ export default function LandingIndex() {
                 </Link>
                 <Link
                   to="#"
-                  className="text-slate-400 hover:text-indigo-600 transition"
+                  className="text-slate-400 transition hover:text-indigo-600"
                   aria-label="GitHub"
                 >
                   <svg
@@ -627,7 +579,7 @@ export default function LandingIndex() {
                 </Link>
                 <Link
                   to="#"
-                  className="text-slate-400 hover:text-indigo-600 transition"
+                  className="text-slate-400 transition hover:text-indigo-600"
                   aria-label="Dribbble"
                 >
                   <svg
@@ -646,12 +598,12 @@ export default function LandingIndex() {
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-slate-800">Platform</h4>
+              <h4 className="mb-4 font-semibold text-slate-800">Platform</h4>
               <ul className="space-y-3">
                 <li>
                   <Link
                     to="#features"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
+                    className="text-sm text-slate-500 transition hover:text-indigo-600"
                   >
                     Features
                   </Link>
@@ -659,7 +611,7 @@ export default function LandingIndex() {
                 <li>
                   <Link
                     to="#how-it-works"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
+                    className="text-sm text-slate-500 transition hover:text-indigo-600"
                   >
                     How it works
                   </Link>
@@ -667,99 +619,73 @@ export default function LandingIndex() {
                 <li>
                   <Link
                     to="#pricing"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
+                    className="text-sm text-slate-500 transition hover:text-indigo-600"
                   >
                     Pricing
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="#"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
-                  >
+                  <Link to="#" className="text-sm text-slate-500 transition hover:text-indigo-600">
                     FAQs
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-slate-800">Company</h4>
+              <h4 className="mb-4 font-semibold text-slate-800">Company</h4>
               <ul className="space-y-3">
                 <li>
-                  <Link
-                    to="#"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
-                  >
+                  <Link to="#" className="text-sm text-slate-500 transition hover:text-indigo-600">
                     About
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="#"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
-                  >
+                  <Link to="#" className="text-sm text-slate-500 transition hover:text-indigo-600">
                     Blog
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="#"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
-                  >
+                  <Link to="#" className="text-sm text-slate-500 transition hover:text-indigo-600">
                     Careers
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="#"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
-                  >
+                  <Link to="#" className="text-sm text-slate-500 transition hover:text-indigo-600">
                     Contact
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-slate-800">Legal</h4>
+              <h4 className="mb-4 font-semibold text-slate-800">Legal</h4>
               <ul className="space-y-3">
                 <li>
-                  <Link
-                    to="#"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
-                  >
+                  <Link to="#" className="text-sm text-slate-500 transition hover:text-indigo-600">
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="#"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
-                  >
+                  <Link to="#" className="text-sm text-slate-500 transition hover:text-indigo-600">
                     Terms of Service
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="#"
-                    className="text-slate-500 hover:text-indigo-600 transition text-sm"
-                  >
+                  <Link to="#" className="text-sm text-slate-500 transition hover:text-indigo-600">
                     Data Handling
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
-          <Separator className="bg-slate-200 mb-8" />
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-slate-500 mb-4 md:mb-0">
+          <Separator className="mb-8 bg-slate-200" />
+          <div className="flex flex-col items-center justify-between md:flex-row">
+            <p className="mb-4 text-sm text-slate-500 md:mb-0">
               © 2023 ReValidate. All rights reserved.
             </p>
             <div className="flex items-center">
-              <span className="text-xs text-slate-400 mr-2">Made with</span>
+              <span className="mr-2 text-xs text-slate-400">Made with</span>
               <span className="text-indigo-500">♥</span>
-              <span className="text-xs text-slate-400 ml-2">
-                for scientific integrity
-              </span>
+              <span className="ml-2 text-xs text-slate-400">for scientific integrity</span>
             </div>
           </div>
         </div>

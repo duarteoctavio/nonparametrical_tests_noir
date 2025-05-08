@@ -1,12 +1,5 @@
 import { NavLink } from "@remix-run/react";
-import {
-  HistoryIcon,
-  HomeIcon,
-  LogOutIcon,
-  RocketIcon,
-  SearchCheckIcon,
-  UserCircle,
-} from "lucide-react";
+import { HomeIcon, LogOutIcon, UserCircle } from "lucide-react";
 import { $path } from "remix-routes";
 import {
   Sidebar,

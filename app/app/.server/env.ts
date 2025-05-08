@@ -4,9 +4,10 @@ import { z } from "zod";
 
 // eslint-disable-next-line n/no-process-env
 
-const hexSchema = z.string()
+const hexSchema = z
+  .string()
   .regex(/^0x[0-9a-fA-F]*$/)
-  .transform(str => str as Hex);
+  .transform((str) => str as Hex);
 
 export const env = createEnv({
   server: {
@@ -14,7 +15,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "test", "production"]),
     SESSION_SECRET: z.string(),
     VERIFIER_ADDRESS: hexSchema,
-    APP_ADDRESS: hexSchema
+    APP_ADDRESS: hexSchema,
   },
   // eslint-disable-next-line n/no-process-env
   runtimeEnv: process.env,

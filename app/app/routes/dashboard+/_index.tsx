@@ -11,7 +11,7 @@ import { useState } from "react";
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
   const experiments = getAllExperiments();
-  const creatorIds = Array.from(new Set(experiments.map(e => e.creatorId)));
+  const creatorIds = Array.from(new Set(experiments.map((e) => e.creatorId)));
   const userMap = await getUsersByIds(creatorIds);
   return data({ user, experiments, userMap });
 }
@@ -34,7 +34,7 @@ export async function action({ request }: ActionFunctionArgs) {
     bounty,
     image: Buffer.from(image, "base64"),
     creatorId: user.id,
-    verifierAddress: "0x00"
+    verifierAddress: "0x00",
   });
 
   return redirect($path("/dashboard"));
@@ -48,8 +48,9 @@ function shorten(str: string) {
 function Copyable({ value, display }: { value: string; display: string }) {
   const [copied, setCopied] = useState(false);
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <span
-      className="cursor-pointer hover:underline truncate inline-block max-w-[120px] align-middle"
+      className="inline-block max-w-[120px] cursor-pointer truncate align-middle hover:underline"
       onClick={() => {
         navigator.clipboard.writeText(value);
         setCopied(true);
@@ -67,13 +68,14 @@ export default function Dashboard() {
   const { experiments, userMap } = useLoaderData<typeof loader>();
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-background py-12">
-      <div className="w-full max-w-4xl flex flex-col items-center">
-        <h1 className="text-4xl font-bold tracking-tight text-center mb-2">Welcome!</h1>
-        <p className="mt-0 mb-6 text-lg text-muted-foreground text-center max-w-2xl">
-          Find and verify the latest experiments below. Making science fairer one validation at a time.
+    <div className="flex min-h-screen flex-col items-center bg-background py-12">
+      <div className="flex w-full max-w-4xl flex-col items-center">
+        <h1 className="mb-2 text-center text-4xl font-bold tracking-tight">Welcome!</h1>
+        <p className="mb-6 mt-0 max-w-2xl text-center text-lg text-muted-foreground">
+          Find and verify the latest experiments below. Making science fairer one validation at a
+          time.
         </p>
-        <div className="flex flex-row gap-4 mb-10">
+        <div className="mb-10 flex flex-row gap-4">
           <Link
             to={$path("/dashboard/experiments/new")}
             className="font-geist inline-flex items-center rounded-lg border border-transparent bg-primary px-6 py-2 text-base font-medium text-primary-foreground shadow-sm transition-colors duration-200 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
@@ -89,31 +91,35 @@ export default function Dashboard() {
         </div>
         <div className="w-full">
           {/* Section Title */}
-          <h2 className="text-2xl font-semibold text-foreground text-center mb-4 mt-2">
+          <h2 className="mb-4 mt-2 text-center text-2xl font-semibold text-foreground">
             Check out the latest experiments you can be a part of
           </h2>
           {/* Cards Section with much wider background */}
-          <div className="w-full max-w-7xl mx-auto bg-secondary rounded-2xl p-10 shadow-inner">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          <div className="mx-auto w-full max-w-7xl rounded-2xl bg-secondary p-10 shadow-inner">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
               {experiments.map((experiment) => (
                 <Card
                   key={experiment.id}
-                  className="w-full shadow-md hover:shadow-xl hover:scale-[1.03] transition duration-200 cursor-pointer"
+                  className="w-full cursor-pointer shadow-md transition duration-200 hover:scale-[1.03] hover:shadow-xl"
                 >
                   <CardHeader>
-                    <CardTitle className="truncate text-lg font-bold mb-2">{experiment.title}</CardTitle>
+                    <CardTitle className="mb-2 truncate text-lg font-bold">
+                      {experiment.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
                       <div>
                         <span className="font-semibold text-foreground">Description:</span>
-                        <p className="font-geist text-sm text-muted-foreground line-clamp-3 mb-0">
+                        <p className="font-geist mb-0 line-clamp-3 text-sm text-muted-foreground">
                           {experiment.description}
                         </p>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-foreground">Bounty:</span>
-                        <span className="font-geist font-medium text-primary">${experiment.bounty}</span>
+                        <span className="font-geist font-medium text-primary">
+                          ${experiment.bounty}
+                        </span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-foreground">Created:</span>
@@ -123,11 +129,26 @@ export default function Dashboard() {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-foreground">Creator:</span>
-                        <span className="font-geist text-sm text-muted-foreground flex items-center gap-1 max-w-[160px] truncate">
+                        <span className="font-geist flex max-w-[160px] items-center gap-1 truncate text-sm text-muted-foreground">
                           {(() => {
                             const user = userMap[experiment.creatorId];
-                            if (user?.worldIdNullifierHash) return <><span>World ID:</span> <Copyable value={user.worldIdNullifierHash} display={shorten(user.worldIdNullifierHash)} /></>;
-                            if (user?.address) return <><span>Wallet:</span> <Copyable value={user.address} display={shorten(user.address)} /></>;
+                            if (user?.worldIdNullifierHash)
+                              return (
+                                <>
+                                  <span>World ID:</span>{" "}
+                                  <Copyable
+                                    value={user.worldIdNullifierHash}
+                                    display={shorten(user.worldIdNullifierHash)}
+                                  />
+                                </>
+                              );
+                            if (user?.address)
+                              return (
+                                <>
+                                  <span>Wallet:</span>{" "}
+                                  <Copyable value={user.address} display={shorten(user.address)} />
+                                </>
+                              );
                             return `User ${experiment.creatorId}`;
                           })()}
                         </span>
@@ -137,7 +158,7 @@ export default function Dashboard() {
                   <CardFooter>
                     <Link
                       to={$path("/dashboard/revalidate/:id", { id: experiment.id })}
-                      className="font-geist w-full rounded-md border border-transparent bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors duration-200"
+                      className="font-geist w-full rounded-md border border-transparent bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary/90"
                     >
                       Revalidate Experiment
                     </Link>
@@ -146,7 +167,7 @@ export default function Dashboard() {
               ))}
             </div>
             {experiments.length === 0 && (
-              <div className="text-center py-12">
+              <div className="py-12 text-center">
                 <p className="text-muted-foreground">No experiments available yet.</p>
               </div>
             )}

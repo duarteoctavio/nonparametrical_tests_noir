@@ -91,6 +91,6 @@
 
 @layer components {
   .glass {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+    @apply border border-white/20 bg-white/80 backdrop-blur-sm;
   }
 }

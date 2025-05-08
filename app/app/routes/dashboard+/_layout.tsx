@@ -1,6 +1,5 @@
 // Combined version of dashboard layout with authentication and neobrutalist UI
 import { Outlet, Form, useSubmit, useLoaderData, useNavigate } from "@remix-run/react";
-import { ArrowLeftIcon } from "lucide-react";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Button } from "~/components/ui/button";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
@@ -77,16 +76,14 @@ export default function Layout() {
       />
       <SidebarInset>
         {/* Top Navbar - now inside SidebarInset */}
-        <nav className="glass shadow-sm mb-2">
+        <nav className="glass mb-2 shadow-sm">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 justify-between">
               <div className="flex items-center">
                 <h1 className="font-geist text-2xl font-bold text-primary">ReValidate</h1>
               </div>
               <div className="flex items-center space-x-4">
-                <span className="font-geist text-foreground">
-                  Welcome!
-                </span>
+                <span className="font-geist text-foreground">Welcome!</span>
                 <Button
                   variant="default"
                   onClick={() => {
@@ -100,19 +97,16 @@ export default function Layout() {
           </div>
         </nav>
         {!breadcrumb.disableHeader && (
-          <header className="flex h-16 shrink-0 items-center border-b px-6 transition-[width,height] ease-linear justify-between">
+          <header className="flex h-16 shrink-0 items-center justify-between border-b px-6 transition-[width,height] ease-linear">
             <span className="text-lg font-semibold md:text-xl">{breadcrumb.label}</span>
             {breadcrumb.label !== "Home" && breadcrumb.label !== "Dashboard" && (
-              <Button
-                variant="outline"
-                onClick={() => navigate('/dashboard')}
-              >
+              <Button variant="outline" onClick={() => navigate("/dashboard")}>
                 Back to Dashboard
               </Button>
             )}
           </header>
         )}
-        <main className="pt-0 px-6 pb-6">
+        <main className="px-6 pb-6 pt-0">
           <Outlet />
         </main>
       </SidebarInset>

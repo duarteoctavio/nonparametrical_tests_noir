@@ -22,7 +22,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     esbuildOptions: { target: "esnext" },
-    exclude: ['@noir-lang/noirc_abi', '@noir-lang/acvm_js']
+    exclude: ["@noir-lang/noirc_abi", "@noir-lang/acvm_js"],
   },
   plugins: [
     remix({
