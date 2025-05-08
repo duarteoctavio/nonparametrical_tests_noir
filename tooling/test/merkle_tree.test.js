@@ -42,4 +42,15 @@ describe("The tree behaves as the noir version", () => {
         ]);
         expect(expectedRoot).toBe(merkle.root());
     });
+
+    test("Same value as Noir is generated for example", () => {
+        let expectedHash = "10c5ecf6c58460eb00eba98b21ef57d36671753cc77d111bfedb8f3dbfb7f4ff";
+        let dataset = [418, -430, -673, 1008, -1180, 1227, 1331, -1598, 1964, -2054, 2870, -3040, 3275, 3292, -4092, -4129, -4212, -4319, 4423, -4723, 4748, -4789, 5383, -5968, -6018, -6231, 6419, -6463, 6502, 6653, 6683, -6691]
+            .map( num => BigInt(( 2**15 ) + num - 1) );
+        ;
+        let merkle = new MerkleTree({depth:5});
+        dataset.forEach( datum  => merkle.add_leaf(datum) );
+        console.log(merkle);
+        expect(merkle.root().toString(16)).toBe(expectedHash);
+    });
 });
