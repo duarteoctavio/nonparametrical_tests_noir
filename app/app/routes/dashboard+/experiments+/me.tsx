@@ -23,6 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
   const userExperiments = getExperimentsByCreator(user.id);
   const appAddress = env.APP_ADDRESS;
+
   return data({ experiments: userExperiments, user, appAddress });
 }
 
@@ -30,7 +31,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const id = formData.get("id");
   const hash = formData.get("hash");
-
+  
   if (!id) {
     throw new Error("missing id")
   }
@@ -47,7 +48,7 @@ export default function MyExperiments() {
   const { user, experiments, appAddress} = useLoaderData<typeof loader>();
   const { writeContractAsync } = useWriteContract();
   const fetcher = useFetcher();
-
+  
   const handlePublish = async (experiment: Experiment) => {
     try {
       const decoder = new TextEncoder()
