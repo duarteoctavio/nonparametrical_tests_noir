@@ -2,7 +2,7 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { usePublicClient, useWriteContract } from "wagmi";
-import { bytesToHex, getAddress, Hex } from "viem";
+import { bytesToHex, getAddress, Hex, keccak256 } from "viem";
 import { appApi } from "~/utils/app_api";
 import { getAllExperiments } from "~/.server/dto/experiments";
 import { useState } from "react";
@@ -103,12 +103,17 @@ export default function RevalidateExperiment() {
     console.log("Merkle root:", merkleRoot.toString(16));
 
     const proof = await generateProof(circuit, {
-      statistic_threshold: 400,
+      statistic_threshold: 422,
       dataset: csvData.map(n => n.toString()),
       expected_root: merkleRoot.toString()
     });
 
-    console.log("Proof:", proof);
+    console.log("Dataset:", csvData);
+    console.log(circuit);
+    console.log("proof as keccak256", keccak256(proof.proof));
+
+    console.log("size of proof", proof.proof.length);
+    console.log("Proof:", proof.proof);
     console.log("Experiment ID:", experimentId);
 
     console.log("Contract ID:", experiment.contractId);

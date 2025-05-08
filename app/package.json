@@ -18,8 +18,8 @@
   "dependencies": {
     "@aztec/bb.js": "=0.82.2",
     "@fontsource/geist-sans": "^5.2.5",
-    "@noir-lang/noir_js": "=1.0.0-beta.2",
-    "@noir-lang/types": "=1.0.0-beta.2",
+    "@noir-lang/noir_js": "=1.0.0-beta.3",
+    "@noir-lang/types": "=1.0.0-beta.3",
     "@radix-ui/react-dialog": "^1.1.12",
     "@radix-ui/react-hover-card": "^1.1.11",
     "@radix-ui/react-label": "^2.1.4",

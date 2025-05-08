@@ -50,12 +50,12 @@ contract App {
         return experimentId;
     }
 
-    function publishRevalidation(bytes32 experimentId, bytes calldata proof, uint256 dataSetMerkleRoot) external {
+    function publishRevalidation(bytes32 experimentId, bytes memory proof, uint256 dataSetMerkleRoot) external {
         Experiment memory experiment = proposals[experimentId];
-
+        
         bool isValid = experiment.verifier.verify(proof, arrayOfOneElement(bytes32(dataSetMerkleRoot)));
-        // require(isValid, "Invalid proof");
-        // require(!experiment.revalidated, "Experiment already revalidated");
+        require(isValid, "Invalid proof");
+        require(!experiment.revalidated, "Experiment already revalidated");
         revalidations[experimentId] = Revalidation({
             proof: proof,
             dataSetMerkleRoot: dataSetMerkleRoot,
@@ -84,7 +84,7 @@ contract App {
         require(samples.length == SAMPLE_LENGTH, "Invalid number of samples");
         uint256 recalculated = recalculateMerkleRoot(samples);
         require(recalculated == revalidation.dataSetMerkleRoot, "Merkle root does not match");
-        
+         
         payable(revalidation.revalidator).transfer(experiment.bounty);
         experiment.claimed = true;
     }
