@@ -2,3 +2,5 @@ target
 circuits/target
 app/node_modules
 *node_modules*
+r_statistical_tools/brief.pdf
+r_statistical_tools/brief.html
