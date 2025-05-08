@@ -1,0 +1,1 @@
+ALTER TABLE `experiments` ADD `image` blob NOT NULL;

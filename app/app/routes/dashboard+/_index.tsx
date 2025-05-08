@@ -1,9 +1,10 @@
 import { data, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { requireUserId } from "~/.server/services/session";
 import { createExperiment, getAllExperiments } from "~/.server/dto/experiments";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { $path } from "remix-routes";
+import { Card, CardFooter, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
@@ -18,7 +19,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const bounty = Number(formData.get("bounty"));
-
+  const image = formData.get("image") as string;
   if (!title || !description || !bounty) {
     return data({ error: "All fields are required" }, { status: 400 });
   }
@@ -27,6 +28,7 @@ export async function action({ request }: ActionFunctionArgs) {
     title,
     description,
     bounty,
+    image: Buffer.from(image, "base64"),
     creatorId: user.id,
   });
 
@@ -38,12 +40,12 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-4xl font-bold tracking-tight">Welcome, {user.name || "Researcher"}!</h1>
+      <h1 className="text-4xl font-bold tracking-tight">Welcome!</h1>
       <p className="mt-2 text-lg text-muted-foreground">
         Find and verify the latest experiments below. Making science fairer one validation at a
         time.
       </p>
-      {/* <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex space-x-4">
             <Link
@@ -81,7 +83,7 @@ export default function Dashboard() {
             </Card>
           ))}
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

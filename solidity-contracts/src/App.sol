@@ -2,7 +2,6 @@
 pragma solidity ^0.8.13;
 import {IVerifier} from './Verifier.sol';
 import {PoseidonT3} from './Poseidon2.sol';
-import {console} from "forge-std/console.sol";
 
 
 contract App {
@@ -23,6 +22,8 @@ contract App {
         bool approved;
         uint256[] samples;
     }
+
+    event ExperimentProposed(bytes32 experimentId);
 
     mapping(bytes32 => Experiment) internal proposals;
     mapping(bytes32 => Revalidation) internal revalidations;
@@ -45,6 +46,7 @@ contract App {
             claimed: false
         });
         proposals[experimentId] = proposal;
+        emit ExperimentProposed(experimentId);
         return experimentId;
     }
 

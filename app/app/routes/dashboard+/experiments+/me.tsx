@@ -1,17 +1,99 @@
 import { data } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { requireUserId } from "~/.server/services/session";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { getExperimentsByCreator } from "~/.server/dto/experiments";
+import { useWaitForTransactionReceipt, useWriteContract, usePublicClient } from "wagmi";
+import { appApi } from "~/utils/app_api";
+import { getAddress, keccak256 } from "viem";
+import { useState, useEffect } from "react";
+
+interface Experiment {
+  id: number;
+  title: string;
+  description: string;
+  bounty: number;
+  createdAt: Date;
+  creatorId: number;
+  verifierAddress: string;
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
   const userExperiments = getExperimentsByCreator(user.id);
-  return data({ experiments: userExperiments, user });
+  const appAddress = process.env.APP_ADDRESS;
+  return data({ experiments: userExperiments, user, appAddress });
 }
 
 export default function MyExperiments() {
-  const { user, experiments } = useLoaderData<typeof loader>();
+  const { user, experiments, appAddress} = useLoaderData<typeof loader>();
+  const { writeContractAsync, error, status } = useWriteContract();
+  const [transactionHash, setTransactionHash] = useState<`0x${string}` | undefined>(undefined);
+  const [publishingExperiments, setPublishingExperiments] = useState<Record<string, boolean>>({});
+  const [experimentIds, setExperimentIds] = useState<Record<string, string>>({});
+  const publicClient = usePublicClient();
+  
+  const { data, isError, isLoading, error: error2 } = useWaitForTransactionReceipt({
+    hash: transactionHash,
+    query: {
+      enabled: !!transactionHash,
+    },
+  });
+
+  // Debug logs
+  console.log('Current state:', {
+    transactionHash,
+    isError,
+    isLoading,
+    error2,
+    status
+  });
+
+
+  const handlePublish = async (experiment: Experiment) => {
+    try {
+      setPublishingExperiments(prev => ({
+        ...prev,
+        [experiment.id]: true
+      }));
+      
+      const hash = await writeContractAsync({
+        address: getAddress(appAddress!),
+        abi: appApi,
+        functionName: "proposeExperiment",
+        args: [keccak256("0x0102"), getAddress(experiment.verifierAddress), BigInt(experiment.bounty)],
+        value: BigInt(experiment.bounty),
+      });
+      setTransactionHash(hash);
+
+      if (!publicClient) {
+        throw new Error('Public client not initialized');
+      }
+
+      // Wait for transaction receipt
+      const receipt = await publicClient.waitForTransactionReceipt({ hash });
+      
+      // Find the ExperimentProposed event
+      const eventSignature = `0x${Buffer.from('ExperimentProposed(bytes32)').toString('hex')}` as `0x${string}`;
+      const event = receipt.logs.find(log => 
+        log.topics[0] === keccak256(eventSignature)
+      );
+
+      if (event) {
+        const experimentId = event.topics[1];
+        setExperimentIds(prev => ({
+          ...prev,
+          [experiment.id]: experimentId
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to publish experiment:', error);
+      setPublishingExperiments(prev => ({
+        ...prev,
+        [experiment.id]: false
+      }));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -59,11 +141,30 @@ export default function MyExperiments() {
                 <p className="font-geist mb-4 text-sm text-muted-foreground">
                   {experiment.description}
                 </p>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-4">
                   <span className="font-geist font-medium text-primary">${experiment.bounty}</span>
                   <span className="font-geist text-sm text-muted-foreground">
                     {new Date(experiment.createdAt).toLocaleDateString()}
                   </span>
+                </div>
+                <div className="space-y-2">
+                  {publishingExperiments[experiment.id] ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary"></div>
+                      <span className="text-sm text-muted-foreground">Publishing...</span>
+                    </div>
+                  ) : experimentIds[experiment.id] ? (
+                    <div className="text-sm text-green-500">
+                      Published! ID: {experimentIds[experiment.id]}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => handlePublish(experiment)}
+                      className="font-geist w-full rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors duration-200"
+                    >
+                      Publish
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

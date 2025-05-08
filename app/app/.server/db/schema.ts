@@ -27,6 +27,7 @@ export const experimentsTable = sqliteTable(
       .notNull()
       .references(() => usersTable.id),
     createdAt: createdAt(),
+    verifierAddress: text("verifier_address").notNull(),
     image: blob("image", { mode: "buffer" }).notNull(),
   },
   (t) => [index("experiments_creator_id_idx").on(t.creatorId)],
