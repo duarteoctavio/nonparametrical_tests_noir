@@ -5,6 +5,10 @@ CREATE TABLE `experiments` (
 	`bounty` integer NOT NULL,
 	`creator_id` integer NOT NULL,
 	`created_at` integer NOT NULL,
+	`verifier_address` text NOT NULL,
+	`image` blob NOT NULL,
+	`tx_hash` text,
+	`contract_id` text,
 	FOREIGN KEY (`creator_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -19,6 +23,3 @@ CREATE TABLE `users` (
 --> statement-breakpoint
 CREATE UNIQUE INDEX `users_address_unique` ON `users` (`address`);--> statement-breakpoint
 CREATE UNIQUE INDEX `users_world_id_nullifier_hash_unique` ON `users` (`world_id_nullifier_hash`);
-
-ALTER TABLE `users` ADD COLUMN `world_id_nullifier_hash` text;
-/* Potentially also includes adding the UNIQUE constraint */

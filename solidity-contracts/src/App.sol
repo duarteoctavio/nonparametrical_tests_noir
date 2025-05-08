@@ -23,7 +23,7 @@ contract App {
         uint256[] samples;
     }
 
-    event ExperimentProposed(bytes32 experimentId);
+    event ExperimentProposed(bytes32 indexed experimentId);
 
     mapping(bytes32 => Experiment) internal proposals;
     mapping(bytes32 => Revalidation) internal revalidations;

@@ -1,1 +1,0 @@
-ALTER TABLE `experiments` ADD `verifier_address` text NOT NULL;

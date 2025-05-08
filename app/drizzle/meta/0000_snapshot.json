@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d8b183b5-0514-4e74-84ad-e5381ac0ab4f",
-  "prevId": "9a8c5e36-e2d1-4748-98b8-7c7b32f3560c",
+  "id": "2bda9831-8ffb-41a0-b823-4eba79dcc3f5",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "experiments": {
       "name": "experiments",
@@ -61,6 +61,20 @@
           "type": "blob",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "tx_hash": {
+          "name": "tx_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "contract_id": {
+          "name": "contract_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         }
       },

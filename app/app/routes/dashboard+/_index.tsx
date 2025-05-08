@@ -30,6 +30,7 @@ export async function action({ request }: ActionFunctionArgs) {
     bounty,
     image: Buffer.from(image, "base64"),
     creatorId: user.id,
+    verifierAddress: "0x00"
   });
 
   return redirect($path("/dashboard"));
