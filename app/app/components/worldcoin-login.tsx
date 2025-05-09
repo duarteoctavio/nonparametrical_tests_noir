@@ -4,6 +4,7 @@ import { useState } from "react"; // Import useState for loading/error handling
 import { useNavigate } from "@remix-run/react"; // Import useNavigate
 import { cn } from "~/utils/cn"; // Import cn utility for merging classes
 import { useClientEnv } from "~/hooks/use-client-env";
+import { ClientOnly } from "./client-only";
 
 interface WorldcoinLoginProps {
   className?: string;
@@ -79,27 +80,29 @@ export default function WorldcoinLogin({ className }: WorldcoinLoginProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <IDKitWidget
-        app_id={env.WORLDCOIN_APP_ID as `app_${string}`}
-        action="login"
-        verification_level={VerificationLevel.Device}
-        handleVerify={handleVerify}
-        onSuccess={onSuccess}
-        onError={onError}
-      >
-        {({ open }) => (
-          <button
-            onClick={open}
-            disabled={isLoading}
-            className={cn(
-              "inline-flex items-center justify-center rounded-lg border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors duration-200 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              className,
-            )}
-          >
-            {isLoading ? "Verifying..." : "Verify with World ID"}
-          </button>
-        )}
-      </IDKitWidget>
+      <ClientOnly>
+        <IDKitWidget
+          app_id={env.WORLDCOIN_APP_ID as `app_${string}`}
+          action="login"
+          verification_level={VerificationLevel.Device}
+          handleVerify={handleVerify}
+          onSuccess={onSuccess}
+          onError={onError}
+        >
+          {({ open }) => (
+            <button
+              onClick={open}
+              disabled={isLoading}
+              className={cn(
+                "inline-flex items-center justify-center rounded-lg border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors duration-200 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                className,
+              )}
+            >
+              {isLoading ? "Verifying..." : "Verify with World ID"}
+            </button>
+          )}
+        </IDKitWidget>
+      </ClientOnly>
       {error && <p className="mt-2 text-xs text-red-600">Error: {error}</p>}
     </div>
   );
