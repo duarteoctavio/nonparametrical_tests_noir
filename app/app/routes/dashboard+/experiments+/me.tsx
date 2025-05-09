@@ -6,8 +6,8 @@ import { getExperimentsByCreator, updateExperiment } from "~/.server/dto/experim
 import { useWriteContract } from "wagmi";
 import { appApi } from "~/utils/app_api";
 import { getAddress, keccak256 } from "viem";
-import { env } from "~/.server/env";
 import { $path } from "remix-routes";
+import { useClientEnv } from "~/hooks/use-client-env";
 
 interface Experiment {
   id: number;
@@ -22,9 +22,8 @@ interface Experiment {
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
   const userExperiments = getExperimentsByCreator(user.id);
-  const appAddress = env.APP_ADDRESS;
 
-  return data({ experiments: userExperiments, user, appAddress });
+  return data({ experiments: userExperiments, user });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -45,9 +44,10 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function MyExperiments() {
-  const { user, experiments, appAddress } = useLoaderData<typeof loader>();
+  const { experiments } = useLoaderData<typeof loader>();
   const { writeContractAsync } = useWriteContract();
   const fetcher = useFetcher();
+  const env = useClientEnv();
 
   const handlePublish = async (experiment: Experiment) => {
     try {
@@ -55,7 +55,7 @@ export default function MyExperiments() {
       const bytes = decoder.encode(experiment.description);
 
       const hash = await writeContractAsync({
-        address: getAddress(appAddress!),
+        address: env.APP_ADDRESS,
         abi: appApi,
         functionName: "proposeExperiment",
         args: [keccak256(bytes), getAddress(experiment.verifierAddress), BigInt(experiment.bounty)],

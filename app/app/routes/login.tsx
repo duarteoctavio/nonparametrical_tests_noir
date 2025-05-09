@@ -5,8 +5,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/card";
 import { createUserSession, getUserId } from "~/.server/services/session";
-import { findOrCreateUserByAddress } from "~/.server/dto/users";
-import { redirect, json } from "@remix-run/node";
+import { findOrCreateUserByAddress, getUserById } from "~/.server/dto/users";
+import { redirect } from "@remix-run/node";
 import WorldcoinLogin from "~/components/worldcoin-login";
 import { Separator } from "~/components/ui/separator";
 import { Button } from "~/components/ui/button";
@@ -15,11 +15,13 @@ import { Button } from "~/components/ui/button";
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await getUserId(request);
   if (userId) {
-    // User already has a valid session, redirect
-    return redirect("/dashboard");
+    const user = getUserById(userId);
+    if (user !== undefined) {
+      return redirect("/dashboard");
+    }
   }
   // No user session, render the login page
-  return json({});
+  return {};
 }
 
 // Action: Handles wallet connect login

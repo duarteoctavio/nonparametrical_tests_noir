@@ -1,18 +1,17 @@
 import { useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useWriteContract } from "wagmi";
-import { bytesToHex, getAddress, Hex } from "viem";
+import { bytesToHex, Hex } from "viem";
 import { appApi } from "~/utils/app_api";
 import { getAllExperiments } from "~/.server/dto/experiments";
 import { useState } from "react";
 import { calculateMerkleRoot, convertToField } from "~/utils/merkle_tree";
 import { generateProof } from "~/utils/prove";
 import { circuit } from "~/utils/circuit";
-import { env } from "~/.server/env";
+import { useClientEnv } from "~/hooks/use-client-env";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const experimentId = params.id;
-  const appAddress = env.APP_ADDRESS;
 
   if (!experimentId) {
     throw new Response("Experiment ID not found", { status: 404 });
@@ -25,16 +24,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Experiment not found", { status: 404 });
   }
 
-  return { experimentId, appAddress: appAddress!, experiment };
+  return { experimentId, experiment };
 }
 
 export default function RevalidateExperiment() {
-  const { experimentId, appAddress, experiment } = useLoaderData<typeof loader>();
+  const { experimentId, experiment } = useLoaderData<typeof loader>();
   const { writeContractAsync } = useWriteContract();
   const [csvData, setCsvData] = useState<number[]>([]);
   const [csvTitle, setCsvTitle] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [buttonEnabled, setButtonEnabled] = useState<boolean>(true);
+  const env = useClientEnv();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -99,7 +99,7 @@ export default function RevalidateExperiment() {
 
     console.log("Contract ID:", experiment.contractId);
     const hash = await writeContractAsync({
-      address: getAddress(appAddress!),
+      address: env.APP_ADDRESS,
       abi: appApi,
       functionName: "publishRevalidation",
       args: [experiment.contractId as Hex, bytesToHex(proof.proof), merkleRoot],

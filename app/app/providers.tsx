@@ -1,31 +1,31 @@
-// Updated providers setup for Wagmi v2 / RainbowKit v1
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { anvil } from "wagmi/chains";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query"; // Need QueryClient for RainbowKit v1+
-import { ClientOnly } from "./components/client-only";
-
-const config = getDefaultConfig({
-  appName: "ReValidate",
-  projectId: "d15c85f3708f1fec67a241a18774984f", // this should be in the .env but I am lazy :)
-  chains: [anvil],
-  // transports: {
-  //   [mainnet.id]: http("https://eth.llamarpc.com"),
-  // },
-  ssr: true, // Important for Remix
-});
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { ClientEnv } from "./.server/env";
+import { ClientEnvContext } from "./hooks/use-client-env";
 
 const queryClient = new QueryClient();
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children, env }: { children: React.ReactNode; env: ClientEnv }) {
+  const config = useMemo(() => {
+    return getDefaultConfig({
+      appName: "ReValidate",
+      projectId: env.WALLET_CONNECT_PROJECT_ID,
+      chains: [anvil],
+      ssr: true,
+    });
+  }, [env.WALLET_CONNECT_PROJECT_ID]);
+
   return (
-    <ClientOnly>
+    <ClientEnvContext.Provider value={env}>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider theme={darkTheme()}>{children}</RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>
-    </ClientOnly>
+    </ClientEnvContext.Provider>
   );
 }

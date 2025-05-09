@@ -16,6 +16,8 @@ export const env = createEnv({
     SESSION_SECRET: z.string(),
     VERIFIER_ADDRESS: hexSchema,
     APP_ADDRESS: hexSchema,
+    WALLET_CONNECT_PROJECT_ID: z.string(),
+    WORLDCOIN_APP_ID: z.string(),
   },
   // eslint-disable-next-line n/no-process-env
   runtimeEnv: process.env,
@@ -26,6 +28,9 @@ export const env = createEnv({
 
 export const clientEnv = {
   NODE_ENV: env.NODE_ENV,
+  WALLET_CONNECT_PROJECT_ID: env.WALLET_CONNECT_PROJECT_ID,
+  APP_ADDRESS: env.APP_ADDRESS,
+  WORLDCOIN_APP_ID: env.WORLDCOIN_APP_ID,
 };
 
 export type ClientEnv = typeof clientEnv;

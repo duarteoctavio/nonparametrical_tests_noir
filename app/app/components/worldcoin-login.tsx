@@ -1,14 +1,10 @@
-// Component for World ID Login using IDKitWidget
-// This component renders the World ID button, handles the verification callback,
-// and sends the proof to the backend verification endpoint.
-// Updated: Uses correct types ISuccessResult and VerificationLevel enum.
 import type { ISuccessResult, IErrorState } from "@worldcoin/idkit"; // Re-add IErrorState import
 import { IDKitWidget, VerificationLevel } from "@worldcoin/idkit"; // Import VerificationLevel enum
 import { useState } from "react"; // Import useState for loading/error handling
 import { useNavigate } from "@remix-run/react"; // Import useNavigate
 import { cn } from "~/utils/cn"; // Import cn utility for merging classes
+import { useClientEnv } from "~/hooks/use-client-env";
 
-// Add className prop for button styling
 interface WorldcoinLoginProps {
   className?: string;
 }
@@ -16,7 +12,8 @@ interface WorldcoinLoginProps {
 export default function WorldcoinLogin({ className }: WorldcoinLoginProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate(); // Get navigate function
+  const navigate = useNavigate();
+  const env = useClientEnv();
 
   const handleVerify = async (proof: ISuccessResult) => {
     console.log("World ID Proof received from IDKit:", proof);
@@ -83,29 +80,26 @@ export default function WorldcoinLogin({ className }: WorldcoinLoginProps) {
   return (
     <div className="flex flex-col items-center">
       <IDKitWidget
-        app_id="app_d8c5804c8e9c81c610125012f6c866b7" // TODO: Replace with your actual App ID (use env vars ideally)
-        action="login" // TODO: Replace with your action ID (use env vars ideally)
-        verification_level={VerificationLevel.Device} // Use enum value
+        app_id={env.WORLDCOIN_APP_ID as `app_${string}`}
+        action="login"
+        verification_level={VerificationLevel.Device}
         handleVerify={handleVerify}
         onSuccess={onSuccess}
         onError={onError}
-        // Other optional configurations like theme, signal, etc.
       >
         {({ open }) => (
           <button
             onClick={open}
             disabled={isLoading}
-            // Apply base styles and merge with passed className
             className={cn(
               "inline-flex items-center justify-center rounded-lg border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors duration-200 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              className, // Allow overriding/extending styles
+              className,
             )}
           >
-            {isLoading ? "Verifying..." : "Verify with World ID"} {/* Updated button text */}
+            {isLoading ? "Verifying..." : "Verify with World ID"}
           </button>
         )}
       </IDKitWidget>
-      {/* Keep minimal error display, can be improved with Shadcn components later */}
       {error && <p className="mt-2 text-xs text-red-600">Error: {error}</p>}
     </div>
   );
