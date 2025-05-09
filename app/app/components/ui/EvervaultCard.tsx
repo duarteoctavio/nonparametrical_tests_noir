@@ -41,7 +41,7 @@ export const EvervaultCard = ({ text, className }: { text?: string; className?: 
         <div className="relative z-10 flex items-center justify-center">
           <div className="w-25 relative flex h-20 items-center justify-center p-4 text-4xl font-bold text-white">
             <div className="absolute h-full w-full rounded-2xl bg-white/[0.5] blur-sm dark:bg-black/[0.8]" />
-            <span className="center z-20 px-2 py-1 text-3xl text-black dark:text-white">
+            <span className="center z-20 px-2 py-1 text-6xl text-black dark:text-white">
               {text}
             </span>
           </div>
