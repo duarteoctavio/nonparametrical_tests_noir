@@ -32,7 +32,7 @@ export default function Dashboard() {
         <img src="/logo.png" alt="ReValidate" className="h-20 w-20" />
         <h1 className="mb-4 mt-2 text-center text-6xl font-semibold tracking-tight">ReValidate</h1>
         <p className="mb-6 mt-0 max-w-2xl text-center text-xl font-medium">
-          Find and verify the latest experiments below.
+          Find and verify the latest experiments.
           <br />
           Making science fairer one validation at a time.
         </p>
@@ -54,7 +54,7 @@ export default function Dashboard() {
           startAngle={40}
           containerRef={containerRef}
         >
-          <div className="h-16 w-16 overflow-hidden rounded-lg border shadow-xl md:h-48 md:w-48">
+          <div className="h-16 w-16 overflow-hidden rounded-lg border shadow md:h-48 md:w-48">
             <img
               src={`data:image/webp;base64,${experiment.image}`}
               alt={experiment.title}
