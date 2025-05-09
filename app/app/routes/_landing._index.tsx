@@ -6,7 +6,6 @@ import { Separator } from "~/components/ui/separator";
 import {
   ArrowRight,
   CheckCircle,
-  FileCheck,
   BarChart3,
   Users,
   Search,
@@ -75,7 +74,7 @@ export default function LandingIndex() {
       </header>
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-slate-50 py-28">
+      <section className="relative overflow-hidden bg-slate-50 py-28 pb-10">
         <div className="bg-grid-slate-100 dark:bg-grid-slate-700/25 absolute inset-0 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]"></div>
         <div className="py-15 container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
@@ -110,34 +109,25 @@ export default function LandingIndex() {
                 </a>
               </Button>
             </div>
-            <div className="mb-12 rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-shadow duration-300 hover:shadow-md">
-              <div className="relative mb-6 flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-slate-100 bg-slate-50">
-                <div className="absolute inset-0 bg-[radial-gradient(#e0e7ff_1px,transparent_1px)] opacity-40 [background-size:16px_16px]"></div>
-                <div className="z-10 flex flex-col items-center">
-                  <FileCheck className="mb-3 h-16 w-16 text-indigo-200" />
-                  <span className="text-slate-400">
-                    Dashboard preview: Grayscale interface with indigo highlights for actions and
-                    progress indicators
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-8">
-                <span className="text-sm font-medium text-slate-500">Trusted by</span>
-                <div className="flex flex-wrap justify-center gap-8">
-                  <div className="h-8 font-medium text-slate-400 opacity-60">
-                    Stanford University
-                  </div>
-                  <div className="h-8 font-medium text-slate-400 opacity-60">Nature</div>
-                  <div className="h-8 font-medium text-slate-400 opacity-60">
-                    Science Foundation
-                  </div>
-                  <div className="h-8 font-medium text-slate-400 opacity-60">MIT</div>
-                  <div className="h-8 font-medium text-slate-400 opacity-60">OSF</div>
-                </div>
+            <img
+              src="/dashboard-capture.png"
+              alt="Dashboard preview"
+              className="h-full w-full rounded-xl border border-slate-200 object-cover shadow-sm hover:shadow-md"
+            />
+
+            <div className="my-10 flex flex-col items-center justify-center gap-2">
+              <span className="text-sm font-medium text-slate-500">Trusted by</span>
+              <div className="flex flex-wrap justify-center gap-8">
+                <div className="h-8 font-medium text-slate-400 opacity-60">Stanford University</div>
+                <div className="h-8 font-medium text-slate-400 opacity-60">Nature</div>
+                <div className="h-8 font-medium text-slate-400 opacity-60">Science Foundation</div>
+                <div className="h-8 font-medium text-slate-400 opacity-60">MIT</div>
+                <div className="h-8 font-medium text-slate-400 opacity-60">OSF</div>
               </div>
             </div>
           </div>
-          <div className="mx-auto max-w-xl text-center">
+
+          <div className="mx-auto max-w-xl pt-8 text-center">
             <p className="mb-4 text-lg font-medium text-slate-700">
               Transform hypothesis to verified knowledge in a transparent, collaborative ecosystem
             </p>
