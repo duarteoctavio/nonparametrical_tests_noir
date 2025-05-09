@@ -110,7 +110,3 @@ Citations:
 [32] https://xtalks.com/Reproducible-Preclinical-Study-Results-842/
 [33] https://frontlinegenomics.com/reproducibility-the-science-communities-ticking-timebomb-can-we-still-trust-published-research/
 [34] https://www.ahajournals.org/doi/10.1161/circresaha.114.303819
-
----
-
-Answer from Perplexity: https://www.perplexity.ai/search/can-you-investigate-about-the-rQZhUmyjSYOyJMqh45NTLA?utm_source=copy_output
