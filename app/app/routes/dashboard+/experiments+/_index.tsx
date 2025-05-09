@@ -126,18 +126,18 @@ export default function Experiments() {
             >
               <Card key={experiment.id}>
                 <CardHeader className="flex flex-col items-center justify-between lg:flex-row">
-                  <CardTitle className="text-xl">{experiment.title}</CardTitle>
+                  <CardTitle className="truncate text-xl">{experiment.title}</CardTitle>
                   <div className="flex flex-row gap-2">
                     {experiment.isMine && <Badge variant="success">My Experiment</Badge>}
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="mb-4 text-sm">{experiment.description}</p>
+                  <p className="mb-4 truncate text-sm">{experiment.description}</p>
                   <div className="mx-auto w-fit rounded border-2 border-dashed p-1">
                     <img
                       src={`data:image/webp;base64,${experiment.image}`}
                       alt={experiment.title}
-                      className="max-h-[250px] rounded"
+                      className="h-[200px] rounded"
                     />
                   </div>
                 </CardContent>

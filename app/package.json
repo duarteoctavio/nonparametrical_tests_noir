@@ -17,7 +17,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node ./scripts/migrate.mjs",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "tsx ./scripts/seed.ts"
   },
   "dependencies": {
     "@aztec/bb.js": "=0.82.2",

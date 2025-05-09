@@ -61,7 +61,7 @@ export default function Experiment() {
   }
 
   return (
-    <div className="container mx-auto space-y-6 py-8">
+    <div className="container mx-auto space-y-6">
       <Card className="overflow-hidden">
         {/* Image at the top */}
         {experiment.image && (
