@@ -1,11 +1,12 @@
 // Combined experiment creation page with form and action handler
-import { data } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { requireUserId } from "~/.server/services/session";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { createExperiment } from "~/.server/dto/experiments";
 import { env } from "~/.server/env";
 import sharp from "sharp";
 import { Address, encodeAbiParameters, keccak256 } from "viem";
+import { $path } from "remix-routes";
 
 export async function action({ request }: ActionFunctionArgs) {
   const user = await requireUserId(request);
@@ -35,7 +36,7 @@ export async function action({ request }: ActionFunctionArgs) {
     ),
   );
 
-  createExperiment({
+  const experiment = createExperiment({
     title,
     description,
     bounty,
@@ -45,5 +46,5 @@ export async function action({ request }: ActionFunctionArgs) {
     contractId,
   });
 
-  return { ok: true };
+  return redirect($path("/dashboard/experiments/:id", { id: experiment.id }));
 }
