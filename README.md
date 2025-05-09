@@ -38,7 +38,7 @@ This will publish the contracts into the devnet as required. If you use these co
 
 * Navigate into the `app` folder.
 * Install dependencies with the `bun i` command.
-* Initialize the database with the `bun db:push`, `bun db:migrage`, `bun db:seed` commands.
+* Initialize the database with the `bun db:migrage`, `bun db:seed` commands.
 * Launch the site with `bun dev`.
 
 ## Using the platform.
