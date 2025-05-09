@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useWriteContract } from "wagmi";
-import { bytesToHex, Hex } from "viem";
+import { bytesToHex, getAddress, Hex } from "viem";
 import { appApi } from "~/utils/app_api";
 import { getAllExperiments } from "~/.server/dto/experiments";
 import { useState } from "react";
@@ -100,7 +100,7 @@ export default function RevalidateExperiment() {
 
     console.log("Contract ID:", experiment.contractId);
     const hash = await writeContractAsync({
-      address: env.APP_ADDRESS,
+      address: getAddress(env.APP_ADDRESS),
       abi: appApi,
       functionName: "publishRevalidation",
       args: [experiment.contractId as Hex, bytesToHex(proof.proof), merkleRoot],
