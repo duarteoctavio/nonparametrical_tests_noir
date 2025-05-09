@@ -9,6 +9,7 @@ import { calculateMerkleRoot, convertToField } from "~/utils/merkle_tree";
 import { generateProof } from "~/utils/prove";
 import { circuit } from "~/utils/circuit";
 import { useClientEnv } from "~/hooks/use-client-env";
+import { CompiledCircuit } from "@noir-lang/types";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const experimentId = params.id;
@@ -88,7 +89,7 @@ export default function RevalidateExperiment() {
     const merkleRoot = calculateMerkleRoot(5, csvData.map((n) => BigInt(n)).map(convertToField));
     console.log("Merkle root:", merkleRoot.toString(16));
 
-    const proof = await generateProof(circuit, {
+    const proof = await generateProof(circuit as CompiledCircuit, {
       statistic_threshold: 400,
       dataset: csvData.map((n) => n.toString()),
       expected_root: merkleRoot.toString(),

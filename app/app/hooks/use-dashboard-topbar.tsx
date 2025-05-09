@@ -17,8 +17,8 @@ type BreadCrumbRoutes = Record<
 const BreadcrumbRoutes: BreadCrumbRoutes = {
   "/dashboard": () => ({ label: "Home", backButton: false, disableHeader: true }),
   "/dashboard/experiments": () => "Experiments",
-  "/dashboard/experiments/me": () => "My Experiments",
   "/dashboard/experiments/new": () => "New Experiment",
+  "/dashboard/revalidate/:id": () => "Revalidate Experiment",
 };
 
 const DynamicBreadcrumbRoutes = Object.entries(BreadcrumbRoutes).filter(

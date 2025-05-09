@@ -6,7 +6,7 @@ import { z } from "zod";
 const numericString = z.string().regex(/^-?\d+/);
 
 const inputMapSchema = z.object({
-  statistic_threshold: numericString,
+  statistic_threshold: z.number(),
   dataset: z.array(numericString),
   expected_root: numericString,
 });
