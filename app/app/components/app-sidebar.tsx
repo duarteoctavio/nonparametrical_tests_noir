@@ -1,5 +1,5 @@
 import { NavLink } from "@remix-run/react";
-import { HomeIcon, LogOutIcon, UserCircle } from "lucide-react";
+import { HomeIcon, LogOutIcon, RocketIcon, UserCircle } from "lucide-react";
 import { $path } from "remix-routes";
 import {
   Sidebar,
@@ -16,7 +16,7 @@ import {
 
 const ITEMS = [
   { label: "Home", path: $path("/dashboard"), icon: HomeIcon, end: true },
-  // { label: "Experiments", path: $path("/dashboard/experiments"), icon: RocketIcon },
+  { label: "Experiments", path: $path("/dashboard/experiments"), icon: RocketIcon },
   // { label: "My Validations", path: $path("/dashboard"), icon: SearchCheckIcon, inactive: true },
   // { label: "History", path: $path("/dashboard"), icon: HistoryIcon, inactive: true },
 ];
@@ -52,7 +52,7 @@ export function AppSidebar({ userIdentifier, onLogout }: AppSidebarProps) {
                     onClick={() => setOpenMobile(false)}
                   >
                     {({ isActive }) => (
-                      <SidebarMenuButton tooltip={item.label} isActive={isActive && !item.inactive}>
+                      <SidebarMenuButton tooltip={item.label} isActive={isActive}>
                         {item.icon && <item.icon strokeWidth={2} />}
                         <span>{item.label}</span>
                       </SidebarMenuButton>

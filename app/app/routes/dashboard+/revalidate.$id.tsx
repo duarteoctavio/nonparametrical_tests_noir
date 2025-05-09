@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useWriteContract } from "wagmi";
-import { bytesToHex, Hex } from "viem";
+import { bytesToHex, getAddress, Hex } from "viem";
 import { appApi } from "~/utils/app_api";
 import { getAllExperiments } from "~/.server/dto/experiments";
 import { useState } from "react";
@@ -9,6 +9,7 @@ import { calculateMerkleRoot, convertToField } from "~/utils/merkle_tree";
 import { generateProof } from "~/utils/prove";
 import { circuit } from "~/utils/circuit";
 import { useClientEnv } from "~/hooks/use-client-env";
+import { CompiledCircuit } from "@noir-lang/types";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const experimentId = params.id;
@@ -88,7 +89,7 @@ export default function RevalidateExperiment() {
     const merkleRoot = calculateMerkleRoot(5, csvData.map((n) => BigInt(n)).map(convertToField));
     console.log("Merkle root:", merkleRoot.toString(16));
 
-    const proof = await generateProof(circuit, {
+    const proof = await generateProof(circuit as CompiledCircuit, {
       statistic_threshold: 400,
       dataset: csvData.map((n) => n.toString()),
       expected_root: merkleRoot.toString(),
@@ -99,7 +100,7 @@ export default function RevalidateExperiment() {
 
     console.log("Contract ID:", experiment.contractId);
     const hash = await writeContractAsync({
-      address: env.APP_ADDRESS,
+      address: getAddress(env.APP_ADDRESS),
       abi: appApi,
       functionName: "publishRevalidation",
       args: [experiment.contractId as Hex, bytesToHex(proof.proof), merkleRoot],

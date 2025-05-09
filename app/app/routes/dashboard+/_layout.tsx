@@ -6,19 +6,15 @@ import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import { useAccount } from "wagmi";
 import { useEffect, useRef, useState } from "react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { requireUserId } from "~/.server/services/session";
 import useDashboardTopbar from "~/hooks/use-dashboard-topbar";
 
 // Add a loader function for the layout
 export async function loader({ request }: LoaderFunctionArgs) {
-  // This ensures the user is logged in for all dashboard routes
-  // requireUserId returns the user object or throws a redirect
   const user = await requireUserId(request);
-  return json({ user }); // Return the user data
+  return { user };
 }
 
-// Helper function to display user identifier
 function getUserDisplayIdentifier(
   user:
     | { id: number; walletAddress?: string | null; worldIdNullifierHash?: string | null }
@@ -27,7 +23,6 @@ function getUserDisplayIdentifier(
 ): string {
   if (!user) return "Guest";
   if (user.walletAddress) {
-    // Shorten address for display
     return `${user.walletAddress.substring(0, 6)}...${user.walletAddress.substring(user.walletAddress.length - 4)}`;
   }
   if (user.worldIdNullifierHash) {
@@ -64,10 +59,8 @@ export default function Layout() {
 
   return (
     <SidebarProvider>
-      {/* Hidden form for programmatic logout (e.g., on wallet disconnect) */}
       <Form ref={logoutFormRef} method="post" action="/logout" style={{ display: "none" }} />
 
-      {/* Pass user info to sidebar for display */}
       <AppSidebar
         userIdentifier={userIdentifier}
         onLogout={() => {
@@ -75,27 +68,6 @@ export default function Layout() {
         }}
       />
       <SidebarInset>
-        {/* Top Navbar - now inside SidebarInset */}
-        <nav className="glass mb-2 shadow-sm">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 justify-between">
-              <div className="flex items-center">
-                <h1 className="font-geist text-2xl font-bold text-primary">ReValidate</h1>
-              </div>
-              <div className="flex items-center space-x-4">
-                <span className="font-geist text-foreground">Welcome!</span>
-                <Button
-                  variant="default"
-                  onClick={() => {
-                    if (logoutFormRef.current) submit(logoutFormRef.current);
-                  }}
-                >
-                  Sign out
-                </Button>
-              </div>
-            </div>
-          </div>
-        </nav>
         {!breadcrumb.disableHeader && (
           <header className="flex h-16 shrink-0 items-center justify-between border-b px-6 transition-[width,height] ease-linear">
             <span className="text-lg font-semibold md:text-xl">{breadcrumb.label}</span>
@@ -106,9 +78,9 @@ export default function Layout() {
             )}
           </header>
         )}
-        <main className="px-6 pb-6 pt-0">
+        <div className="flex flex-1 p-6">
           <Outlet />
-        </main>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

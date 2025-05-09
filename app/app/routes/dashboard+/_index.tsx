@@ -7,6 +7,8 @@ import { $path } from "remix-routes";
 import { Card, CardFooter, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { getUsersByIds } from "~/.server/dto/users";
 import { useState } from "react";
+import { Button } from "~/components/ui/button";
+import NewExperimentModal from "~/components/new-experiment-modal";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
@@ -66,35 +68,27 @@ function Copyable({ value, display }: { value: string; display: string }) {
 
 export default function Dashboard() {
   const { experiments, userMap } = useLoaderData<typeof loader>();
-
+  const [newExperimentModalOpen, setNewExperimentModalOpen] = useState(false);
   return (
-    <div className="flex min-h-screen flex-col items-center bg-background py-12">
+    <div className="mt-16 flex flex-1 flex-col items-center">
       <div className="flex w-full max-w-4xl flex-col items-center">
         <h1 className="mb-2 text-center text-4xl font-bold tracking-tight">Welcome!</h1>
         <p className="mb-6 mt-0 max-w-2xl text-center text-lg text-muted-foreground">
           Find and verify the latest experiments below. Making science fairer one validation at a
           time.
         </p>
-        <div className="mb-10 flex flex-row gap-4">
-          <Link
-            to={$path("/dashboard/experiments/new")}
-            className="font-geist inline-flex items-center rounded-lg border border-transparent bg-primary px-6 py-2 text-base font-medium text-primary-foreground shadow-sm transition-colors duration-200 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-          >
+        <div className="mb-20 flex flex-row gap-4">
+          <Button size="lg" onClick={() => setNewExperimentModalOpen(true)}>
             Create New Experiment
-          </Link>
-          <Link
-            to={$path("/dashboard/experiments/me")}
-            className="font-geist inline-flex items-center rounded-lg border border-border bg-background px-6 py-2 text-base font-medium text-foreground shadow-sm transition-colors duration-200 hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-          >
-            My Experiments
-          </Link>
+          </Button>
+          <Button size="lg" variant="outline" asChild>
+            <Link to={$path("/dashboard/experiments")}>View Experiments</Link>
+          </Button>
         </div>
         <div className="w-full">
-          {/* Section Title */}
           <h2 className="mb-4 mt-2 text-center text-2xl font-semibold text-foreground">
             Check out the latest experiments you can be a part of
           </h2>
-          {/* Cards Section with much wider background */}
           <div className="mx-auto w-full max-w-7xl rounded-2xl bg-secondary p-10 shadow-inner">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
               {experiments.map((experiment) => (
@@ -174,6 +168,8 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      <NewExperimentModal open={newExperimentModalOpen} setOpen={setNewExperimentModalOpen} />
     </div>
   );
 }

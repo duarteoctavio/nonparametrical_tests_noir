@@ -10,6 +10,10 @@ export function createExperiment(data: InsertExperiment) {
   return result;
 }
 
+export function getExperimentById(id: number) {
+  return db.select().from(experimentsTable).where(eq(experimentsTable.id, id)).get();
+}
+
 export async function getExperimentByHash(hash: string): Promise<SelectExperiment> {
   const [experiment] = await db
     .select()
