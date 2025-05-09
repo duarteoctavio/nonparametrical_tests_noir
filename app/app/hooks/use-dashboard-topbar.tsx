@@ -16,11 +16,16 @@ type BreadCrumbRoutes = Record<
 >;
 
 const BreadcrumbRoutes: BreadCrumbRoutes = {
+  // Action Routes
+  "/dashboard/experiments/approve-revalidation": () => "Approve Revalidation",
+  "/dashboard/experiments/claim-bounty": () => "Claim Bounty",
+  "/dashboard/experiments/create-revalidation": () => "Create Revalidation",
+
   "/dashboard": () => ({ label: "Home", backButton: false, disableHeader: true }),
   "/dashboard/experiments": () => "Experiments",
   "/dashboard/experiments/new": () => "New Experiment",
   "/dashboard/experiments/:id": (data: ReturnType<typeof experimentsIdLoader>) =>
-    `Experiment ${data.experiment?.title}`,
+    `Experiment #${data.experiment?.id}`,
   "/dashboard/revalidate/:id": () => "Revalidate Experiment",
 };
 

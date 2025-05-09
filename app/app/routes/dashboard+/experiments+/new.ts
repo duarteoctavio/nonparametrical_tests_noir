@@ -44,6 +44,7 @@ export async function action({ request }: ActionFunctionArgs) {
     image: webpImage,
     verifierAddress: env.VERIFIER_ADDRESS,
     contractId,
+    txHash: transactionHash,
   });
 
   return redirect($path("/dashboard/experiments/:id", { id: experiment.id }));

@@ -1,8 +1,8 @@
-import { data, redirect } from "@remix-run/node";
+import { data } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { requireUserId } from "~/.server/services/session";
-import { createExperiment, getAllExperiments } from "~/.server/dto/experiments";
-import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { getAllExperiments } from "~/.server/dto/experiments";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { $path } from "remix-routes";
 import { Card, CardFooter, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { getUsersByIds } from "~/.server/dto/users";
@@ -16,30 +16,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const creatorIds = Array.from(new Set(experiments.map((e) => e.creatorId)));
   const userMap = await getUsersByIds(creatorIds);
   return data({ user, experiments, userMap });
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-  const user = await requireUserId(request);
-
-  const formData = await request.formData();
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const bounty = Number(formData.get("bounty"));
-  const image = formData.get("image") as string;
-  if (!title || !description || !bounty) {
-    return data({ error: "All fields are required" }, { status: 400 });
-  }
-
-  createExperiment({
-    title,
-    description,
-    bounty,
-    image: Buffer.from(image, "base64"),
-    creatorId: user.id,
-    verifierAddress: "0x00",
-  });
-
-  return redirect($path("/dashboard"));
 }
 
 function shorten(str: string) {

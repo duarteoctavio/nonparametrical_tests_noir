@@ -29,8 +29,11 @@ export const experimentsTable = sqliteTable(
     createdAt: createdAt(),
     verifierAddress: text("verifier_address").notNull(),
     image: blob("image", { mode: "buffer" }).notNull(),
-    txHash: text("tx_hash"),
-    contractId: text("contract_id"),
+    txHash: text("tx_hash").notNull(),
+    contractId: text("contract_id").notNull(),
+    revalidatedAt: integer("revalidated_at", { mode: "timestamp" }),
+    revalidatedBy: text("revalidated_by"),
+    claimedAt: integer("claimed_at", { mode: "timestamp" }),
   },
   (t) => [index("experiments_creator_id_idx").on(t.creatorId)],
 );

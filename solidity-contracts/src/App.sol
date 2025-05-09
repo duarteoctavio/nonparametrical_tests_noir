@@ -28,7 +28,7 @@ contract App {
     mapping(bytes32 => Experiment) internal proposals;
     mapping(bytes32 => Revalidation) internal revalidations;
 
-    uint256 public constant SAMPLE_LENGTH = 128;
+    uint256 public constant SAMPLE_LENGTH = 32;
 
 
     constructor() {}
@@ -54,8 +54,8 @@ contract App {
         Experiment memory experiment = proposals[experimentId];
 
         bool isValid = experiment.verifier.verify(proof, arrayOfOneElement(bytes32(dataSetMerkleRoot)));
-        // require(isValid, "Invalid proof");
-        // require(!experiment.revalidated, "Experiment already revalidated");
+        require(isValid, "Invalid proof");
+        require(!experiment.revalidated, "Experiment already revalidated");
         revalidations[experimentId] = Revalidation({
             proof: proof,
             dataSetMerkleRoot: dataSetMerkleRoot,
@@ -70,7 +70,7 @@ contract App {
         Experiment storage experiment = proposals[experimentId];
         require(experiment.author == msg.sender, "Not authorized");
         Revalidation storage revalidation = revalidations[experimentId];
-        
+
         revalidation.approved = true;
         experiment.revalidated = true;
     }
@@ -84,7 +84,7 @@ contract App {
         require(samples.length == SAMPLE_LENGTH, "Invalid number of samples");
         uint256 recalculated = recalculateMerkleRoot(samples);
         require(recalculated == revalidation.dataSetMerkleRoot, "Merkle root does not match");
-        
+
         payable(revalidation.revalidator).transfer(experiment.bounty);
         experiment.claimed = true;
     }

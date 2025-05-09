@@ -1,5 +1,6 @@
 export const circuit = {
   noir_version: "1.0.0-beta.3+ceaa1986628197bd1170147f6a07f0f98d21030a",
+  // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
   hash: 3886904673170159117,
   abi: {
     parameters: [

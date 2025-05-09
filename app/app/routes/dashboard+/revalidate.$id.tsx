@@ -1,6 +1,6 @@
-import { useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { useWriteContract } from "wagmi";
+import { useConfig, useWriteContract } from "wagmi";
 import { bytesToHex, getAddress, Hex } from "viem";
 import { appApi } from "~/utils/app_api";
 import { getAllExperiments } from "~/.server/dto/experiments";
@@ -10,6 +10,8 @@ import { generateProof } from "~/utils/prove";
 import { circuit } from "~/utils/circuit";
 import { useClientEnv } from "~/hooks/use-client-env";
 import { CompiledCircuit } from "@noir-lang/types";
+import { $path } from "remix-routes";
+import { waitForTransactionReceipt } from "@wagmi/core";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const experimentId = params.id;
@@ -36,6 +38,8 @@ export default function RevalidateExperiment() {
   const [error, setError] = useState<string>("");
   const [buttonEnabled, setButtonEnabled] = useState<boolean>(true);
   const env = useClientEnv();
+  const fetcher = useFetcher();
+  const config = useConfig();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -90,7 +94,7 @@ export default function RevalidateExperiment() {
     console.log("Merkle root:", merkleRoot.toString(16));
 
     const proof = await generateProof(circuit as CompiledCircuit, {
-      statistic_threshold: 400,
+      statistic_threshold: 400 as unknown as string,
       dataset: csvData.map((n) => n.toString()),
       expected_root: merkleRoot.toString(),
     });
@@ -105,8 +109,17 @@ export default function RevalidateExperiment() {
       functionName: "publishRevalidation",
       args: [experiment.contractId as Hex, bytesToHex(proof.proof), merkleRoot],
     });
+    await waitForTransactionReceipt(config, { hash });
 
     console.log("Hash:", hash);
+
+    fetcher.submit(
+      { id: experimentId },
+      {
+        action: $path("/dashboard/experiments/create-revalidation"),
+        method: "POST",
+      },
+    );
 
     setButtonEnabled(true);
   };

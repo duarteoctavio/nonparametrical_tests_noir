@@ -46,7 +46,7 @@ export const appApi = [
     name: "claimBounty",
     inputs: [
       { name: "experimentId", type: "bytes32", internalType: "bytes32" },
-      { name: "samples", type: "uint256[128]", internalType: "uint256[128]" },
+      { name: "samples", type: "uint256[32]", internalType: "uint256[32]" },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -118,8 +118,14 @@ export const appApi = [
   {
     type: "function",
     name: "recalculateMerkleRoot",
-    inputs: [{ name: "samples", type: "uint256[128]", internalType: "uint256[128]" }],
+    inputs: [{ name: "samples", type: "uint256[32]", internalType: "uint256[32]" }],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "pure",
+  },
+  {
+    type: "event",
+    name: "ExperimentProposed",
+    inputs: [{ name: "experimentId", type: "bytes32", indexed: true, internalType: "bytes32" }],
+    anonymous: false,
   },
 ] as const;
