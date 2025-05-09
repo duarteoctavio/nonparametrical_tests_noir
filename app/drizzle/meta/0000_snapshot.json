@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "690d054e-d8f7-40b5-a1ea-2253d9cb0cab",
+  "id": "3862b40b-2d2e-467c-88fe-5899b6278b5b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "experiments": {
@@ -67,12 +67,33 @@
           "name": "tx_hash",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "contract_id": {
           "name": "contract_id",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "revalidated_at": {
+          "name": "revalidated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "revalidated_by": {
+          "name": "revalidated_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "claimed_at": {
+          "name": "claimed_at",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
