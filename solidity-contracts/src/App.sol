@@ -121,18 +121,16 @@ contract App {
 
     function recalculateMerkleRoot(uint256[SAMPLE_LENGTH] calldata samples) public pure returns (uint256) {
         uint256[] memory hashes = new uint256[](samples.length);
-
+        uint256 depth = 5;
         for (uint256 i = 0; i < samples.length; i++) {
             hashes[i] = samples[i];
         }
 
-        uint256 length = samples.length / 2;
-
-        while (length > 1) {
-            for (uint256 i = 0; i < length; i += 2) {
-                hashes[i] = PoseidonT3.hash(arrayOfTwoElements(hashes[2*i], hashes[2*i + 1]));
+        for (uint256 level = 0; level < depth; level++) {
+            uint256 limit = SAMPLE_LENGTH / (1 << (level + 1));
+            for (uint256 index = 0; index < limit; index++) {
+                hashes[index] = PoseidonT3.hash(arrayOfTwoElements(hashes[2 * index], hashes[2 * index + 1]));
             }
-            length = length / 2;
         }
 
         return hashes[0];
