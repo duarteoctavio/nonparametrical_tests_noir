@@ -35,7 +35,7 @@ export const EvervaultCard = ({ text, className }: { text?: string; className?: 
     >
       <div
         onMouseMove={onMouseMove}
-        className="group/card relative flex h-full w-full items-center justify-center overflow-hidden rounded-3xl bg-transparent"
+        className="group/card relative flex h-full w-full items-center justify-center overflow-hidden bg-transparent"
       >
         <CardPattern mouseX={mouseX} mouseY={mouseY} randomString={randomString} />
         <div className="relative z-10 flex items-center justify-center">
@@ -67,7 +67,7 @@ export function CardPattern({
     <div className="pointer-events-none">
       <div className="absolute inset-0 rounded-2xl [mask-image:linear-gradient(white,transparent)] group-hover/card:opacity-50"></div>
       <motion.div
-        className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500 to-indigo-700 opacity-0 backdrop-blur-xl transition duration-500 group-hover/card:opacity-100"
+        className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/70 to-primary/80 opacity-0 backdrop-blur-xl transition duration-500 group-hover/card:opacity-100"
         style={style}
       />
       <motion.div

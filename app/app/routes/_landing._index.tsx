@@ -1,4 +1,3 @@
-// @jsxImportSource react
 import { Link } from "@remix-run/react";
 import type { MetaFunction } from "@remix-run/node";
 import { Button } from "~/components/ui/button";
@@ -17,6 +16,7 @@ import {
   Star,
 } from "lucide-react";
 import { EvervaultCard } from "~/components/ui/EvervaultCard";
+import { Badge } from "~/components/ui/badge";
 
 export const meta: MetaFunction = () => {
   return [
@@ -42,36 +42,35 @@ export default function LandingIndex() {
           <nav className="hidden items-center gap-8 md:flex">
             <Link
               to="#features"
-              className="text-sm font-medium text-slate-600 transition hover:text-indigo-600"
+              className="text-sm font-medium text-slate-600 transition hover:text-primary"
             >
               Features
             </Link>
             <Link
               to="#how-it-works"
-              className="text-sm font-medium text-slate-600 transition hover:text-indigo-600"
+              className="text-sm font-medium text-slate-600 transition hover:text-primary"
             >
               How it works
             </Link>
             <Link
               to="#testimonials"
-              className="text-sm font-medium text-slate-600 transition hover:text-indigo-600"
+              className="text-sm font-medium text-slate-600 transition hover:text-primary"
             >
               Testimonials
             </Link>
             <Link
               to="#pricing"
-              className="text-sm font-medium text-slate-600 transition hover:text-indigo-600"
+              className="text-sm font-medium text-slate-600 transition hover:text-primary"
             >
               Pricing
             </Link>
           </nav>
-          <Link
-            to="/login"
-            className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-slate-50 shadow-sm ring-offset-white transition-colors hover:bg-indigo-700 hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300"
-          >
-            Get started
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
+          <Button asChild size="lg">
+            <Link to="/login">
+              Get started
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </header>
 
@@ -80,10 +79,10 @@ export default function LandingIndex() {
         <div className="bg-grid-slate-100 dark:bg-grid-slate-700/25 absolute inset-0 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]"></div>
         <div className="py-15 container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
+            <Badge className="mb-6 bg-primary/10 text-sm font-medium text-primary/90 ring-1 ring-primary/20 hover:bg-primary/20">
               <span>Science that stands the test of time</span>
-            </div>
-            <h1 className="mb-6 bg-gradient-to-r from-indigo-700 to-indigo-500 bg-clip-text text-4xl font-bold leading-tight text-transparent md:text-6xl">
+            </Badge>
+            <h1 className="mb-6 text-4xl font-bold leading-tight text-primary md:text-6xl">
               Restore trust in science through rigorous revalidation
             </h1>
             <p className="mb-8 text-xl leading-relaxed text-slate-600">
@@ -91,21 +90,23 @@ export default function LandingIndex() {
               researchers to verify, replicate, and strengthen scientific studies with transparent
               methodologies.
             </p>
-            <p className="mb-10 text-lg font-medium text-indigo-600">
+            <p className="mb-10 text-lg font-medium text-primary/80">
               Validate findings. Build confidence. Advance science.
             </p>
             <div className="mb-16 flex flex-col justify-center gap-4 sm:flex-row">
-              <Link
-                to="/login"
-                className="inline-flex h-11 items-center justify-center rounded-full bg-indigo-600 px-8 text-sm font-medium text-slate-50 shadow-md ring-offset-white transition-colors hover:bg-indigo-700 hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300"
-              >
-                Start revalidating
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
+              <Button asChild size="lg">
+                <Link to="/login">
+                  Start revalidating
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
               <Button size="lg" variant="outline" asChild>
-                <a href="https://www.youtube.com/watch?v=qvAI-hRZBBc">
-                  See how it works
-                  <CheckCircle className="ml-2 h-5 w-5" />
+                <a
+                  href="https://www.youtube.com/watch?v=qvAI-hRZBBc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Watch the Demo
                 </a>
               </Button>
             </div>
@@ -141,8 +142,8 @@ export default function LandingIndex() {
               Transform hypothesis to verified knowledge in a transparent, collaborative ecosystem
             </p>
             <div className="flex justify-center">
-              <div className="rounded-full bg-indigo-50 p-3">
-                <BarChart3 className="h-8 w-8 text-indigo-600" />
+              <div className="rounded-full bg-primary/10 p-3">
+                <BarChart3 className="h-8 w-8 text-primary" />
               </div>
             </div>
           </div>
@@ -153,9 +154,9 @@ export default function LandingIndex() {
       <section id="features" className="bg-white py-24">
         <div className="container mx-auto px-4">
           <div className="mb-16 text-center">
-            <div className="mb-4 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
+            <Badge className="mb-4 bg-primary/10 text-sm font-medium text-primary/90 ring-1 ring-primary/20 hover:bg-primary/20">
               <span>Why choose us</span>
-            </div>
+            </Badge>
             <h2 className="mb-4 text-3xl font-bold">Why researchers choose ReValidate</h2>
             <p className="mx-auto max-w-2xl text-slate-600">
               Our platform provides the tools and framework needed to ensure scientific integrity
@@ -165,7 +166,7 @@ export default function LandingIndex() {
             <Card className="group rounded-xl border-slate-200 p-8 transition-all duration-300 hover:shadow-lg">
               <div className="flex flex-col items-start">
                 <div className="mb-6 rounded-xl bg-indigo-50 p-3 transition-colors group-hover:bg-indigo-100">
-                  <Search className="h-8 w-8 text-indigo-600" />
+                  <Search className="h-8 w-8 text-primary/80" />
                 </div>
                 <h3 className="mb-3 text-xl font-semibold">Transparent Methodology</h3>
                 <p className="mb-6 leading-relaxed text-slate-600">
@@ -177,7 +178,7 @@ export default function LandingIndex() {
             <Card className="group rounded-xl border-slate-200 p-8 transition-all duration-300 hover:shadow-lg">
               <div className="flex flex-col items-start">
                 <div className="mb-6 rounded-xl bg-indigo-50 p-3 transition-colors group-hover:bg-indigo-100">
-                  <Shield className="h-8 w-8 text-indigo-600" />
+                  <Shield className="h-8 w-8 text-primary/80" />
                 </div>
                 <h3 className="mb-3 text-xl font-semibold">Verification Framework</h3>
                 <p className="mb-6 leading-relaxed text-slate-600">
@@ -189,7 +190,7 @@ export default function LandingIndex() {
             <Card className="group rounded-xl border-slate-200 p-8 transition-all duration-300 hover:shadow-lg">
               <div className="flex flex-col items-start">
                 <div className="mb-6 rounded-xl bg-indigo-50 p-3 transition-colors group-hover:bg-indigo-100">
-                  <Users className="h-8 w-8 text-indigo-600" />
+                  <Users className="h-8 w-8 text-primary/80" />
                 </div>
                 <h3 className="mb-3 text-xl font-semibold">Collaborative Network</h3>
                 <p className="mb-6 leading-relaxed text-slate-600">
@@ -204,7 +205,7 @@ export default function LandingIndex() {
 
       {/* Evervault Card Demo Section */}
       <section className="flex min-h-[350px] w-full flex-col items-center bg-white px-0 py-0">
-        <div className="flex h-[350px] w-full items-center justify-center md:h-[420px]">
+        <div className="flex h-[350px] w-full items-center justify-center md:h-[600px]">
           <EvervaultCard text="Bringing trust with math" className="h-full w-full" />
         </div>
       </section>
@@ -213,9 +214,9 @@ export default function LandingIndex() {
       <section id="how-it-works" className="bg-slate-50 py-24">
         <div className="container mx-auto px-4">
           <div className="mb-16 text-center">
-            <div className="mb-4 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
+            <Badge className="mb-4 bg-primary/10 text-sm font-medium text-primary/90 ring-1 ring-primary/20 hover:bg-primary/20">
               <span>The process</span>
-            </div>
+            </Badge>
             <h2 className="mb-4 text-3xl font-bold">Revalidation in three simple steps</h2>
             <p className="mx-auto max-w-2xl text-lg text-slate-600">
               Our structured approach ensures consistency and reliability across all revalidation
@@ -226,7 +227,7 @@ export default function LandingIndex() {
             <div className="absolute left-[20%] right-[20%] top-1/2 z-0 hidden h-0.5 -translate-y-1/2 bg-indigo-100 md:block"></div>
             <div className="relative z-10 flex flex-col items-center rounded-xl bg-slate-50 p-6 text-center">
               <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 shadow-md">
-                <span className="text-lg font-bold text-indigo-600">1</span>
+                <span className="text-lg font-bold text-primary">1</span>
               </div>
               <h3 className="mb-3 text-xl font-semibold">Submit Study</h3>
               <p className="mb-4 leading-relaxed text-slate-600">
@@ -234,12 +235,12 @@ export default function LandingIndex() {
                 platform.
               </p>
               <div className="rounded-full bg-white p-2 shadow-sm">
-                <Search className="h-6 w-6 text-indigo-600" />
+                <Search className="h-6 w-6 text-primary" />
               </div>
             </div>
             <div className="relative z-10 flex flex-col items-center rounded-xl bg-slate-50 p-6 text-center">
               <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 shadow-md">
-                <span className="text-lg font-bold text-indigo-600">2</span>
+                <span className="text-lg font-bold text-primary">2</span>
               </div>
               <h3 className="mb-3 text-xl font-semibold">Verify Process</h3>
               <p className="mb-4 leading-relaxed text-slate-600">
@@ -247,12 +248,12 @@ export default function LandingIndex() {
                 complete transparency.
               </p>
               <div className="rounded-full bg-white p-2 shadow-sm">
-                <Clock className="h-6 w-6 text-indigo-600" />
+                <Clock className="h-6 w-6 text-primary" />
               </div>
             </div>
             <div className="relative z-10 flex flex-col items-center rounded-xl bg-slate-50 p-6 text-center">
               <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 shadow-md">
-                <span className="text-lg font-bold text-indigo-600">3</span>
+                <span className="text-lg font-bold text-primary">3</span>
               </div>
               <h3 className="mb-3 text-xl font-semibold">Publish Results</h3>
               <p className="mb-4 leading-relaxed text-slate-600">
@@ -260,13 +261,13 @@ export default function LandingIndex() {
                 for improvement.
               </p>
               <div className="rounded-full bg-white p-2 shadow-sm">
-                <Trophy className="h-6 w-6 text-indigo-600" />
+                <Trophy className="h-6 w-6 text-primary" />
               </div>
             </div>
           </div>
           <div className="mt-16 text-center">
             <Link to="/login">
-              <Button className="rounded-full bg-indigo-600 px-8 shadow-md hover:bg-indigo-700">
+              <Button className="rounded-full bg-primary px-8 shadow-md hover:bg-indigo-700">
                 Start the revalidation process
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -279,9 +280,9 @@ export default function LandingIndex() {
       <section id="testimonials" className="bg-white py-24">
         <div className="container mx-auto px-4">
           <div className="mb-16 text-center">
-            <div className="mb-4 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
+            <Badge className="mb-4 bg-primary/10 text-sm font-medium text-primary/90 ring-1 ring-primary/20 hover:bg-primary/20">
               <span>Testimonials</span>
-            </div>
+            </Badge>
             <h2 className="mb-4 text-3xl font-bold">What researchers are saying</h2>
             <p className="mx-auto max-w-2xl text-slate-600">
               Hear from scientists who have strengthened their research through our platform
@@ -435,9 +436,9 @@ export default function LandingIndex() {
         <div className="container mx-auto max-w-4xl px-4">
           <div className="rounded-2xl border border-slate-100 bg-white p-12 shadow-xl">
             <div className="mb-8 text-center">
-              <div className="mb-4 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-500/20">
+              <Badge className="mb-4 bg-primary/10 text-sm font-medium text-primary/90 ring-1 ring-primary/20 hover:bg-primary/20">
                 <span>Get started</span>
-              </div>
+              </Badge>
               <h2 className="mb-6 text-3xl font-bold md:text-4xl">
                 Ready to strengthen scientific integrity?
               </h2>
@@ -469,11 +470,7 @@ export default function LandingIndex() {
               </li>
             </ul>
             <div className="text-center">
-              <Button
-                size="lg"
-                className="rounded-full bg-indigo-600 px-8 shadow-lg hover:bg-indigo-700"
-                asChild
-              >
+              <Button size="lg" className="rounded-full px-8 shadow-lg" asChild>
                 <a href="https://cal.com/revalidate/30min">
                   Get started today
                   <Clock className="ml-2 h-5 w-5" />
@@ -490,7 +487,7 @@ export default function LandingIndex() {
           <div className="mb-12 grid gap-8 md:grid-cols-4">
             <div>
               <div className="mb-4 flex items-center gap-2">
-                <FileCheck className="h-6 w-6 text-indigo-600" />
+                <img src="/logo.png" alt="ReValidate" className="h-8 w-8" />
                 <span className="text-lg font-semibold">ReValidate</span>
               </div>
               <p className="mb-4 leading-relaxed text-slate-500">
@@ -505,7 +502,7 @@ export default function LandingIndex() {
             </p>
             <div className="flex items-center">
               <span className="mr-2 text-xs text-slate-400">Made with</span>
-              <span className="text-indigo-500">♥</span>
+              <span className="text-indigo-600">♥</span>
               <span className="ml-2 text-xs text-slate-400">for scientific integrity</span>
             </div>
           </div>
