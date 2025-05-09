@@ -1,4 +1,3 @@
-// Combined version of dashboard layout with authentication and neobrutalist UI
 import { Outlet, Form, useSubmit, useLoaderData, useNavigate } from "@remix-run/react";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Button } from "~/components/ui/button";
@@ -8,27 +7,22 @@ import { useEffect, useRef, useState } from "react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { requireUserId } from "~/.server/services/session";
 import useDashboardTopbar from "~/hooks/use-dashboard-topbar";
+import { SelectUser } from "~/.server/dto/users";
 
-// Add a loader function for the layout
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
   return { user };
 }
 
-function getUserDisplayIdentifier(
-  user:
-    | { id: number; walletAddress?: string | null; worldIdNullifierHash?: string | null }
-    | null
-    | undefined,
-): string {
+function getUserDisplayIdentifier(user: SelectUser | null | undefined): string {
   if (!user) return "Guest";
-  if (user.walletAddress) {
-    return `${user.walletAddress.substring(0, 6)}...${user.walletAddress.substring(user.walletAddress.length - 4)}`;
+  if (user.address) {
+    return `${user.address.substring(0, 6)}...${user.address.substring(user.address.length - 4)}`;
   }
   if (user.worldIdNullifierHash) {
     return "World ID Verified";
   }
-  return `User ${user.id}`; // Fallback
+  return `User ${user.id}`;
 }
 
 export default function Layout() {
@@ -39,8 +33,7 @@ export default function Layout() {
   const breadcrumb = useDashboardTopbar();
   const navigate = useNavigate();
 
-  // --- Get user data from THIS layout's loader ---
-  const { user } = useLoaderData<typeof loader>(); // Use the loader defined above
+  const { user } = useLoaderData<typeof loader>();
   const userIdentifier = getUserDisplayIdentifier(user);
 
   useEffect(() => {

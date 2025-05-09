@@ -69,8 +69,8 @@ export async function createUserWithNullifier(nullifierHash: string): Promise<Se
   }
 }
 
-export async function getUsersByIds(ids: number[]): Promise<Record<number, SelectUser>> {
+export function getUsersByIds(ids: number[]) {
   if (!ids.length) return {};
-  const users = await db.select().from(usersTable).where(inArray(usersTable.id, ids)).all();
+  const users = db.select().from(usersTable).where(inArray(usersTable.id, ids)).all();
   return Object.fromEntries(users.map((u) => [u.id, u]));
 }

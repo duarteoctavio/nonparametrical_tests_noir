@@ -14,7 +14,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
-  const bounty = parseInt(formData.get("bounty") as string);
+  const bounty = parseFloat(formData.get("bounty") as string);
   const image = formData.get("image") as File;
   const transactionHash = formData.get("transactionHash") as string;
 

@@ -24,7 +24,7 @@ const BreadcrumbRoutes: BreadCrumbRoutes = {
   "/dashboard": () => ({ label: "Home", backButton: false, disableHeader: true }),
   "/dashboard/experiments": () => "Experiments",
   "/dashboard/experiments/new": () => "New Experiment",
-  "/dashboard/experiments/:id": (data: ReturnType<typeof experimentsIdLoader>) =>
+  "/dashboard/experiments/:id": (data: Awaited<ReturnType<typeof experimentsIdLoader>>) =>
     `Experiment #${data.experiment?.id}`,
   "/dashboard/revalidate/:id": () => "Revalidate Experiment",
 };

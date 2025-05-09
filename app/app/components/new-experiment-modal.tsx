@@ -7,7 +7,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { SelectExperiment } from "~/.server/dto/experiments";
-import { getAddress, keccak256 } from "viem";
+import { getAddress, keccak256, parseEther } from "viem";
 import { useConfig, useWriteContract } from "wagmi";
 import { useClientEnv } from "~/hooks/use-client-env";
 import { appApi } from "~/utils/app_api";
@@ -58,11 +58,16 @@ export default function NewExperimentModal({
         address: getAddress(env.APP_ADDRESS),
         abi: appApi,
         functionName: "proposeExperiment",
-        args: [keccak256(bytes), getAddress(env.VERIFIER_ADDRESS), BigInt(experimentData.bounty)],
-        value: BigInt(experimentData.bounty),
+        args: [
+          keccak256(bytes),
+          getAddress(env.VERIFIER_ADDRESS),
+          parseEther(experimentData.bounty.toString()),
+        ],
+        value: parseEther(experimentData.bounty.toString()),
       });
       await waitForTransactionReceipt(config, { hash });
       formData.append("transactionHash", hash);
+      console.log("formData", Object.fromEntries(formData.entries()));
       fetcher.submit(formData, {
         action: $path("/dashboard/experiments/new"),
         method: "POST",
@@ -113,13 +118,14 @@ export default function NewExperimentModal({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="bounty">Bounty ($)</Label>
+            <Label htmlFor="bounty">Bounty (ETH)</Label>
             <Input
               type="number"
               id="bounty"
               name="bounty"
               required
               min="0"
+              step="any"
               placeholder="Enter bounty amount"
             />
           </div>

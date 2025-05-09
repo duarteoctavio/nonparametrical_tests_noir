@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, index, blob } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, index, blob, real } from "drizzle-orm/sqlite-core";
 import { createdAt, id } from "./common-schema";
 
 export const usersTable = sqliteTable(
@@ -22,7 +22,7 @@ export const experimentsTable = sqliteTable(
     id: id(),
     title: text("title").notNull(),
     description: text("description").notNull(),
-    bounty: integer("bounty").notNull(),
+    bounty: real("bounty").notNull(),
     creatorId: integer("creator_id")
       .notNull()
       .references(() => usersTable.id),

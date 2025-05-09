@@ -7,3 +7,5 @@ node_modules
 sqlite*.db
 sqlite*.db-shm
 sqlite*.db-wal
+
+.DS_Store

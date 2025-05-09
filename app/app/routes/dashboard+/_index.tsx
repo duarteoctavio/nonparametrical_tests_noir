@@ -4,56 +4,39 @@ import { requireUserId } from "~/.server/services/session";
 import { getAllExperiments } from "~/.server/dto/experiments";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { $path } from "remix-routes";
-import { Card, CardFooter, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { getUsersByIds } from "~/.server/dto/users";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import NewExperimentModal from "~/components/new-experiment-modal";
+import Screensaver from "~/components/screensaver";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
   const experiments = getAllExperiments();
-  const creatorIds = Array.from(new Set(experiments.map((e) => e.creatorId)));
-  const userMap = await getUsersByIds(creatorIds);
-  return data({ user, experiments, userMap });
-}
-
-function shorten(str: string) {
-  if (!str) return "";
-  return str.length <= 7 ? str : `${str.slice(0, 3)}...${str.slice(-3)}`;
-}
-
-function Copyable({ value, display }: { value: string; display: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <span
-      className="inline-block max-w-[120px] cursor-pointer truncate align-middle hover:underline"
-      onClick={() => {
-        navigator.clipboard.writeText(value);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1000);
-      }}
-      title={value}
-    >
-      {display}
-      {copied && <span className="ml-1 text-green-500">✓</span>}
-    </span>
-  );
+  return data({
+    user,
+    experiments: experiments.map((e) => ({
+      ...e,
+      image: e.image.toString("base64"),
+    })),
+  });
 }
 
 export default function Dashboard() {
-  const { experiments, userMap } = useLoaderData<typeof loader>();
+  const { experiments } = useLoaderData<typeof loader>();
   const [newExperimentModalOpen, setNewExperimentModalOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div className="mt-16 flex flex-1 flex-col items-center">
-      <div className="flex w-full max-w-4xl flex-col items-center">
-        <h1 className="mb-2 text-center text-4xl font-bold tracking-tight">Welcome!</h1>
-        <p className="mb-6 mt-0 max-w-2xl text-center text-lg text-muted-foreground">
-          Find and verify the latest experiments below. Making science fairer one validation at a
-          time.
+    <div className="relative mt-16 flex-1 overflow-hidden" ref={containerRef}>
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-lg p-4">
+        <img src="/logo.png" alt="ReValidate" className="h-20 w-20" />
+        <h1 className="mb-4 mt-2 text-center text-6xl font-semibold tracking-tight">ReValidate</h1>
+        <p className="mb-6 mt-0 max-w-2xl text-center text-xl font-medium">
+          Find and verify the latest experiments below.
+          <br />
+          Making science fairer one validation at a time.
         </p>
-        <div className="mb-20 flex flex-row gap-4">
+        <div className="mb-20 flex flex-col gap-4 md:flex-row">
           <Button size="lg" onClick={() => setNewExperimentModalOpen(true)}>
             Create New Experiment
           </Button>
@@ -61,89 +44,39 @@ export default function Dashboard() {
             <Link to={$path("/dashboard/experiments")}>View Experiments</Link>
           </Button>
         </div>
-        <div className="w-full">
-          <h2 className="mb-4 mt-2 text-center text-2xl font-semibold text-foreground">
-            Check out the latest experiments you can be a part of
-          </h2>
-          <div className="mx-auto w-full max-w-7xl rounded-2xl bg-secondary p-10 shadow-inner">
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-              {experiments.map((experiment) => (
-                <Card
-                  key={experiment.id}
-                  className="w-full cursor-pointer shadow-md transition duration-200 hover:scale-[1.03] hover:shadow-xl"
-                >
-                  <CardHeader>
-                    <CardTitle className="mb-2 truncate text-lg font-bold">
-                      {experiment.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div>
-                        <span className="font-semibold text-foreground">Description:</span>
-                        <p className="font-geist mb-0 line-clamp-3 text-sm text-muted-foreground">
-                          {experiment.description}
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-foreground">Bounty:</span>
-                        <span className="font-geist font-medium text-primary">
-                          ${experiment.bounty}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-foreground">Created:</span>
-                        <span className="font-geist text-sm text-muted-foreground">
-                          {new Date(experiment.createdAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-foreground">Creator:</span>
-                        <span className="font-geist flex max-w-[160px] items-center gap-1 truncate text-sm text-muted-foreground">
-                          {(() => {
-                            const user = userMap[experiment.creatorId];
-                            if (user?.worldIdNullifierHash)
-                              return (
-                                <>
-                                  <span>World ID:</span>{" "}
-                                  <Copyable
-                                    value={user.worldIdNullifierHash}
-                                    display={shorten(user.worldIdNullifierHash)}
-                                  />
-                                </>
-                              );
-                            if (user?.address)
-                              return (
-                                <>
-                                  <span>Wallet:</span>{" "}
-                                  <Copyable value={user.address} display={shorten(user.address)} />
-                                </>
-                              );
-                            return `User ${experiment.creatorId}`;
-                          })()}
-                        </span>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Link
-                      to={$path("/dashboard/revalidate/:id", { id: experiment.id })}
-                      className="font-geist w-full rounded-md border border-transparent bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary/90"
-                    >
-                      Revalidate Experiment
-                    </Link>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-            {experiments.length === 0 && (
-              <div className="py-12 text-center">
-                <p className="text-muted-foreground">No experiments available yet.</p>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
+
+      {experiments.map((experiment, index) => (
+        <Screensaver
+          key={experiment.id}
+          speed={2}
+          startPosition={{ x: index * 20, y: index * 20 }}
+          startAngle={40}
+          containerRef={containerRef}
+        >
+          <div className="h-16 w-16 overflow-hidden rounded-lg border shadow-xl md:h-48 md:w-48">
+            <img
+              src={`data:image/webp;base64,${experiment.image}`}
+              alt={experiment.title}
+              className="h-full w-full rounded-lg object-cover opacity-60"
+            />
+          </div>
+        </Screensaver>
+      ))}
+      <Screensaver
+        speed={2}
+        startPosition={{ x: experiments.length * 20, y: experiments.length * 20 }}
+        startAngle={40}
+        containerRef={containerRef}
+      >
+        <div className="h-16 w-16 overflow-hidden rounded-lg border shadow md:h-48 md:w-48">
+          <img
+            src="/meme.jpg"
+            alt="meme"
+            className="h-full w-full rounded-lg object-cover opacity-60"
+          />
+        </div>
+      </Screensaver>
 
       <NewExperimentModal open={newExperimentModalOpen} setOpen={setNewExperimentModalOpen} />
     </div>

@@ -3,8 +3,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Form, useFetcher } from "@remix-run/react";
 import { Button } from "./ui/button";
 import { $path } from "remix-routes";
+import { useConfig, useWriteContract } from "wagmi";
+import { useClientEnv } from "~/hooks/use-client-env";
+import { appApi } from "~/utils/app_api";
+import { Hash } from "viem";
+import { convertToField } from "~/utils/merkle_tree";
+import { waitForTransactionReceipt } from "wagmi/actions";
 
-export default function NewExperimentModal({
+export default function ClaimBountyModal({
   open,
   setOpen,
   experimentId,
@@ -18,9 +24,9 @@ export default function NewExperimentModal({
   const [csvData, setCsvData] = useState<number[]>([]);
   const [csvTitle, setCsvTitle] = useState<string>("");
   const [error, setError] = useState<string>("");
-  // const { writeContractAsync } = useWriteContract();
-  // const env = useClientEnv();
-  // const config = useConfig();
+  const { writeContractAsync } = useWriteContract();
+  const env = useClientEnv();
+  const config = useConfig();
   const fetcher = useFetcher();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,14 +75,14 @@ export default function NewExperimentModal({
     event.preventDefault();
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      // const hash = await writeContractAsync({
-      //   address: env.APP_ADDRESS,
-      //   abi: appApi,
-      //   functionName: "claimBounty",
-      //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      //   args: [experimentContractId as Hash, csvData.map((n) => convertToField(BigInt(n))) as any],
-      // });
-      // await waitForTransactionReceipt(config, { hash });
+      const hash = await writeContractAsync({
+        address: env.APP_ADDRESS,
+        abi: appApi,
+        functionName: "claimBounty",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        args: [experimentContractId as Hash, csvData.map((n) => convertToField(BigInt(n))) as any],
+      });
+      await waitForTransactionReceipt(config, { hash });
       fetcher.submit(
         { id: experimentId },
         {

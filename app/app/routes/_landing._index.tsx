@@ -102,11 +102,7 @@ export default function LandingIndex() {
                 Start revalidating
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-              >
+              <Button size="lg" variant="outline" asChild>
                 <a href="https://www.youtube.com/watch?v=qvAI-hRZBBc">
                   See how it works
                   <CheckCircle className="ml-2 h-5 w-5" />

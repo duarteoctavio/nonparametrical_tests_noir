@@ -128,29 +128,27 @@ export default function Experiments() {
                 <CardHeader className="flex flex-col items-center justify-between lg:flex-row">
                   <CardTitle className="text-xl">{experiment.title}</CardTitle>
                   <div className="flex flex-row gap-2">
-                    {experiment.isMine && (
-                      <Badge className="bg-green-600 text-xs hover:bg-green-700">Mine</Badge>
-                    )}
+                    {experiment.isMine && <Badge variant="success">My Experiment</Badge>}
                   </div>
                 </CardHeader>
                 <CardContent>
                   <p className="mb-4 text-sm">{experiment.description}</p>
-                  <div className="rounded border-2 border-dashed p-1">
+                  <div className="mx-auto w-fit rounded border-2 border-dashed p-1">
                     <img
                       src={`data:image/webp;base64,${experiment.image}`}
                       alt={experiment.title}
-                      className="rounded"
+                      className="max-h-[250px] rounded"
                     />
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <span className="font-bold text-primary" suppressHydrationWarning>
                     {new Intl.NumberFormat(navigator.language, {
-                      style: "currency",
-                      currency: navigator.language.startsWith("en") ? "USD" : undefined,
+                      style: "decimal",
                       minimumFractionDigits: 0,
                       maximumFractionDigits: 2,
-                    }).format(experiment.bounty)}
+                    }).format(experiment.bounty)}{" "}
+                    ETH
                   </span>
                   <span className="text-muted-foreground" suppressHydrationWarning>
                     {new Date(experiment.createdAt).toLocaleDateString()}

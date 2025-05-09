@@ -8,6 +8,13 @@
       "when": 1746819458926,
       "tag": "0000_thankful_power_pack",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1746824042871,
+      "tag": "0001_unusual_otto_octavius",
+      "breakpoints": true
     }
   ]
 }
