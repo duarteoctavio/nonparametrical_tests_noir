@@ -1,0 +1,88 @@
+---
+title: "Requirements for Revalidation of Test #17"
+author: "Company's Statistician"
+output: pdf_document
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(
+                    echo = FALSE,
+                    warning = FALSE,
+                    fig.height = 3
+                  )
+```
+
+# Situation
+
+  A revalidation essay will be carried over by a neutral third party.
+
+  The function of this brief is to provide them with a suitable replication protocol and to provide the **specifications** for the **test circuit**.
+
+
+# Circuit Specifications
+
+```{r table}
+library(tidyverse)
+library(knitr)
+
+sampleSize <- 32
+confidenceLevel <- 0.1
+threshold <- qsignrank(p=confidenceLevel, n=sampleSize)
+
+tribble(
+  ~ parameter, ~ value,
+  "test type", "Wilcoxon Signed Rank",
+  "level", confidenceLevel %>% as.character,
+  "sample size (n)", sampleSize %>% as.character,
+  "statistic threshold", threshold %>% as.character,
+  ) %>% kable(x= ., label = "Test specifications")
+```
+
+
+# Previous Results
+
+
+```{r results}
+firstSample <- rnorm(n=32, mean=1000, sd=200) %>%
+  as_tibble_col(column_name = "value") %>%
+  mutate(
+    source = "Internal Lab"
+  )
+
+peerSample <- rnorm(n=32, mean=970, sd=220) %>%
+  as_tibble_col(column_name = "value") %>%
+  mutate(
+    source = "Peer Lab"
+  )
+
+bibliography <- rnorm(n=32, mean=1010, sd=187) %>%
+  as_tibble_col(column_name = "value") %>%
+  mutate(
+    source = "Preexisting bibliography"
+  )
+
+samples <- bind_rows(
+  firstSample,
+  peerSample,
+  bibliography
+)
+
+samples %>%
+  ggplot() +
+  aes(x = value, color = source, fill = source) +
+  geom_density( aes( alpha = 0.4) ) +
+  labs(
+    x = "Measurement",
+    y = "Density",
+    title = "Comparing available results for test 17",
+    caption = "Promising results"
+  ) +
+  guides(
+    alpha = "none",
+    size = "none"
+  )
+```
+
+
+# Replication Protocol
