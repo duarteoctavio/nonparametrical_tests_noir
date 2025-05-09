@@ -13,13 +13,13 @@ contract Deployer is Script {
     function run() public {
         vm.startBroadcast();
 
-        address verifier = address(new HonkVerifier());
+        verifier = new HonkVerifier();
         console.log("Verifier deployed");
-        console.logAddress(verifier);
+        console.logAddress(address(verifier));
 
-        address app = address(new App());
+        app = new App();
         console.log("App deployed");
-        console.logAddress(app);
+        console.logAddress(address(app));
 
         vm.stopBroadcast();
     }
