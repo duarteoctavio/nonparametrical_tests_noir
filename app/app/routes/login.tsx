@@ -1,37 +1,44 @@
-import { Form, useActionData, useNavigation } from "@remix-run/react";
-import type { ActionFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { db } from "~/db";
-import { users } from "~/db/schema";
-import { eq } from "drizzle-orm";
-import bcrypt from "bcryptjs";
+import { useRef } from "react";
+import { useAccount } from "wagmi";
+import { Form, useSubmit } from "@remix-run/react";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/card";
+import { createUserSession, getUserId } from "~/.server/services/session";
+import { findOrCreateUserByAddress, getUserById } from "~/.server/dto/users";
+import { redirect } from "@remix-run/node";
+import WorldcoinLogin from "~/components/worldcoin-login";
+import { Separator } from "~/components/ui/separator";
 import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
-import { createUserSession } from "~/utils/session.server";
 
+// Loader: Redirect logged-in users to dashboard
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userId = await getUserId(request);
+  if (userId) {
+    const user = getUserById(userId);
+    if (user !== undefined) {
+      return redirect("/dashboard");
+    }
+  }
+  // No user session, render the login page
+  return {};
+}
+
+// Action: Handles wallet connect login
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  const address = formData.get("address") as string;
 
-  if (!email || !password) {
-    return json({ error: "Email and password are required" }, { status: 400 });
+  if (!address) {
+    console.error("Login action called without address.");
+    return redirect("/login");
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.email, email),
-  });
+  const user = await findOrCreateUserByAddress(address);
 
   if (!user) {
-    return json({ error: "Invalid email or password" }, { status: 401 });
-  }
-
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-
-  if (!isPasswordValid) {
-    return json({ error: "Invalid email or password" }, { status: 401 });
+    console.error(`Could not find or create user for address: ${address}`);
+    return redirect("/login");
   }
 
   return createUserSession({
@@ -43,55 +50,76 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Login() {
-  const actionData = useActionData<typeof action>();
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const { isConnected, address } = useAccount();
+  const submit = useSubmit();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleWalletLoginSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!address) {
+      console.warn("Wallet not connected, cannot submit login.");
+      return;
+    }
+    if (formRef.current) {
+      console.log(`Submitting login form manually for address: ${address}.`);
+      submit(formRef.current);
+    }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-      <Card className="w-full max-w-md glass">
-        <CardHeader>
-          <CardTitle className="text-center">Welcome to ReValidate</CardTitle>
-          <CardDescription className="text-center">Science that stands the test of time</CardDescription>
+    <div className="font-geist flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="space-y-1 text-center">
+          <h1 className="font-geist text-3xl font-bold text-primary">ReValidate</h1>
+          <CardTitle className="pt-4 text-2xl font-semibold tracking-tight">Welcome</CardTitle>
+          <CardDescription>Sign in using your preferred method below.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Form method="post" className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                required
+        <CardContent className="flex flex-col items-center space-y-6 pb-8 pt-6">
+          <div className="flex w-full flex-col items-center space-y-3">
+            <p className="text-sm font-medium text-foreground">Connect & Sign In with Wallet</p>
+            <div className="mb-3 flex justify-center">
+              <ConnectButton
+                label="1. Connect Wallet"
+                showBalance={false}
+                accountStatus="address"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-            {actionData?.error && (
-              <p className="text-sm text-destructive">{actionData.error}</p>
-            )}
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Signing in..." : "Sign in"}
-            </Button>
-          </Form>
-        </CardContent>
-        <CardFooter className="flex justify-center">
-          <p className="text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <a href="/register" className="text-primary hover:underline">
-              Register
+            <Form
+              method="post"
+              ref={formRef}
+              onSubmit={handleWalletLoginSubmit}
+              className="flex justify-center"
+            >
+              <input type="hidden" name="address" value={address ?? ""} />
+              <Button
+                type="submit"
+                disabled={!isConnected || !address}
+                className="w-full max-w-[200px]"
+              >
+                2. Sign In
+              </Button>
+            </Form>
+          </div>
+
+          <div className="flex w-full items-center gap-2">
+            <Separator className="flex-1" />
+            <span className="text-xs uppercase text-muted-foreground">Or</span>
+            <Separator className="flex-1" />
+          </div>
+
+          <div className="flex w-full flex-col items-center space-y-3">
+            <p className="text-sm font-medium text-foreground">Verify with World ID</p>
+            <WorldcoinLogin className="w-full max-w-[200px]" />
+            <a
+              href="https://worldcoin.org/download-app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-muted-foreground underline hover:text-primary"
+            >
+              Get the World App
             </a>
-          </p>
-        </CardFooter>
+          </div>
+        </CardContent>
       </Card>
     </div>
   );

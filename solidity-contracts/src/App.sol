@@ -2,7 +2,6 @@
 pragma solidity ^0.8.13;
 import {IVerifier} from './Verifier.sol';
 import {PoseidonT3} from './Poseidon2.sol';
-import {console} from "forge-std/console.sol";
 
 
 contract App {
@@ -24,10 +23,12 @@ contract App {
         uint256[] samples;
     }
 
+    event ExperimentProposed(bytes32 indexed experimentId);
+
     mapping(bytes32 => Experiment) internal proposals;
     mapping(bytes32 => Revalidation) internal revalidations;
 
-    uint256 public constant SAMPLE_LENGTH = 128;
+    uint256 public constant SAMPLE_LENGTH = 32;
 
 
     constructor() {}
@@ -45,6 +46,7 @@ contract App {
             claimed: false
         });
         proposals[experimentId] = proposal;
+        emit ExperimentProposed(experimentId);
         return experimentId;
     }
 
@@ -68,7 +70,7 @@ contract App {
         Experiment storage experiment = proposals[experimentId];
         require(experiment.author == msg.sender, "Not authorized");
         Revalidation storage revalidation = revalidations[experimentId];
-        
+
         revalidation.approved = true;
         experiment.revalidated = true;
     }
@@ -82,7 +84,7 @@ contract App {
         require(samples.length == SAMPLE_LENGTH, "Invalid number of samples");
         uint256 recalculated = recalculateMerkleRoot(samples);
         require(recalculated == revalidation.dataSetMerkleRoot, "Merkle root does not match");
-        
+
         payable(revalidation.revalidator).transfer(experiment.bounty);
         experiment.claimed = true;
     }
