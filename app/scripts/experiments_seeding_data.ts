@@ -1,11 +1,9 @@
-const { createExperiment } = require("../app/.server/dto/experiments");
-
-const seedExperiments = [
+export const seedExperiments = [
     {
         title: "Mid term effectivity of candidate drug #S632.",
         description: "Drug candidate #S632 is a promising cure to Malaria accordint to two propnentes, but their financial motivation as patent owners and manufacturers disqualifies them for final demonstration. The protocol is public, avaible in DOI:23523.",
         bounty: 1000000,
-        image: "durgCandidate.jpg",
+        image: "drugCandidate.jpg",
     },
     {
         title: "Flow dynamics of toroidal drug bomb are above spec.",
@@ -31,4 +29,4 @@ const seedExperiments = [
         bounty:3500,
         image:"tensileStrength.jpg",
     },
-];
+] as const;
