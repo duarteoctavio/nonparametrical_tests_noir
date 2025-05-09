@@ -1,4 +1,4 @@
-import { useLoaderData, useSearchParams } from "@remix-run/react";
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { requireUserId } from "~/.server/services/session";
 import { LoaderFunctionArgs } from "@remix-run/node";
@@ -13,6 +13,7 @@ import { useState, useRef, useEffect } from "react";
 import { Switch } from "~/components/ui/switch";
 import { Label } from "~/components/ui/label";
 import { Badge } from "~/components/ui/badge";
+import { $path } from "remix-routes";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await requireUserId(request);
@@ -119,39 +120,44 @@ export default function Experiments() {
       {experiments.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
           {experiments.map((experiment) => (
-            <Card key={experiment.id}>
-              <CardHeader className="flex flex-col items-center justify-between lg:flex-row">
-                <CardTitle className="text-xl">{experiment.title}</CardTitle>
-                <div className="flex flex-row gap-2">
-                  {experiment.isMine && (
-                    <Badge className="bg-green-600 text-xs hover:bg-green-700">Mine</Badge>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4 text-sm">{experiment.description}</p>
-                <div className="rounded border-2 border-dashed p-1">
-                  <img
-                    src={`data:image/webp;base64,${experiment.image}`}
-                    alt={experiment.title}
-                    className="rounded"
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <span className="font-bold text-primary" suppressHydrationWarning>
-                  {new Intl.NumberFormat(navigator.language, {
-                    style: "currency",
-                    currency: navigator.language.startsWith("en") ? "USD" : undefined,
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                  }).format(experiment.bounty)}
-                </span>
-                <span className="text-muted-foreground" suppressHydrationWarning>
-                  {new Date(experiment.createdAt).toLocaleDateString()}
-                </span>
-              </CardFooter>
-            </Card>
+            <Link
+              to={$path("/dashboard/experiments/:id", { id: experiment.id })}
+              key={experiment.id}
+            >
+              <Card key={experiment.id}>
+                <CardHeader className="flex flex-col items-center justify-between lg:flex-row">
+                  <CardTitle className="text-xl">{experiment.title}</CardTitle>
+                  <div className="flex flex-row gap-2">
+                    {experiment.isMine && (
+                      <Badge className="bg-green-600 text-xs hover:bg-green-700">Mine</Badge>
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="mb-4 text-sm">{experiment.description}</p>
+                  <div className="rounded border-2 border-dashed p-1">
+                    <img
+                      src={`data:image/webp;base64,${experiment.image}`}
+                      alt={experiment.title}
+                      className="rounded"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                  <span className="font-bold text-primary" suppressHydrationWarning>
+                    {new Intl.NumberFormat(navigator.language, {
+                      style: "currency",
+                      currency: navigator.language.startsWith("en") ? "USD" : undefined,
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    }).format(experiment.bounty)}
+                  </span>
+                  <span className="text-muted-foreground" suppressHydrationWarning>
+                    {new Date(experiment.createdAt).toLocaleDateString()}
+                  </span>
+                </CardFooter>
+              </Card>
+            </Link>
           ))}
         </div>
       ) : (

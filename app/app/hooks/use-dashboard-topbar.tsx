@@ -1,5 +1,6 @@
 import { useLocation, useMatches } from "@remix-run/react";
 import { type Routes } from "remix-routes";
+import { loader as experimentsIdLoader } from "~/routes/dashboard+/experiments+/$id";
 
 type DashboardRoutes = {
   [K in keyof Routes]: K extends `/dashboard${string}` ? K : never;
@@ -18,6 +19,8 @@ const BreadcrumbRoutes: BreadCrumbRoutes = {
   "/dashboard": () => ({ label: "Home", backButton: false, disableHeader: true }),
   "/dashboard/experiments": () => "Experiments",
   "/dashboard/experiments/new": () => "New Experiment",
+  "/dashboard/experiments/:id": (data: ReturnType<typeof experimentsIdLoader>) =>
+    `Experiment ${data.experiment?.title}`,
   "/dashboard/revalidate/:id": () => "Revalidate Experiment",
 };
 
