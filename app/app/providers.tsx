@@ -1,7 +1,7 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
-import { anvil } from "wagmi/chains";
+import { anvil, sepolia } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { ClientEnv } from "./.server/env";
@@ -14,7 +14,7 @@ export function Providers({ children, env }: { children: React.ReactNode; env: C
     return getDefaultConfig({
       appName: "ReValidate",
       projectId: env.WALLET_CONNECT_PROJECT_ID,
-      chains: [anvil],
+      chains: env.ETH_NETWORK == "sepolia" ? [sepolia] : [anvil],
       ssr: true,
     });
   }, [env.WALLET_CONNECT_PROJECT_ID]);

@@ -18,6 +18,7 @@ export const env = createEnv({
     APP_ADDRESS: hexSchema,
     WALLET_CONNECT_PROJECT_ID: z.string(),
     WORLDCOIN_APP_ID: z.string(),
+    ETH_NETWORK: z.enum(["local", "sepolia"]).default("local")
   },
   // eslint-disable-next-line n/no-process-env
   runtimeEnv: process.env,
@@ -32,6 +33,7 @@ export const clientEnv = {
   APP_ADDRESS: env.APP_ADDRESS,
   VERIFIER_ADDRESS: env.VERIFIER_ADDRESS,
   WORLDCOIN_APP_ID: env.WORLDCOIN_APP_ID,
+  ETH_NETWORK: env.ETH_NETWORK,
 };
 
 export type ClientEnv = typeof clientEnv;
