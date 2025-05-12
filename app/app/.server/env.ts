@@ -18,7 +18,7 @@ export const env = createEnv({
     APP_ADDRESS: hexSchema,
     WALLET_CONNECT_PROJECT_ID: z.string(),
     WORLDCOIN_APP_ID: z.string(),
-    ETH_NETWORK: z.enum(["local", "sepolia"]).default("local")
+    ETH_NETWORK: z.enum(["local", "sepolia"]).default("local"),
   },
   // eslint-disable-next-line n/no-process-env
   runtimeEnv: process.env,
